@@ -1,6 +1,6 @@
 
 using UnityEngine;
-
+//fucking babies with gitignore
 public class GunScript : MonoBehaviour
 {
 
