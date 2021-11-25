@@ -39,6 +39,7 @@ public class GunScript : MonoBehaviour
 
             GetHit enemyReceiveDamage=hit.transform.GetComponent<GetHit>();
 
+         
             if (enemyReceiveDamage != null)
             {
                 enemyReceiveDamage.ReceiveDamage(damage);
