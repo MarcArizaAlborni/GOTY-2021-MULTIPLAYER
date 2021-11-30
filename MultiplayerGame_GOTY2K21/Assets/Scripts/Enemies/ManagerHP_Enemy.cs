@@ -19,6 +19,7 @@ public class ManagerHP_Enemy : MonoBehaviour
     public GameObject vhandTop_R_obj;
     public GameObject vmidArm_R_obj;
 
+    private bool armRkilled = false;
     [Header("ARM L")]
     public IndividualHP_Enemy arm_L_script;
     //BONES
@@ -31,8 +32,11 @@ public class ManagerHP_Enemy : MonoBehaviour
     public GameObject vhandTop_L_obj;
     public GameObject vmidArm_L_obj;
 
+    private bool armLkilled = false;
+
     [Header("BODY")]
-    
+
+    private bool headKilled = false;
     public GameObject body_obj;
 
 
@@ -48,18 +52,19 @@ public class ManagerHP_Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (head_script.currHP <= 0)
+        if (head_script.currHP <= 0 && headKilled==false)
         {
+            headKilled = true;
             Destroy(head_obj);
         }
 
-        if (arm_L_script.currHP <= 0)
+        if (arm_L_script.currHP <= 0 && armLkilled==false)
         {
 
             arm_L_obj.SetActive(false);
             handTop_L_obj.SetActive(false);
             midArm_L_obj.SetActive(false);
-
+            armLkilled = true;
 
 
             //we destroy visual obj
@@ -68,13 +73,13 @@ public class ManagerHP_Enemy : MonoBehaviour
             Destroy(vmidArm_L_obj);
         }
 
-        if (arm_R_script.currHP <= 0)
+        if (arm_R_script.currHP <= 0&&armRkilled==false)
         {
             //we disable bones
             arm_R_obj.SetActive(false);
             handTop_R_obj.SetActive(false);
             midArm_R_obj.SetActive(false);
-           
+            armRkilled = true;
 
 
             //we destroy visual obj
