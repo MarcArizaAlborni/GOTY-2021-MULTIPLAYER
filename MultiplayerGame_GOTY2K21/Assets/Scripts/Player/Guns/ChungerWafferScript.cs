@@ -35,8 +35,11 @@ public class ChungerWafferScript : MonoBehaviour
     public bool randomizeRecoil;
     public Vector2 randomRecoilConstraints;
 
-    [Header("Visual Management")]
+    [Header("Visual / Projectile Management")]
     public ParticleSystem muzzleFlash;
+    public GameObject bulletPrefab;
+    public GameObject bulletSpawnPos;
+    public float projectileSpeed = 2;
 
     private void Start()
     {
@@ -130,43 +133,58 @@ public class ChungerWafferScript : MonoBehaviour
 
     void CheckForHit()
     {
+
+
         RaycastHit hit;
         if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange))
         {
             Debug.Log(hit.transform.name);
 
-            // GetHit enemyReceiveDamage = hit.transform.GetComponent<GetHit>();
-            //
-            //
-            // if (enemyReceiveDamage != null)
-            // {
-            //     enemyReceiveDamage.ReceiveDamage(gunDamage);
-            // }
 
-            ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
-
-
-            if (hpManagerScript != null)
-            {
-
-                hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
-
-
-            }
-
-
-            IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
-
-
-            if (hpIndividualScript != null)
-            {
-
-                hpIndividualScript.ReceiveDamage(gunDamage);
-
-            }
+            ManageTargetHP(hit);
+            ManageBullet(hit.point);
 
 
         }
+        else
+        {
+            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+            ManageBullet(ray.GetPoint(gunRange));
+        }
+
+    }
+
+    void ManageTargetHP(RaycastHit hit)
+    {
+        ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
+
+
+        if (hpManagerScript != null)
+        {
+
+            hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
+
+
+        }
+
+
+        IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
+
+
+        if (hpIndividualScript != null)
+        {
+
+            hpIndividualScript.ReceiveDamage(gunDamage);
+
+        }
+    }
+
+    void ManageBullet(Vector3 hitPosition)
+    {
+        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+
+        projObj.GetComponent<Rigidbody>().velocity = (hitPosition - bulletSpawnPos.transform.position).normalized * projectileSpeed;
     }
 
 
