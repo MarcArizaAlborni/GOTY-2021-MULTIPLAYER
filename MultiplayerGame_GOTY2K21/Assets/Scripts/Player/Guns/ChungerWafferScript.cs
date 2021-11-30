@@ -135,13 +135,36 @@ public class ChungerWafferScript : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
 
-            GetHit enemyReceiveDamage = hit.transform.GetComponent<GetHit>();
+            // GetHit enemyReceiveDamage = hit.transform.GetComponent<GetHit>();
+            //
+            //
+            // if (enemyReceiveDamage != null)
+            // {
+            //     enemyReceiveDamage.ReceiveDamage(gunDamage);
+            // }
+
+            ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
 
 
-            if (enemyReceiveDamage != null)
+            if (hpManagerScript != null)
             {
-                enemyReceiveDamage.ReceiveDamage(gunDamage);
+
+                hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
+
+
             }
+
+
+            IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
+
+
+            if (hpIndividualScript != null)
+            {
+
+                hpIndividualScript.ReceiveDamage(gunDamage);
+
+            }
+
 
         }
     }

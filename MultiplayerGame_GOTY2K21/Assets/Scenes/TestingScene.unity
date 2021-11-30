@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44030482, g: 0.48886538, b: 0.56903535, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -801,7 +801,6 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
-  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -1306,7 +1305,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &1366674560
 Canvas:
   m_ObjectHideFlags: 0
@@ -2172,10 +2170,13 @@ MonoBehaviour:
   varm_R_obj: {fileID: 8103067124372187814}
   vhandTop_R_obj: {fileID: 4710940673564571267}
   vmidArm_R_obj: {fileID: 3972006011126541986}
-  arm_L_script: {fileID: 7919196358801296818}
-  arm_L_obj: {fileID: 7919196358801296816}
-  handTop_L_obj: {fileID: 2438390135795875276}
-  midArm_L_obj: {fileID: 1918587762464723652}
+  arm_L_script: {fileID: 2656270106215344054}
+  arm_L_obj: {fileID: 2656270106215344053}
+  handTop_L_obj: {fileID: 1477319742328265826}
+  midArm_L_obj: {fileID: 7532005085759267015}
+  varm_L_obj: {fileID: 7919196358801296816}
+  vhandTop_L_obj: {fileID: 1918587762464723652}
+  vmidArm_L_obj: {fileID: 2438390135795875276}
   body_obj: {fileID: 4493914614284389709}
   maxGeneralHP: 90
 --- !u!136 &2033410222
@@ -2417,7 +2418,7 @@ Transform:
   m_GameObject: {fileID: 4493914614284389709}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -33.32, y: -7.6109104, z: -8.57}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_Children:
   - {fileID: 3095270377798993893}
   - {fileID: 417590864}
@@ -2733,6 +2734,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3989546061646964142}
+  - component: {fileID: 1477319742328265828}
+  - component: {fileID: 1477319742328265827}
   m_Layer: 0
   m_Name: Base HumanLArmForearm
   m_TagString: Untagged
@@ -2740,6 +2743,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1477319742328265827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477319742328265826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectDamaged: {fileID: 0}
+  maxHP: 30
+  currHP: 0
+  generalHP_script: {fileID: 2033410221}
+  isManaging: 0
+  managingObject: {fileID: 2656270106215344053}
+--- !u!65 &1477319742328265828
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477319742328265826}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.23036264, y: 0.11347859, z: 0.095806055}
+  m_Center: {x: -0.15266465, y: -0.0069147996, z: 0.0026989228}
 --- !u!1 &1548363270847346794
 GameObject:
   m_ObjectHideFlags: 0
@@ -2889,7 +2923,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2082082756834705548}
   - component: {fileID: 6240894085460992442}
-  - component: {fileID: 1918587762464723653}
   m_Layer: 0
   m_Name: Z_L_Upperarm
   m_TagString: Untagged
@@ -2897,24 +2930,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1918587762464723653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918587762464723652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
-  maxHP: 30
-  currHP: 0
-  generalHP_script: {fileID: 2033410221}
-  isManaging: 0
-  managingObject: {fileID: 0}
 --- !u!1 &1934761134908505462
 GameObject:
   m_ObjectHideFlags: 0
@@ -3085,7 +3100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4031533092308914229}
   - component: {fileID: 757158234069346343}
-  - component: {fileID: 2438390135795875277}
   m_Layer: 0
   m_Name: Z_L_Forearm
   m_TagString: Untagged
@@ -3093,24 +3107,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2438390135795875277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2438390135795875276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
-  maxHP: 30
-  currHP: 0
-  generalHP_script: {fileID: 2033410221}
-  isManaging: 0
-  managingObject: {fileID: 0}
 --- !u!4 &2492849121637548009
 Transform:
   m_ObjectHideFlags: 0
@@ -3181,6 +3177,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3660009025437075895}
+  - component: {fileID: 2656270106215344055}
+  - component: {fileID: 2656270106215344054}
   m_Layer: 0
   m_Name: Base HumanLArmPalm
   m_TagString: Untagged
@@ -3188,6 +3186,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2656270106215344054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656270106215344053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectDamaged: {fileID: 0}
+  maxHP: 30
+  currHP: 0
+  generalHP_script: {fileID: 2033410221}
+  isManaging: 1
+  managingObject: {fileID: 0}
+--- !u!65 &2656270106215344055
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656270106215344053}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.21548119, y: 0.10431377, z: 0.13848518}
+  m_Center: {x: -0.10497988, y: -0.0061680363, z: 0.008899282}
 --- !u!4 &2666804134427034107
 Transform:
   m_ObjectHideFlags: 0
@@ -4880,6 +4909,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4714040074486336295}
+  - component: {fileID: 7532005085759267017}
+  - component: {fileID: 7532005085759267016}
   m_Layer: 0
   m_Name: Base HumanLArmUpperarm
   m_TagString: Untagged
@@ -4887,6 +4918,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7532005085759267016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7532005085759267015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectDamaged: {fileID: 0}
+  maxHP: 30
+  currHP: 0
+  generalHP_script: {fileID: 2033410221}
+  isManaging: 0
+  managingObject: {fileID: 2656270106215344053}
+--- !u!65 &7532005085759267017
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7532005085759267015}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3818367, y: 0.14697981, z: 0.13535103}
+  m_Center: {x: -0.14782298, y: 0.009626356, z: 0.004115507}
 --- !u!1 &7535322509544630650
 GameObject:
   m_ObjectHideFlags: 0
@@ -5009,7 +5071,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2232947171089298715}
   - component: {fileID: 2193966763641013498}
-  - component: {fileID: 7919196358801296818}
   m_Layer: 0
   m_Name: Z_L_ArmPalm
   m_TagString: Untagged
@@ -5017,24 +5078,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7919196358801296818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7919196358801296816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
-  maxHP: 30
-  currHP: 0
-  generalHP_script: {fileID: 2033410221}
-  isManaging: 1
-  managingObject: {fileID: 0}
 --- !u!4 &7923601318984265171
 Transform:
   m_ObjectHideFlags: 0

@@ -21,9 +21,15 @@ public class ManagerHP_Enemy : MonoBehaviour
 
     [Header("ARM L")]
     public IndividualHP_Enemy arm_L_script;
+    //BONES
     public GameObject arm_L_obj;
     public GameObject handTop_L_obj;
     public GameObject midArm_L_obj;
+
+    //VISUAL
+    public GameObject varm_L_obj;
+    public GameObject vhandTop_L_obj;
+    public GameObject vmidArm_L_obj;
 
     [Header("BODY")]
     
@@ -49,10 +55,17 @@ public class ManagerHP_Enemy : MonoBehaviour
 
         if (arm_L_script.currHP <= 0)
         {
-            
-            Destroy(arm_L_obj);
-            Destroy(handTop_L_obj);
-            Destroy(midArm_L_obj);
+
+            arm_L_obj.SetActive(false);
+            handTop_L_obj.SetActive(false);
+            midArm_L_obj.SetActive(false);
+
+
+
+            //we destroy visual obj
+            Destroy(varm_L_obj);
+            Destroy(vhandTop_L_obj);
+            Destroy(vmidArm_L_obj);
         }
 
         if (arm_R_script.currHP <= 0)
