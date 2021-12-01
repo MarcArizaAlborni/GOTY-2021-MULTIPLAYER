@@ -7,15 +7,16 @@ public class ChungerWafferScript : MonoBehaviour
     [Header("Gun Performance Management")]
 
     public float fireRate = 0.1f;
-    public int clipSize = 30;
-    public int reservedAmmoCapacity = 90;
+   
     public float gunDamage = 5f;
     public float gunRange = 100f;
 
     [Header("Ammo Management")]
     private bool canShoot;
-    private int currentAmmoMag;
+    private int currentAmmoInMag;
     private int ammoInReserve;
+    public const int magSize = 4;
+    public const int maxTotalAmmo = 16;
 
     [Header("Hit Management")]
     public Camera ourCamera;
@@ -43,8 +44,11 @@ public class ChungerWafferScript : MonoBehaviour
 
     private void Start()
     {
-        currentAmmoMag = clipSize;
-        ammoInReserve = reservedAmmoCapacity;
+        currentAmmoInMag = magSize;
+
+
+        ammoInReserve = maxTotalAmmo;
+        ammoInReserve -= currentAmmoInMag;
         canShoot = true;
     }
 
@@ -53,25 +57,29 @@ public class ChungerWafferScript : MonoBehaviour
         SetAim();
 
 
-        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoMag > 0)
+        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0)
         {
+            Debug.Log("CurrentMag" + currentAmmoInMag);
+            Debug.Log("InReserve" + ammoInReserve);
             canShoot = false;
-            currentAmmoMag--;
+            currentAmmoInMag--;
             StartCoroutine(ShootGun());
         }
-        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoMag < clipSize && ammoInReserve > 0)
+        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoInMag < magSize && ammoInReserve > 0)
         {
-            int amountNeeded = clipSize - currentAmmoMag;
+            int amountToReload = magSize - currentAmmoInMag;
 
-            if (amountNeeded >= ammoInReserve)
+            if (amountToReload <= ammoInReserve)
             {
-                currentAmmoMag += ammoInReserve;
-                ammoInReserve -= amountNeeded;
+                currentAmmoInMag += amountToReload;
+                ammoInReserve -= amountToReload;
             }
             else
             {
-                currentAmmoMag = clipSize;
-                ammoInReserve -= amountNeeded;
+
+                currentAmmoInMag += ammoInReserve;
+                ammoInReserve -= ammoInReserve;
+
             }
 
         }
