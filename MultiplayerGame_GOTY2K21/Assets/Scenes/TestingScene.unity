@@ -232,6 +232,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 110969406}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &115598191 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
+  m_PrefabInstance: {fileID: 1987496783}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &115598192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115598191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6cf8f0f5419a546b54554dcb557885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rifleScript: {fileID: 0}
+  pistolScript: {fileID: 0}
+  chungerWafferScript: {fileID: 0}
+  totalMoney: 0
 --- !u!1 &148407143
 GameObject:
   m_ObjectHideFlags: 0
