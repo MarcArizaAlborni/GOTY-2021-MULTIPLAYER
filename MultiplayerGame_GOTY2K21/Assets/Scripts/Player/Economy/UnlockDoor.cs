@@ -8,16 +8,17 @@ public class UnlockDoor : MonoBehaviour
     public MoneyManager moneyScript;
     public int moneyRequired;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player")
         {
+            if (moneyScript.totalMoney >= moneyRequired)
+            {
+                moneyScript.UnlockAcces(moneyRequired);
 
-            moneyScript.UnlockAcces(moneyRequired);
+                gameObject.SetActive(false);
 
-            //ADD AMMO
-            gameObject.SetActive(false);
-
+            }
         }
     }
 }
