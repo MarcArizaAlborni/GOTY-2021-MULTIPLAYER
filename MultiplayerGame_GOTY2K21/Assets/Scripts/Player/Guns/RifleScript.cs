@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class RifleScript : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class RifleScript : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
     public float projectileSpeed = 2;
+    public bool bulletRecoil = true;
 
 
 
@@ -115,8 +117,8 @@ public class RifleScript : MonoBehaviour
 
         if (randomizeRecoil)
         {
-            float xRecoil = Random.Range(-randomRecoilConstraints.x, randomRecoilConstraints.x);
-            float yRecoil = Random.Range(-randomRecoilConstraints.y, randomRecoilConstraints.y);
+            float xRecoil = UnityEngine.Random.Range(-randomRecoilConstraints.x, randomRecoilConstraints.x);
+            float yRecoil = UnityEngine.Random.Range(-randomRecoilConstraints.y, randomRecoilConstraints.y);
 
             Vector2 recoil = new Vector2(xRecoil, yRecoil);
             currentRotation += recoil;
@@ -157,7 +159,21 @@ public class RifleScript : MonoBehaviour
     
     void ManageBullet(Vector3 hitPosition)
     {
-        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+        GameObject projObj;
+        if (bulletRecoil == false)
+        {
+            projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            float Xvar=(float) Math.Round(UnityEngine.Random.Range(-0.1f, 0.1f), 3) ;
+            float Yvar =(float) Math.Round(UnityEngine.Random.Range(-0.1f, 0.1f), 3) ;
+
+            Vector3 spawnPoint = new Vector3(bulletSpawnPos.transform.position.x+Xvar , bulletSpawnPos.transform.position.y +Yvar, bulletSpawnPos.transform.position.z);
+            projObj = Instantiate(bulletPrefab, spawnPoint, Quaternion.identity);
+           // Debug.Log("X:" + Xvar);
+           // Debug.Log("Y:"+Yvar);
+        }
 
         projObj.GetComponent<Rigidbody>().velocity=(hitPosition-bulletSpawnPos.transform.position).normalized * projectileSpeed;
     }

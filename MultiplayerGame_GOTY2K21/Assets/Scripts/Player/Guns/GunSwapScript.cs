@@ -15,6 +15,12 @@ public class GunSwapScript : MonoBehaviour
     public GameObject chunger;
 
 
+    private void Start()
+    {
+        rifle.SetActive(true);
+        pistol.SetActive(false);
+        chunger.SetActive(false);
+    }
 
     void Update()
     {

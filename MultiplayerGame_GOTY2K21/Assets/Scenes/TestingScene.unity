@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44030482, g: 0.48886538, b: 0.56903535, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -324,7 +324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7565430590385412966, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -864,6 +864,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!4 &705507995
@@ -985,6 +986,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 999618381732254091, guid: e1d659a55cbcd2b489c1ab801899acdd, type: 3}
   bulletSpawnPos: {fileID: 1555878404}
   projectileSpeed: 20
+  bulletRecoil: 1
 --- !u!1 &880477511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,6 +1376,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!223 &1366674560
 Canvas:
   m_ObjectHideFlags: 0
@@ -1439,7 +1442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1555878404}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.004, y: 0.512, z: 2.5}
+  m_LocalPosition: {x: 0, y: 0.5, z: 2.5}
   m_LocalScale: {x: 1.4285713, y: 1.4285713, z: 1.4285713}
   m_Children: []
   m_Father: {fileID: 788458632}
@@ -1627,7 +1630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5010645991592904564, guid: 983d3c32751ffbf40b05493c52f50da9, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5010645991593270100, guid: 983d3c32751ffbf40b05493c52f50da9, type: 3}
       propertyPath: m_RootOrder
