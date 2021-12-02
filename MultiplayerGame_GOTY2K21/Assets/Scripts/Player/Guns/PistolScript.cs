@@ -193,5 +193,10 @@ public class PistolScript : MonoBehaviour
         projObj.GetComponent<Rigidbody>().velocity = (hitPosition - bulletSpawnPos.transform.position).normalized * projectileSpeed;
     }
 
+    public void AddAmmo()
+    {
+        ammoInReserve = maxTotalAmmo;
+    }
+
 
 }

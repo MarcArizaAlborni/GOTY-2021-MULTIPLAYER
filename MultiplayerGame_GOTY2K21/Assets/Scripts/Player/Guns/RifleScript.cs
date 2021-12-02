@@ -215,4 +215,8 @@ public class RifleScript : MonoBehaviour
         }
     }
 
+    public void AddAmmo()
+    {
+        ammoInReserve = maxTotalAmmo;
+    }
 }

@@ -44,7 +44,9 @@ public class MoneyManager : MonoBehaviour
 
         //Add Ammo
 
-
+        pistolScript.AddAmmo();
+        rifleScript.AddAmmo();
+        chungerWafferScript.AddAmmo();
 
 
     }
