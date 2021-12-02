@@ -141,23 +141,36 @@ public class PistolScript : MonoBehaviour
         
             RaycastHit hit;
 
-            if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
+        if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
+            if (hit.collider.tag != "Bullet")
+            {
+
                 Debug.Log(hit.transform.name);
+            }
 
 
-                ManageTargetHP(hit);
+            ManageTargetHP(hit);
                 ManageBullet(hit.point);
 
 
-            }
-            else //If the raycast doesnt hit anything, set a point for the bullets to go to
-            {
-                Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        }
+        else //If the raycast doesnt hit anything, set a point for the bullets to go to
+        {
+            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-                ManageBullet(ray.GetPoint(gunRange));
-            }
+            ManageBullet(ray.GetPoint(gunRange));
+        }
         
+    }
+
+    void ManageBullet(Vector3 hitPosition)
+    {
+        Vector3 spawnPoint = bulletSpawnPos.transform.position;
+
+        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+
+        projObj.GetComponent<Rigidbody>().velocity = (hitPosition - spawnPoint).normalized * projectileSpeed;
     }
 
     void ManageTargetHP(RaycastHit hit)
@@ -185,12 +198,7 @@ public class PistolScript : MonoBehaviour
         }
     }
 
-    void ManageBullet(Vector3 hitPosition)
-    {
-        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
-
-        projObj.GetComponent<Rigidbody>().velocity = (hitPosition - bulletSpawnPos.transform.position).normalized * projectileSpeed;
-    }
+   
 
     public void AddAmmo()
     {

@@ -140,7 +140,11 @@ public class ChungerWafferScript : MonoBehaviour
 
         if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
-            Debug.Log(hit.transform.name);
+            if (hit.collider.tag != "Bullet")
+            {
+
+                Debug.Log(hit.transform.name);
+            }
 
 
             ManageTargetHP(hit);
@@ -150,11 +154,18 @@ public class ChungerWafferScript : MonoBehaviour
         }
         else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
-            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-            ManageBullet(ray.GetPoint(gunRange));
+            ManageBullet(BulletAim.transform.position);
         }
 
+    }
+
+    void ManageBullet(Vector3 hitPosition) // Create bullet and give it velocity
+    {
+        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+
+        projObj.GetComponent<Rigidbody>().velocity = (hitPosition - bulletSpawnPos.transform.position).normalized * projectileSpeed;
     }
 
     void ManageTargetHP(RaycastHit hit)
@@ -183,12 +194,7 @@ public class ChungerWafferScript : MonoBehaviour
         }
     }
 
-    void ManageBullet(Vector3 hitPosition) // Create bullet and give it velocity
-    {
-        GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
-
-        projObj.GetComponent<Rigidbody>().velocity = (hitPosition - bulletSpawnPos.transform.position).normalized * projectileSpeed;
-    }
+   
 
     public void AddAmmo()
     {
