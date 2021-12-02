@@ -830,7 +830,7 @@ MonoBehaviour:
   normalLocalPosition: {x: 0.35, y: 0.2, z: 1.8}
   aimingLocalPosition: {x: 0, y: 0.28, z: 1.8}
   aimSpeed: 10
-  removeCrosshairAim: 1
+  removeCrosshairAim: 0
   crosshairImage: {fileID: 1948749542}
   BulletAim: {fileID: 1550284233}
   mouseSensitivity: 1
@@ -1031,7 +1031,7 @@ MonoBehaviour:
   normalLocalPosition: {x: 0.35, y: 0, z: 1.6}
   aimingLocalPosition: {x: 0, y: 0.12, z: 0.26}
   aimSpeed: 10
-  removeCrosshairAim: 1
+  removeCrosshairAim: 0
   crosshairImage: {fileID: 1948749542}
   BulletAim: {fileID: 1550284233}
   mouseSensitivity: 1
