@@ -14,6 +14,8 @@ public class RifleScript : MonoBehaviour
 
    public CameraShake cameraShakeScript;
 
+    public bool wantCameraShake=true;
+
 
     [Header("Ammo Management")]
     private bool canShoot;
@@ -83,7 +85,7 @@ public class RifleScript : MonoBehaviour
         {
             //Debug.Log("CurrentMag"+currentAmmoInMag);
             //Debug.Log("InReserve" + ammoInReserve);
-            if (cameraShakeScript.shaking != true)
+            if (cameraShakeScript.shaking != true && wantCameraShake == true)
             {
                 cameraShakeScript.StartShake();
             }
