@@ -11,6 +11,7 @@ public class PistolScript : MonoBehaviour
     public float gunDamage = 5f;
     public float gunRange = 100f;
 
+
     [Header("Ammo Management")]
     private bool canShoot;
     private int currentAmmoInMag; //Remaining ammo outside of mag
@@ -29,7 +30,9 @@ public class PistolScript : MonoBehaviour
 
     public bool removeCrosshairAim = true;
     public GameObject crosshairImage;
-    
+
+    public GameObject BulletAim;
+
 
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
@@ -52,6 +55,8 @@ public class PistolScript : MonoBehaviour
         ammoInReserve = maxTotalAmmo;
         ammoInReserve -= currentAmmoInMag;
         canShoot = true;
+
+        BulletAim.transform.localPosition = new Vector3(0f, 0f, gunRange);
     }
 
     private void Update()

@@ -33,6 +33,8 @@ public class RifleScript : MonoBehaviour
     public bool removeCrosshairAim = true;
     public GameObject crosshairImage;
 
+    public GameObject BulletAim;
+
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
     private Vector2 currentRotation;
@@ -59,13 +61,18 @@ public class RifleScript : MonoBehaviour
         ammoInReserve = maxTotalAmmo;
         ammoInReserve -= currentAmmoInMag;
         canShoot = true;
+
+
+        BulletAim.transform.localPosition = new Vector3(0f, 0f, gunRange);
+
     }
 
     private void Update()
     {
-       
-        
-            SetAim();
+
+      
+
+        SetAim();
         
         
         
@@ -152,7 +159,12 @@ public class RifleScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
-            Debug.Log(hit.transform.name);
+
+            if (hit.collider.tag != "Bullet")
+            {
+               
+                Debug.Log(hit.transform.name);
+            }
 
            
             ManageTargetHP(hit);
@@ -162,30 +174,36 @@ public class RifleScript : MonoBehaviour
         }
         else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
-            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-            ManageBullet(ray.GetPoint(gunRange));
+            ManageBullet(BulletAim.transform.position);
         }
     }
     
     void ManageBullet(Vector3 hitPosition) // Create bullet and give it velocity
     {
         GameObject projObj;
+
+        Vector3 spawnPoint= bulletSpawnPos.transform.position;
+
         if (bulletRecoil == false)
         {
             projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
+            projObj.GetComponent<Rigidbody>().velocity = (hitPosition - spawnPoint).normalized * projectileSpeed;
         }
         else //For rifle we create variation to the spawnpoint of each of the bullets (only visual)
         {
             float Xvar=(float) Math.Round(UnityEngine.Random.Range(-0.05f, 0.05f), 3) ;
             float Yvar =(float) Math.Round(UnityEngine.Random.Range(-0.05f, 0.05f), 3) ;
 
-            Vector3 spawnPoint = new Vector3(bulletSpawnPos.transform.position.x+Xvar , bulletSpawnPos.transform.position.y +Yvar, bulletSpawnPos.transform.position.z);
+             spawnPoint = new Vector3(bulletSpawnPos.transform.position.x + Xvar , bulletSpawnPos.transform.position.y +Yvar, bulletSpawnPos.transform.position.z);
             projObj = Instantiate(bulletPrefab, spawnPoint, Quaternion.identity);
-          
+            projObj.GetComponent<Rigidbody>().velocity = (hitPosition - spawnPoint).normalized * projectileSpeed;
+
         }
 
-        projObj.GetComponent<Rigidbody>().velocity=(hitPosition-bulletSpawnPos.transform.position).normalized * projectileSpeed;
+        
+
     }
 
     void ManageTargetHP(RaycastHit hit)

@@ -29,7 +29,8 @@ public class ChungerWafferScript : MonoBehaviour
 
     public bool removeCrosshairAim = true;
     public GameObject crosshairImage;
-   
+
+    public GameObject BulletAim;
 
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
@@ -53,6 +54,8 @@ public class ChungerWafferScript : MonoBehaviour
         ammoInReserve = maxTotalAmmo;
         ammoInReserve -= currentAmmoInMag;
         canShoot = true;
+
+        BulletAim.transform.localPosition = new Vector3(0f, 0f, gunRange);
     }
 
     private void Update()
