@@ -14,12 +14,12 @@ public class RifleScript : MonoBehaviour
 
     [Header("Ammo Management")]
     private bool canShoot;
-    private int currentAmmoInMag;
+    private int currentAmmoInMag; //Remaining ammo outside of mag
     private int ammoInReserve;
-    public const int magSize = 30; //Max ammo in single Mag
-    public const int maxTotalAmmo = 90; //Total Ammo
+    public  int magSize = 30; //Max ammo in single Mag
+    public  int maxTotalAmmo = 1000; //Total Ammo
 
-
+    
 
     [Header("Hit Management")]
     public Camera ourCamera;
@@ -29,6 +29,9 @@ public class RifleScript : MonoBehaviour
     public Vector3 normalLocalPosition;
     public Vector3 aimingLocalPosition;
     public float aimSpeed = 10;
+
+    public bool removeCrosshairAim = true;
+    public GameObject crosshairImage;
 
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
@@ -60,14 +63,17 @@ public class RifleScript : MonoBehaviour
 
     private void Update()
     {
-       SetAim();
+       
+        
+            SetAim();
+        
         
         
 
         if (Input.GetMouseButton(0) && canShoot && currentAmmoInMag > 0)
         {
-            Debug.Log("CurrentMag"+currentAmmoInMag);
-            Debug.Log("InReserve" + ammoInReserve);
+            //Debug.Log("CurrentMag"+currentAmmoInMag);
+            //Debug.Log("InReserve" + ammoInReserve);
             canShoot = false;
             currentAmmoInMag--;
             StartCoroutine(ShootGun());
@@ -94,47 +100,40 @@ public class RifleScript : MonoBehaviour
         }
     }
 
-    private void SetRotation()
-    {
-        Vector2 mouseAxis = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-        mouseAxis *= mouseSensitivity;
-        currentRotation += mouseAxis;
+    private void SetAim()//There are 2 positions for each of the guns (aiming , regular)
+    {//When aim button is pressed, move gun from regular position to aiming
 
-        currentRotation.y = Mathf.Clamp(currentRotation.y, -90, 90);
-
-        transform.localPosition += (Vector3)mouseAxis * weaponSwayAmount / 1000;
-
-        transform.root.localRotation = Quaternion.AngleAxis(currentRotation.x, Vector3.up);
-        transform.parent.localRotation = Quaternion.AngleAxis(-currentRotation.y, Vector3.right);
-
-
-    }
-    private void SetAim()
-    {
         Vector3 target = normalLocalPosition;
         if (Input.GetMouseButton(1))
+        {
             target = aimingLocalPosition;
+            if (removeCrosshairAim == true)
+            {
+                crosshairImage.SetActive(false);
+            }
+        }
+        else
+        {
+            
+           
+                crosshairImage.SetActive(true);
+            
+        }
 
         Vector3 desiredPosition;
         desiredPosition = Vector3.Lerp(transform.localPosition, target, Time.deltaTime * aimSpeed);
 
 
         transform.localPosition = desiredPosition;
+
+       
     }
 
     private void DetermineRecoil()
     {
         transform.localPosition -= Vector3.forward * 0.1f;
 
-        if (randomizeRecoil)
-        {
-            float xRecoil = UnityEngine.Random.Range(-randomRecoilConstraints.x, randomRecoilConstraints.x);
-            float yRecoil = UnityEngine.Random.Range(-randomRecoilConstraints.y, randomRecoilConstraints.y);
-
-            Vector2 recoil = new Vector2(xRecoil, yRecoil);
-            currentRotation += recoil;
-        }
     }
 
     private IEnumerator ShootGun()
@@ -151,7 +150,7 @@ public class RifleScript : MonoBehaviour
     void CheckForHit()
     {
         RaycastHit hit;
-        if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange))
+        if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
             Debug.Log(hit.transform.name);
 
@@ -161,7 +160,7 @@ public class RifleScript : MonoBehaviour
             
 
         }
-        else
+        else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
             Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
@@ -169,22 +168,21 @@ public class RifleScript : MonoBehaviour
         }
     }
     
-    void ManageBullet(Vector3 hitPosition)
+    void ManageBullet(Vector3 hitPosition) // Create bullet and give it velocity
     {
         GameObject projObj;
         if (bulletRecoil == false)
         {
             projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
         }
-        else
+        else //For rifle we create variation to the spawnpoint of each of the bullets (only visual)
         {
-            float Xvar=(float) Math.Round(UnityEngine.Random.Range(-0.1f, 0.1f), 3) ;
-            float Yvar =(float) Math.Round(UnityEngine.Random.Range(-0.1f, 0.1f), 3) ;
+            float Xvar=(float) Math.Round(UnityEngine.Random.Range(-0.05f, 0.05f), 3) ;
+            float Yvar =(float) Math.Round(UnityEngine.Random.Range(-0.05f, 0.05f), 3) ;
 
             Vector3 spawnPoint = new Vector3(bulletSpawnPos.transform.position.x+Xvar , bulletSpawnPos.transform.position.y +Yvar, bulletSpawnPos.transform.position.z);
             projObj = Instantiate(bulletPrefab, spawnPoint, Quaternion.identity);
-           // Debug.Log("X:" + Xvar);
-           // Debug.Log("Y:"+Yvar);
+          
         }
 
         projObj.GetComponent<Rigidbody>().velocity=(hitPosition-bulletSpawnPos.transform.position).normalized * projectileSpeed;
@@ -195,19 +193,19 @@ public class RifleScript : MonoBehaviour
         ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
 
 
-        if (hpManagerScript != null)
+        if (hpManagerScript != null)//only if hitting body (only body has the general hp manager script)
         {
 
             hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
 
-
+            return;
         }
 
 
         IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
 
 
-        if (hpIndividualScript != null)
+        if (hpIndividualScript != null)//only if hitting arms or head
         {
 
             hpIndividualScript.ReceiveDamage(gunDamage);

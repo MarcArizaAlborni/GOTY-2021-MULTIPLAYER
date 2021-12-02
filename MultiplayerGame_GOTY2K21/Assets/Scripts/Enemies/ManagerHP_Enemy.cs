@@ -20,13 +20,13 @@ public class ManagerHP_Enemy : MonoBehaviour
     public GameObject vmidArm_R_obj;
 
     private bool armRkilled = false;
+
     [Header("ARM L")]
     public IndividualHP_Enemy arm_L_script;
     //BONES
     public GameObject arm_L_obj;
     public GameObject handTop_L_obj;
     public GameObject midArm_L_obj;
-
     //VISUAL
     public GameObject varm_L_obj;
     public GameObject vhandTop_L_obj;
@@ -44,7 +44,6 @@ public class ManagerHP_Enemy : MonoBehaviour
     float currHPCount;
 
    
-
     private void Start()
     {
         currHPCount = maxGeneralHP;
@@ -52,13 +51,13 @@ public class ManagerHP_Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (head_script.currHP <= 0 && headKilled==false)
+        if (head_script.currHP <= 0 && headKilled==false) //Check if the HP of the head is = 0
         {
             headKilled = true;
             Destroy(head_obj);
         }
 
-        if (arm_L_script.currHP <= 0 && armLkilled==false)
+        if (arm_L_script.currHP <= 0 && armLkilled==false) //Check if the HP of the left arm is = 0
         {
 
             arm_L_obj.SetActive(false);
@@ -73,7 +72,7 @@ public class ManagerHP_Enemy : MonoBehaviour
             Destroy(vmidArm_L_obj);
         }
 
-        if (arm_R_script.currHP <= 0&&armRkilled==false)
+        if (arm_R_script.currHP <= 0&&armRkilled==false) //Check if the HP of the right arm is = 0
         {
             //we disable bones
             arm_R_obj.SetActive(false);
@@ -89,13 +88,13 @@ public class ManagerHP_Enemy : MonoBehaviour
         }
 
 
-        if (currHPCount <= 0)
+        if (currHPCount <= 0) //When the total amount of the zombie is = 0, destroy zombie
         {
             Destroy(body_obj);
         }
     }
 
-    public void UpdateGeneralHPEnemy(float amountDamage)
+    public void UpdateGeneralHPEnemy(float amountDamage) //Reduces total amount of HP
     {
         currHPCount -= amountDamage;
     }

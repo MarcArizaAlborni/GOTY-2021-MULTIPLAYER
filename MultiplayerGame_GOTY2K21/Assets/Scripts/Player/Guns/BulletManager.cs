@@ -13,7 +13,7 @@ public class BulletManager : MonoBehaviour
         StartCoroutine(DestroyBulletTime());
     }
 
-     IEnumerator DestroyBulletTime()
+     IEnumerator DestroyBulletTime() //After time has passed, destroy bullet
      {
         yield return new WaitForSeconds(lifeTime);
 
@@ -21,7 +21,7 @@ public class BulletManager : MonoBehaviour
      }
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision) //If bullet collides with something, destroy bullet
     {
         Destroy(gameObject);
     }

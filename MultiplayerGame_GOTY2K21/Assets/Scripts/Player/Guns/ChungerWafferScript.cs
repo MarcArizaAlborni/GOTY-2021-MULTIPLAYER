@@ -14,9 +14,9 @@ public class ChungerWafferScript : MonoBehaviour
     [Header("Ammo Management")]
     private bool canShoot;
     private int currentAmmoInMag;
-    private int ammoInReserve;
-    public const int magSize = 4;
-    public const int maxTotalAmmo = 16;
+    private int ammoInReserve; //Remaining ammo outside of mag
+    public  int magSize = 4;
+    public  int maxTotalAmmo = 16;
 
     [Header("Hit Management")]
     public Camera ourCamera;
@@ -26,6 +26,10 @@ public class ChungerWafferScript : MonoBehaviour
     public Vector3 normalLocalPosition;
     public Vector3 aimingLocalPosition;
     public float aimSpeed = 10;
+
+    public bool removeCrosshairAim = true;
+    public GameObject crosshairImage;
+   
 
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
@@ -46,7 +50,6 @@ public class ChungerWafferScript : MonoBehaviour
     {
         currentAmmoInMag = magSize;
 
-
         ammoInReserve = maxTotalAmmo;
         ammoInReserve -= currentAmmoInMag;
         canShoot = true;
@@ -57,10 +60,10 @@ public class ChungerWafferScript : MonoBehaviour
         SetAim();
 
 
-        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0)
+        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0) 
         {
-            Debug.Log("CurrentMag" + currentAmmoInMag);
-            Debug.Log("InReserve" + ammoInReserve);
+           //Debug.Log("CurrentMag" + currentAmmoInMag);
+           //Debug.Log("InReserve" + ammoInReserve);
             canShoot = false;
             currentAmmoInMag--;
             StartCoroutine(ShootGun());
@@ -85,27 +88,22 @@ public class ChungerWafferScript : MonoBehaviour
         }
     }
 
-    private void SetRotation()
-    {
-        Vector2 mouseAxis = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
+    private void SetAim() //There are 2 positions for each of the guns (aiming , regular)
+    {//When aim button is pressed, move gun from regular position to aiming
 
-        mouseAxis *= mouseSensitivity;
-        currentRotation += mouseAxis;
-
-        currentRotation.y = Mathf.Clamp(currentRotation.y, -90, 90);
-
-        transform.localPosition += (Vector3)mouseAxis * weaponSwayAmount / 1000;
-
-        transform.root.localRotation = Quaternion.AngleAxis(currentRotation.x, Vector3.up);
-        transform.parent.localRotation = Quaternion.AngleAxis(-currentRotation.y, Vector3.right);
-
-
-    }
-    private void SetAim()
-    {
         Vector3 target = normalLocalPosition;
         if (Input.GetMouseButton(1))
+        {
             target = aimingLocalPosition;
+            if (removeCrosshairAim == true)
+            {
+                crosshairImage.SetActive(false);
+            }
+        }
+        else
+        {
+            crosshairImage.SetActive(true);
+        }
 
         Vector3 desiredPosition;
         desiredPosition = Vector3.Lerp(transform.localPosition, target, Time.deltaTime * aimSpeed);
@@ -114,24 +112,17 @@ public class ChungerWafferScript : MonoBehaviour
         transform.localPosition = desiredPosition;
     }
 
-    private void DetermineRecoil()
+    private void DetermineRecoil() //Only visual
     {
-        transform.localPosition -= Vector3.forward * 0.1f;
+        transform.localPosition -= Vector3.forward * 0.2f;
 
-        if (randomizeRecoil)
-        {
-            float xRecoil = Random.Range(-randomRecoilConstraints.x, randomRecoilConstraints.x);
-            float yRecoil = Random.Range(-randomRecoilConstraints.y, randomRecoilConstraints.y);
-
-            Vector2 recoil = new Vector2(xRecoil, yRecoil);
-            currentRotation += recoil;
-        }
+      
     }
 
     private IEnumerator ShootGun()
     {
         DetermineRecoil();
-        muzzleFlash.Play();
+        muzzleFlash.Play(); //Play once particle 
 
         CheckForHit();
 
@@ -142,9 +133,9 @@ public class ChungerWafferScript : MonoBehaviour
     void CheckForHit()
     {
 
-
         RaycastHit hit;
-        if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange))
+
+        if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
             Debug.Log(hit.transform.name);
 
@@ -154,7 +145,7 @@ public class ChungerWafferScript : MonoBehaviour
 
 
         }
-        else
+        else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
             Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
@@ -168,7 +159,7 @@ public class ChungerWafferScript : MonoBehaviour
         ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
 
 
-        if (hpManagerScript != null)
+        if (hpManagerScript != null) //only if hitting body (only body has the general hp manager script)
         {
 
             hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
@@ -180,15 +171,16 @@ public class ChungerWafferScript : MonoBehaviour
         IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
 
 
-        if (hpIndividualScript != null)
+        if (hpIndividualScript != null) //only if hitting arms or head
         {
 
             hpIndividualScript.ReceiveDamage(gunDamage);
 
+            return;
         }
     }
 
-    void ManageBullet(Vector3 hitPosition)
+    void ManageBullet(Vector3 hitPosition) // Create bullet and give it velocity
     {
         GameObject projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
 

@@ -5,7 +5,6 @@ using UnityEngine;
 public class IndividualHP_Enemy : MonoBehaviour
 {
 
-    public GameObject objectDamaged;
     public float maxHP;
     [HideInInspector] public float currHP;
 
@@ -21,17 +20,16 @@ public class IndividualHP_Enemy : MonoBehaviour
     }
 
 
-    
-
     public void ReceiveDamage(float amountDamage)
     {
-        if (isManaging == true) { 
+        if (isManaging == true) { //isManaging determines which part of the arm manages the total health of the arm (there are 3 parts for each arm)
+                                  //(head has only 1 object, so will always have isManaging = true)
 
             currHP -= amountDamage;
       
             generalHP_script.UpdateGeneralHPEnemy(amountDamage);
         }
-        else
+        else //If this object is not managing damage, give damage to managing object so that it applies
         {
             if (managingObject != null)
             {

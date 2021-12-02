@@ -13,10 +13,10 @@ public class PistolScript : MonoBehaviour
 
     [Header("Ammo Management")]
     private bool canShoot;
-    private int currentAmmoInMag;
+    private int currentAmmoInMag; //Remaining ammo outside of mag
     private int ammoInReserve;
-    public const int magSize = 7;
-    public const int maxTotalAmmo = 32;
+    public  int magSize = 7;
+    public  int maxTotalAmmo = 32;
 
     [Header("Hit Management")]
     public Camera ourCamera;
@@ -26,6 +26,10 @@ public class PistolScript : MonoBehaviour
     public Vector3 normalLocalPosition;
     public Vector3 aimingLocalPosition;
     public float aimSpeed = 10;
+
+    public bool removeCrosshairAim = true;
+    public GameObject crosshairImage;
+    
 
     [Header("Mouse Settings")]
     public float mouseSensitivity = 1;
@@ -57,8 +61,8 @@ public class PistolScript : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0)
         {
-            Debug.Log("CurrentMag" + currentAmmoInMag);
-            Debug.Log("InReserve" + ammoInReserve);
+            //Debug.Log("CurrentMag" + currentAmmoInMag);
+            //Debug.Log("InReserve" + ammoInReserve);
             canShoot = false;
             currentAmmoInMag--;
             StartCoroutine(ShootGun());
@@ -83,27 +87,23 @@ public class PistolScript : MonoBehaviour
         }
     }
 
-    private void SetRotation()
-    {
-        Vector2 mouseAxis = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-        mouseAxis *= mouseSensitivity;
-        currentRotation += mouseAxis;
+    private void SetAim()//There are 2 positions for each of the guns (aiming , regular)
+    {//When aim button is pressed, move gun from regular position to aiming
 
-        currentRotation.y = Mathf.Clamp(currentRotation.y, -90, 90);
-
-        transform.localPosition += (Vector3)mouseAxis * weaponSwayAmount / 1000;
-
-        transform.root.localRotation = Quaternion.AngleAxis(currentRotation.x, Vector3.up);
-        transform.parent.localRotation = Quaternion.AngleAxis(-currentRotation.y, Vector3.right);
-
-
-    }
-    private void SetAim()
-    {
         Vector3 target = normalLocalPosition;
         if (Input.GetMouseButton(1))
+        {
             target = aimingLocalPosition;
+            if (removeCrosshairAim == true)
+            {
+                crosshairImage.SetActive(false);
+            }
+        }
+        else
+        {
+            crosshairImage.SetActive(true);
+        }
 
         Vector3 desiredPosition;
         desiredPosition = Vector3.Lerp(transform.localPosition, target, Time.deltaTime * aimSpeed);
@@ -112,18 +112,11 @@ public class PistolScript : MonoBehaviour
         transform.localPosition = desiredPosition;
     }
 
-    private void DetermineRecoil()
+    private void DetermineRecoil()//Only visual
     {
-        transform.localPosition -= Vector3.forward * 0.1f;
+        transform.localPosition -= Vector3.forward * 0.2f;
 
-        if (randomizeRecoil)
-        {
-            float xRecoil = Random.Range(-randomRecoilConstraints.x, randomRecoilConstraints.x);
-            float yRecoil = Random.Range(-randomRecoilConstraints.y, randomRecoilConstraints.y);
-
-            Vector2 recoil = new Vector2(xRecoil, yRecoil);
-            currentRotation += recoil;
-        }
+      
     }
 
     private IEnumerator ShootGun()
@@ -142,8 +135,9 @@ public class PistolScript : MonoBehaviour
       
         
             RaycastHit hit;
-            if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange))
-            {
+
+            if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
+        {
                 Debug.Log(hit.transform.name);
 
 
@@ -152,7 +146,7 @@ public class PistolScript : MonoBehaviour
 
 
             }
-            else
+            else //If the raycast doesnt hit anything, set a point for the bullets to go to
             {
                 Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
@@ -166,19 +160,19 @@ public class PistolScript : MonoBehaviour
         ManagerHP_Enemy hpManagerScript = hit.transform.GetComponent<ManagerHP_Enemy>();
 
 
-        if (hpManagerScript != null)
+        if (hpManagerScript != null)//only if hitting body (only body has the general hp manager script)
         {
 
             hpManagerScript.UpdateGeneralHPEnemy(gunDamage);
 
-
+            return;
         }
 
 
         IndividualHP_Enemy hpIndividualScript = hit.transform.GetComponent<IndividualHP_Enemy>();
 
 
-        if (hpIndividualScript != null)
+        if (hpIndividualScript != null)//only if hitting arms or head
         {
 
             hpIndividualScript.ReceiveDamage(gunDamage);

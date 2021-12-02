@@ -14,7 +14,7 @@ public class UnlockDoor : MonoBehaviour
     }
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other) //Checks if player is inside the box collider with trigger
     {
         
         if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player")

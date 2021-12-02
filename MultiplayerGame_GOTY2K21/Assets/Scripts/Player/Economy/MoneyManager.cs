@@ -13,13 +13,10 @@ public class MoneyManager : MonoBehaviour
 
     [HideInInspector] public int totalMoney = 0;
 
-    void Start()
-    {
-        
-    }
+   
 
 
-    void RemoveMoneyAmount(int moneyRemoved)
+    void RemoveMoneyAmount(int moneyRemoved) //Removes amount of money from total amount
     {
 
 
@@ -28,7 +25,7 @@ public class MoneyManager : MonoBehaviour
     }
 
 
-    public void UnlockAcces(int moneyRequired)
+    public void UnlockAcces(int moneyRequired) //Opens door
     {
 
         RemoveMoneyAmount(moneyRequired);
@@ -36,7 +33,7 @@ public class MoneyManager : MonoBehaviour
 
     }
 
-    public void ObtainAmmo(int moneyRequired )
+    public void ObtainAmmo(int moneyRequired ) //Gives ammo to each of the guns
     {
 
         RemoveMoneyAmount(moneyRequired);

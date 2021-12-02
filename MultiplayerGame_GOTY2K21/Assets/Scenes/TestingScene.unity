@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7565430590385412966, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -824,10 +824,14 @@ MonoBehaviour:
   fireRate: 0.5
   gunDamage: 10
   gunRange: 70
+  magSize: 7
+  maxTotalAmmo: 32
   ourCamera: {fileID: 1190129023}
   normalLocalPosition: {x: 0.5, y: 0.2, z: 1.8}
   aimingLocalPosition: {x: 0, y: 0.16, z: 1.8}
   aimSpeed: 10
+  removeCrosshairAim: 0
+  crosshairImage: {fileID: 1948749542}
   mouseSensitivity: 1
   weaponSwayAmount: 10
   randomizeRecoil: 0
@@ -946,7 +950,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963918244070691106, guid: fed9cf852d17e734eac2978ccfb5d974, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4344137493343783832, guid: fed9cf852d17e734eac2978ccfb5d974, type: 3}
       propertyPath: m_RootOrder
@@ -1020,10 +1024,14 @@ MonoBehaviour:
   fireRate: 0.1
   gunDamage: 5
   gunRange: 100
+  magSize: 30
+  maxTotalAmmo: 90
   ourCamera: {fileID: 1190129023}
   normalLocalPosition: {x: 0.5, y: 0, z: 1.6}
   aimingLocalPosition: {x: 0, y: 0.2, z: 0.26}
   aimSpeed: 10
+  removeCrosshairAim: 0
+  crosshairImage: {fileID: 1948749542}
   mouseSensitivity: 1
   weaponSwayAmount: 10
   randomizeRecoil: 0
@@ -1032,7 +1040,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 999618381732254091, guid: e1d659a55cbcd2b489c1ab801899acdd, type: 3}
   bulletSpawnPos: {fileID: 1555878404}
   projectileSpeed: 20
-  bulletRecoil: 1
+  bulletRecoil: 0
 --- !u!1 &880477511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1317,7 +1325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1182894222}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.8, z: 0}
+  m_LocalPosition: {x: 0, y: -0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 788458632}
@@ -1379,10 +1387,14 @@ MonoBehaviour:
   fireRate: 1
   gunDamage: 30
   gunRange: 50
+  magSize: 4
+  maxTotalAmmo: 16
   ourCamera: {fileID: 1190129023}
   normalLocalPosition: {x: 0.6, y: 0.4, z: 1.2}
   aimingLocalPosition: {x: 0, y: 0.35, z: 1.2}
   aimSpeed: 10
+  removeCrosshairAim: 1
+  crosshairImage: {fileID: 1948749542}
   mouseSensitivity: 1
   weaponSwayAmount: 10
   randomizeRecoil: 0
@@ -1955,7 +1967,7 @@ GameObject:
   - component: {fileID: 1948749545}
   - component: {fileID: 1948749544}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Crosshair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2043,7 +2055,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.357643
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2055,19 +2067,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.015914967
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.9998734
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2075,7 +2087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -178.176
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -2934,7 +2946,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -3377,7 +3388,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -3519,7 +3529,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -3614,7 +3623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -3699,7 +3707,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 3731116051631140145}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -4583,7 +4590,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}
@@ -5052,7 +5058,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4493914614284389709}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 8f7380da49034cd488ddff94b1ac35d1, type: 3}
   m_Controller: {fileID: 9100000, guid: 2ef8e6599b7f9934e8ff0d64c5325a1f, type: 2}
   m_CullingMode: 1
@@ -5109,7 +5115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e7183db5fab1c419fe49694d52c166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDamaged: {fileID: 0}
   maxHP: 30
   currHP: 0
   generalHP_script: {fileID: 2033410221}

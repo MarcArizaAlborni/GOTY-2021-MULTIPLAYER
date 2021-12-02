@@ -19,14 +19,15 @@ public class BuyAmmo : MonoBehaviour
         Debug.Log("Press E to get Ammo");
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other) //Checks if player is inside the box collider with trigger
     {
        
-
         if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player" )
         {
-            moneyScript.ObtainAmmo(moneyRequired);
-
+            if (moneyScript.totalMoney >= moneyRequired)
+            {
+                moneyScript.ObtainAmmo(moneyRequired);
+            }
         }
     }
 
