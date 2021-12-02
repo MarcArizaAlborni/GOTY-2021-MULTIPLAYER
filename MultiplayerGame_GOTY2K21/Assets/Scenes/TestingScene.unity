@@ -249,9 +249,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6cf8f0f5419a546b54554dcb557885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rifleScript: {fileID: 0}
-  pistolScript: {fileID: 0}
-  chungerWafferScript: {fileID: 0}
+  rifleScript: {fileID: 788458636}
+  pistolScript: {fileID: 679670982}
+  chungerWafferScript: {fileID: 1264707836}
   totalMoney: 0
 --- !u!1 &148407143
 GameObject:
@@ -679,8 +679,10 @@ GameObject:
   - component: {fileID: 655156325}
   - component: {fileID: 655156324}
   - component: {fileID: 655156323}
+  - component: {fileID: 655156327}
+  - component: {fileID: 655156328}
   m_Layer: 0
-  m_Name: DummyCube3
+  m_Name: Ammo Interactuable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -745,7 +747,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 999e46d689b795a4392431d940997b58, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -775,6 +777,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655156321}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &655156327
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655156321}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 0.00000023841858, z: 0.00000047683716}
+--- !u!114 &655156328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655156321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1407cd782bcd51f4182a3f16106df5a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moneyScript: {fileID: 115598192}
+  moneyRequired: 0
 --- !u!1 &679670979 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7565430590385412966, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
@@ -793,8 +822,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0.5
-  clipSize: 6
-  reservedAmmoCapacity: 30
   gunDamage: 10
   gunRange: 70
   ourCamera: {fileID: 1190129023}
@@ -991,8 +1018,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0.1
-  clipSize: 30
-  reservedAmmoCapacity: 90
   gunDamage: 5
   gunRange: 100
   ourCamera: {fileID: 1190129023}
@@ -1178,7 +1203,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 53701850721f08540b32a0d51855a079, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1352,8 +1377,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 1
-  clipSize: 5
-  reservedAmmoCapacity: 10
   gunDamage: 30
   gunRange: 50
   ourCamera: {fileID: 1190129023}

@@ -9,19 +9,23 @@ public class BuyAmmo : MonoBehaviour
    
 
     public int moneyRequired = 0;
-    public int ammoGiven = 0;
+  //  public int ammoGiven = 0;
 
 
-    private void Update()
+  
+
+    private void OnTriggerEnter(Collider other)
     {
-       
+        Debug.Log("Press E to get Ammo");
     }
 
     private void OnTriggerStay(Collider other)
     {
+       
+
         if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player" )
         {
-            moneyScript.ObtainAmmo(moneyRequired,ammoGiven);
+            moneyScript.ObtainAmmo(moneyRequired);
 
         }
     }

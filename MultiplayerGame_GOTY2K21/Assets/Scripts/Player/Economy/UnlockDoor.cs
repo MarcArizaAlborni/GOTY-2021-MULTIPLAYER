@@ -6,10 +6,17 @@ public class UnlockDoor : MonoBehaviour
 {
 
     public MoneyManager moneyScript;
-    public int moneyRequired;
+    public int moneyRequired = 0;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Press E to Open Door");
+    }
+
 
     private void OnTriggerStay(Collider other)
     {
+        
         if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player")
         {
             if (moneyScript.totalMoney >= moneyRequired)

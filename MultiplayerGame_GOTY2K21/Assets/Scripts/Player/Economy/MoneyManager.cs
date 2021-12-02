@@ -36,7 +36,7 @@ public class MoneyManager : MonoBehaviour
 
     }
 
-    public void ObtainAmmo(int moneyRequired ,float ammoAdded)
+    public void ObtainAmmo(int moneyRequired )
     {
 
         RemoveMoneyAmount(moneyRequired);
