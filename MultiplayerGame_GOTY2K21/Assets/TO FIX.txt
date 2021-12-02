@@ -1,0 +1,5 @@
+REBOT BALES AMB EL TERRA I EL ZOMBIE
+
+Buscar personatge 3D, i escalar totes les armes i bales 
+
+Trajectoria bales fons i collisio trobada
