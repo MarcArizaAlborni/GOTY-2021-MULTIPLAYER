@@ -297,7 +297,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7184965051101184476, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7184965051101184476, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -345,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7565430590385412966, guid: ebb4e39623660f84cb8ac70d59a9b93c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -827,10 +827,10 @@ MonoBehaviour:
   magSize: 7
   maxTotalAmmo: 32
   ourCamera: {fileID: 1190129023}
-  normalLocalPosition: {x: 0.5, y: 0.2, z: 1.8}
-  aimingLocalPosition: {x: 0, y: 0.16, z: 1.8}
+  normalLocalPosition: {x: 0.35, y: 0.2, z: 1.8}
+  aimingLocalPosition: {x: 0, y: 0.28, z: 1.8}
   aimSpeed: 10
-  removeCrosshairAim: 0
+  removeCrosshairAim: 1
   crosshairImage: {fileID: 1948749542}
   BulletAim: {fileID: 1550284233}
   mouseSensitivity: 1
@@ -1031,7 +1031,7 @@ MonoBehaviour:
   normalLocalPosition: {x: 0.35, y: 0, z: 1.6}
   aimingLocalPosition: {x: 0, y: 0.12, z: 0.26}
   aimSpeed: 10
-  removeCrosshairAim: 0
+  removeCrosshairAim: 1
   crosshairImage: {fileID: 1948749542}
   BulletAim: {fileID: 1550284233}
   mouseSensitivity: 1
@@ -1042,7 +1042,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 999618381732254091, guid: e1d659a55cbcd2b489c1ab801899acdd, type: 3}
   bulletSpawnPos: {fileID: 1555878404}
   projectileSpeed: 20
-  bulletRecoil: 0
+  bulletRecoil: 1
 --- !u!1 &880477511
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1559,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1550284233}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
