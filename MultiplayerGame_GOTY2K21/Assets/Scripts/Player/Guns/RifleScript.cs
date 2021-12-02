@@ -19,10 +19,9 @@ public class RifleScript : MonoBehaviour
     public  int magSize = 30; //Max ammo in single Mag
     public  int maxTotalAmmo = 1000; //Total Ammo
 
-    
-
     [Header("Hit Management")]
     public Camera ourCamera;
+   // public ParticleSystem collisionParticle;
 
     [Header("Aim Management")]
 
@@ -48,7 +47,7 @@ public class RifleScript : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject bulletPrefab;
     public GameObject bulletSpawnPos;
-    public float projectileSpeed = 2;
+    public float projectileSpeed = 20;
     public bool bulletRecoil = true;
 
 
