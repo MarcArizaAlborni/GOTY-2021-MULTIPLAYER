@@ -12,6 +12,9 @@ public class RifleScript : MonoBehaviour
     public float gunDamage=5f;
     public float gunRange=100f;
 
+   public CameraShake cameraShakeScript;
+
+
     [Header("Ammo Management")]
     private bool canShoot;
     private int currentAmmoInMag; //Remaining ammo outside of mag
@@ -80,6 +83,11 @@ public class RifleScript : MonoBehaviour
         {
             //Debug.Log("CurrentMag"+currentAmmoInMag);
             //Debug.Log("InReserve" + ammoInReserve);
+            if (cameraShakeScript.shaking != true)
+            {
+                cameraShakeScript.StartShake();
+            }
+
             canShoot = false;
             currentAmmoInMag--;
             StartCoroutine(ShootGun());

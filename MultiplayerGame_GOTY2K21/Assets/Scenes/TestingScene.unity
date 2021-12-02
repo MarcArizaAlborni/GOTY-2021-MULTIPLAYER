@@ -1025,6 +1025,7 @@ MonoBehaviour:
   fireRate: 0.1
   gunDamage: 5
   gunRange: 35
+  cameraShakeScript: {fileID: 1182894225}
   magSize: 30
   maxTotalAmmo: 1000
   ourCamera: {fileID: 1867313192}
@@ -1312,6 +1313,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1182894223}
   - component: {fileID: 1182894224}
+  - component: {fileID: 1182894225}
   m_Layer: 6
   m_Name: Guns
   m_TagString: Untagged
@@ -1354,6 +1356,22 @@ MonoBehaviour:
   rifle: {fileID: 788458631}
   pistol: {fileID: 679670979}
   chunger: {fileID: 1264707834}
+--- !u!114 &1182894225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182894222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c514008a242ebc479a61f5f45d5b633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camTransform: {fileID: 1190129020}
+  shakeDuration: 0.1
+  shakeAmount: 0.05
+  shaking: 0
 --- !u!4 &1190129020 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 3}
