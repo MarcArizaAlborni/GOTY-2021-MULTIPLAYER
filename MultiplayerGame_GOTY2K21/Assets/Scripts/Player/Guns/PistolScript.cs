@@ -157,9 +157,9 @@ public class PistolScript : MonoBehaviour
         }
         else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
-            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+           // Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-            ManageBullet(ray.GetPoint(gunRange));
+            ManageBullet(BulletAim.transform.position);
         }
         
     }

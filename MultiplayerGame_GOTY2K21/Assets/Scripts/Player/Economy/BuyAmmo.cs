@@ -16,7 +16,10 @@ public class BuyAmmo : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Press E to get Ammo");
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Press E to get Ammo");
+        }
     }
 
     private void OnTriggerStay(Collider other) //Checks if player is inside the box collider with trigger

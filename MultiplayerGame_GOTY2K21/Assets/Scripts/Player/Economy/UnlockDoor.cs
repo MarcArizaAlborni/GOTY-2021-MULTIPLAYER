@@ -10,7 +10,10 @@ public class UnlockDoor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Press E to Open Door");
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("Press E to Open Door");
+        }
     }
 
 

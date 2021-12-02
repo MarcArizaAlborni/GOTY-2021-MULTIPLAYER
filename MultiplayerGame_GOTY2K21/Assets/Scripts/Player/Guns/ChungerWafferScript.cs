@@ -133,28 +133,32 @@ public class ChungerWafferScript : MonoBehaviour
         canShoot = true;
     }
 
+   
+
     void CheckForHit()
     {
 
         RaycastHit hit;
 
+
         if (Physics.Raycast(ourCamera.transform.position, ourCamera.transform.forward, out hit, gunRange)) //Send raycast from center of the camera  (where the crosshair is)
         {
+
             if (hit.collider.tag != "Bullet")
             {
-
+               
                 Debug.Log(hit.transform.name);
             }
-
-
-            ManageTargetHP(hit);
-            ManageBullet(hit.point);
+            
+            
+             ManageTargetHP(hit);
+             ManageBullet(hit.point);
 
 
         }
         else //If the raycast doesnt hit anything, set a point for the bullets to go to
         {
-            Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+           // Ray ray = ourCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
             ManageBullet(BulletAim.transform.position);
         }
