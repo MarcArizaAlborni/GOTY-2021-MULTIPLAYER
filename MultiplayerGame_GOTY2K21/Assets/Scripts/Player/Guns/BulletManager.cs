@@ -23,7 +23,12 @@ public class BulletManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //If bullet collides with something, destroy bullet
     {
-        Destroy(gameObject);
+
+        if (collision.gameObject.tag != "Bullet")
+        {
+
+            Destroy(gameObject);
+        }
     }
 
 }
