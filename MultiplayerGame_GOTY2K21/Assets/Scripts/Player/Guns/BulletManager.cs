@@ -11,9 +11,9 @@ public class BulletManager : MonoBehaviour
     public bool wantCollisionParticles=false;
     public GameObject collisionParticleObject;
 
-
-
-
+    public RifleScript rifleScript;
+    public PistolScript pistolScript;
+    public ChungerWafferScript chungerWafferScript;
 
     private void Start()
     {
@@ -30,7 +30,7 @@ public class BulletManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //If bullet collides with something, destroy bullet
     {
-        if (collision.gameObject.tag != "Bullet")
+        if (collision.gameObject.tag != "Bullet" && collision.gameObject.tag!="Player")
         {
 
             if (collision.gameObject.tag == "Concrete")
@@ -44,13 +44,70 @@ public class BulletManager : MonoBehaviour
                     particle.Play();
                 }
             }
-
-
-
-
+            else if (collision.gameObject.tag == "Zombie")
+            {
+              ZombieHitCollision(collision);
 
                 Destroy(gameObject);
+
+            }
+
+
+
+
+            if (gameObject != null)
+            {
+                Destroy(gameObject);
+            }
         }
+    }
+
+    void ZombieHitCollision(Collision collider)
+    {
+
+        float damage=0;
+
+        if (pistolScript != null)
+        {
+            damage = pistolScript.gunDamage;
+        }
+        else if (rifleScript != null)
+        {
+            damage = rifleScript.gunDamage;
+        }
+        else if (chungerWafferScript != null)
+        {
+            damage = chungerWafferScript.gunDamage;
+        }
+
+        ManagerHP_Enemy hpManagerScript = collider.transform.GetComponent<ManagerHP_Enemy>();
+        IndividualHP_Enemy hpIndividualScript = collider.transform.GetComponent<IndividualHP_Enemy>();
+
+        if (hpManagerScript != null)//only if hitting body (only body has the general hp manager script)
+        {
+            
+            Debug.Log(collider.transform.name);
+            hpManagerScript.UpdateGeneralHPEnemy(damage);
+
+            return;
+        }
+        else if (hpIndividualScript != null)//only if hitting arms or head
+        {
+            Debug.Log(collider.transform.name);
+            hpIndividualScript.ReceiveDamage(damage);
+
+        }
+
+
+
+
+
+
+       
+
+
+
+
     }
 
  

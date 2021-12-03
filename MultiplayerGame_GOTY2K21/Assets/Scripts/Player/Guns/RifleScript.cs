@@ -67,7 +67,7 @@ public class RifleScript : MonoBehaviour
         canShoot = true;
 
 
-        BulletAim.transform.localPosition = new Vector3(0f, 0f, gunRange);
+        BulletAim.transform.localPosition = new Vector3(0f, -0.7f, gunRange);
 
     }
 
@@ -172,12 +172,16 @@ public class RifleScript : MonoBehaviour
             if (hit.collider.tag != "Bullet")
             {
                
-                Debug.Log(hit.transform.name);
+                //Debug.Log(hit.transform.name);
             }
 
-           
-            ManageTargetHP(hit);
-            ManageBullet(hit.point);
+
+            // ManageTargetHP(hit);
+
+
+
+            //ManageTargetHP(BulletAim.transform.position);
+            ManageBullet(BulletAim.transform.position);
             
 
         }
@@ -198,7 +202,7 @@ public class RifleScript : MonoBehaviour
         if (bulletRecoil == false)
         {
             projObj = Instantiate(bulletPrefab, bulletSpawnPos.transform.position, Quaternion.identity);
-            projObj.GetComponent<Rigidbody>().velocity = (hitPosition - spawnPoint).normalized * projectileSpeed;
+            projObj.GetComponent<Rigidbody>().velocity = projectileSpeed * bulletSpawnPos.transform.forward;
         }
         else //For rifle we create variation to the spawnpoint of each of the bullets (only visual)
         {

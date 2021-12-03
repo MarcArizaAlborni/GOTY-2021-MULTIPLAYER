@@ -129,6 +129,9 @@ MonoBehaviour:
   lifeTime: 5
   wantCollisionParticles: 1
   collisionParticleObject: {fileID: 6955485500588249989, guid: 0f6b7dc37eb74e345a3952b550947d66, type: 3}
+  rifleScript: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
+  pistolScript: {fileID: 0}
+  chungerWafferScript: {fileID: 0}
 --- !u!96 &-677677924895262759
 TrailRenderer:
   serializedVersion: 2
