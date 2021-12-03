@@ -128,7 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeTime: 5
   wantCollisionParticles: 1
-  collisionParticles: []
+  collisionParticleObject: {fileID: 6955485500588249989, guid: 0f6b7dc37eb74e345a3952b550947d66, type: 3}
 --- !u!96 &9043730098189065284
 TrailRenderer:
   serializedVersion: 2

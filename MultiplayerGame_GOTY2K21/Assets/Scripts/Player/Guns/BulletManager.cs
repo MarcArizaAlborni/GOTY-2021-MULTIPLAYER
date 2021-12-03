@@ -35,11 +35,14 @@ public class BulletManager : MonoBehaviour
 
             if (collision.gameObject.tag == "Concrete")
             {
-               GameObject particleObj = Instantiate(collisionParticleObject, gameObject.transform.position, Quaternion.identity);
-                
+                if (collisionParticleObject != null)
+                {
+                    GameObject particleObj = Instantiate(collisionParticleObject, gameObject.transform.position, Quaternion.identity);
 
-                ParticleSystem particle = particleObj.GetComponent<ParticleSystem>();
-                particle.Play();
+
+                    ParticleSystem particle = particleObj.GetComponent<ParticleSystem>();
+                    particle.Play();
+                }
             }
 
 
