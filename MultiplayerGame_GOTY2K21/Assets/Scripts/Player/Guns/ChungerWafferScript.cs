@@ -12,7 +12,7 @@ public class ChungerWafferScript : MonoBehaviour
     public float gunRange = 100f;
 
     [Header("Ammo Management")]
-    private bool canShoot;
+    public bool canShoot;
     private int currentAmmoInMag;
     private int ammoInReserve; //Remaining ammo outside of mag
     public  int magSize = 4;

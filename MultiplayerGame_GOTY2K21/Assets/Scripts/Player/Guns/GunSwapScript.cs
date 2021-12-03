@@ -26,8 +26,9 @@ public class GunSwapScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha2) && !Input.GetMouseButton(1))
         {
-           
-            
+
+
+            SetCanShootTrue();
                 rifle.SetActive(false);
                 pistol.SetActive(true);
             chunger.SetActive(false);
@@ -37,8 +38,8 @@ public class GunSwapScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1) && !Input.GetMouseButton(1))
         {
-            
-            
+
+            SetCanShootTrue();
                 rifle.SetActive(true);
                 pistol.SetActive(false);
                chunger.SetActive(false);
@@ -48,8 +49,8 @@ public class GunSwapScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha3) && !Input.GetMouseButton(1))
         {
-           
-            
+
+            SetCanShootTrue();
                 rifle.SetActive(false);
                 pistol.SetActive(false);
             chunger.SetActive(true);
@@ -58,5 +59,15 @@ public class GunSwapScript : MonoBehaviour
         }
 
 
+    }
+
+
+    void SetCanShootTrue()
+    {
+
+
+        rifleScript.canShoot = true;
+        pistolScript.canShoot = true;
+        chungerScript.canShoot = true;
     }
 }

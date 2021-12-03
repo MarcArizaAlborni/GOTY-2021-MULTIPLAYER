@@ -18,7 +18,7 @@ public class RifleScript : MonoBehaviour
 
 
     [Header("Ammo Management")]
-    private bool canShoot;
+    [HideInInspector]public bool canShoot;
     private int currentAmmoInMag; //Remaining ammo outside of mag
     private int ammoInReserve;
     public  int magSize = 30; //Max ammo in single Mag
