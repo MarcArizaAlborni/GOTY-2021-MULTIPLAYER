@@ -5,7 +5,7 @@ using UnityEngine;
 public class WaveManagerScript : MonoBehaviour
 {
 
-    public int currentRoundNum = 1;
+    public int currentRoundNum = 0;
    
 
     public int difficultyModifier=1;
@@ -16,13 +16,14 @@ public class WaveManagerScript : MonoBehaviour
     int zombiesOnWaitCount;
 
 
-     int zombiesToSpawn = 0;
+   
      int activeZombiesCap = 0;
 
     private void Start()
     {
         activeZombiesCap = 24 + 6 * (5 - 1); //5 TAKING INTO ACCOUNT WE HAVE 5 PLAYERS ACTIVE
         zombiesOnWaitCount = 0;
+        currentRoundNum=0;
     }
     private void Update()
     {
@@ -31,6 +32,9 @@ public class WaveManagerScript : MonoBehaviour
 
     public void StartNewRound()
     {
+        ++currentRoundNum;
+        Debug.Log("Round " + currentRoundNum + " " + "Started");
+      
        int num= CalculateNumberZombies();
 
         if (num <= activeZombiesCap)
@@ -43,7 +47,7 @@ public class WaveManagerScript : MonoBehaviour
             zombiesOnWaitCount = num - activeZombiesCap;
 
         }
-
+        Debug.Log(num + "Zombies spawned this round");
     }
 
     public int CalculateNumberZombies() 
@@ -73,7 +77,7 @@ public class WaveManagerScript : MonoBehaviour
        
         int spawnerNum=Random.Range(1, spawnerPointsList.Count);
 
-        Instantiate(zombiePrefab, spawnerPointsList[spawnerNum].transform);
+        activeZombiesList.Add( Instantiate(zombiePrefab, spawnerPointsList[spawnerNum].transform.localPosition,Quaternion.identity));
 
        
     }
@@ -87,9 +91,22 @@ public class WaveManagerScript : MonoBehaviour
 
         --zombiesOnWaitCount;
     }
-
+    public void CheckZombieStatus()
+    {
+        for(int i= activeZombiesList.Count; i>0; --i)
+        {
+            if (activeZombiesList[i-1] == null)
+            {
+                activeZombiesList.RemoveAt(i-1);
+            }
+        }
+    }
     public void CheckCurrentRoundState()
     {
+
+        CheckZombieStatus();
+
+
         if (activeZombiesList.Count == 0 && zombiesOnWaitCount==0)
         {
             StartNewRound();
