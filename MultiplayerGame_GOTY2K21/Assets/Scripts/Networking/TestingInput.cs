@@ -19,10 +19,10 @@ public class TestingInput : MonoBehaviour
     private float velY = 0f;
     private bool isGrounded;
 
-    [SerializeField] private Vector2 sensitivity;
-    [SerializeField] private Vector2 acceleration;
-    private Vector2 velocity = new Vector2(0, 0);
-    private Vector2 rotation = new Vector2(0, 0);
+    //[SerializeField] private Vector2 sensitivity;
+    //[SerializeField] private Vector2 acceleration;
+    //private Vector2 velocity = new Vector2(0, 0);
+    //private Vector2 rotation = new Vector2(0, 0);
     private void Awake()
     {
         playerInput = new InputManager();
@@ -36,7 +36,7 @@ public class TestingInput : MonoBehaviour
     }
     private void Update()
     {
-        Rotate2();
+        Rotate();
         UpdateMove();
     }
     private void OnEnable()
@@ -52,33 +52,32 @@ public class TestingInput : MonoBehaviour
         if (isGrounded)
             velY = Mathf.Sqrt(jumpHeight * -2f * gravity);
     }
-    //public void Rotate()
-    //{
-    //    //Problem scales with deltas in new iput system !!!!
-    //    //Temporary solution: multiply by 0.5 * 0.1 (scales on winodws) Done it on the actions processors
-    //    //Link: https://forum.unity.com/threads/mouse-delta-input.646606/
-    //    //Debug.Log("Axis: " + Input.GetAxis("Mouse X") + ", " + Input.GetAxis("Mouse Y"));
-    //    //Debug.Log("Newsys: " + Mouse.current.delta.ReadValue().x * 0.5f * 0.1f + ", " + Mouse.current.delta.ReadValue().y * 0.5f * 0.1f);
-    //    
-    //    float mouseX = Mouse.current.delta.ReadValue().x * mouseSensitivity * Time.deltaTime;
-    //    float mouseY = Mouse.current.delta.ReadValue().y * mouseSensitivity * Time.deltaTime;
-    //    Debug.Log(mouseX + ", " + mouseY);
-    //
-    //    xRotation -= mouseY;
-    //    xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-    //    cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-    //    transform.Rotate(Vector3.up * mouseX);
-    //}
-    public void Rotate2()
+    public void Rotate()
     {
-        Vector2 wantedVelocity = Mouse.current.delta.ReadValue() * sensitivity;
-        Debug.Log(wantedVelocity);
-        velocity = new Vector2(Mathf.MoveTowards(velocity.x, wantedVelocity.x, acceleration.x * Time.deltaTime), Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime));
-        rotation += velocity * Time.deltaTime;
-        rotation.y = Mathf.Clamp(rotation.y, -90f, 90f);
-        cameraTransform.localEulerAngles = new Vector3(rotation.y, 0, 0);
-        transform.localEulerAngles = new Vector3(0, rotation.x, 0);
+        //Problem scales with deltas in new iput system !!!!
+        //Temporary solution: multiply by 0.5 * 0.1 (scales on winodws) Done it on the actions processors
+        //Link: https://forum.unity.com/threads/mouse-delta-input.646606/
+        //Debug.Log("Axis: " + Input.GetAxis("Mouse X") + ", " + Input.GetAxis("Mouse Y"));
+        //Debug.Log("Newsys: " + Mouse.current.delta.ReadValue().x * 0.5f * 0.1f + ", " + Mouse.current.delta.ReadValue().y * 0.5f * 0.1f);
+        float mouseX = playerInput.Player.Look.ReadValue<Vector2>().x * mouseSensitivity * Time.deltaTime;
+        float mouseY = playerInput.Player.Look.ReadValue<Vector2>().y * mouseSensitivity * Time.deltaTime;
+        //Debug.Log(mouseX + ", " + mouseY);
+    
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
     }
+    //public void Rotate2()
+    //{
+    //    Vector2 wantedVelocity = Mouse.current.delta.ReadValue() * sensitivity;
+    //    Debug.Log(wantedVelocity);
+    //    velocity = new Vector2(Mathf.MoveTowards(velocity.x, wantedVelocity.x, acceleration.x * Time.deltaTime), Mathf.MoveTowards(velocity.y, wantedVelocity.y, acceleration.y * Time.deltaTime));
+    //    rotation += velocity * Time.deltaTime;
+    //    rotation.y = Mathf.Clamp(rotation.y, -90f, 90f);
+    //    cameraTransform.localEulerAngles = new Vector3(rotation.y, 0, 0);
+    //    transform.localEulerAngles = new Vector3(0, rotation.x, 0);
+    //}
     private void UpdateMove()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
