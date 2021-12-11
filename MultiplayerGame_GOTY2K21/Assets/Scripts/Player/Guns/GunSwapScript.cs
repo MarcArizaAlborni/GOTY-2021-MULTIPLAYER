@@ -5,21 +5,22 @@ using UnityEngine;
 public class GunSwapScript : MonoBehaviour
 {
 
-
    public  RifleScript rifleScript;
    public  PistolScript pistolScript;
-    public ChungerWafferScript chungerScript;
+   public  ChungerWafferScript chungerScript;
+    public HUDmanagerScript hudScript;
 
    public GameObject rifle;
    public GameObject pistol;
-    public GameObject chunger;
-
+   public GameObject chunger;
 
     private void Start()
     {
         rifle.SetActive(true);
         pistol.SetActive(false);
         chunger.SetActive(false);
+        hudScript.panelPistol.SetActive(false);
+        hudScript.panelRifle.SetActive(true);
     }
 
     void Update()
@@ -27,7 +28,8 @@ public class GunSwapScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && !Input.GetMouseButton(1))
         {
 
-
+            hudScript.panelPistol.SetActive(true);
+            hudScript.panelRifle.SetActive(false);
             SetCanShootTrue();
                 rifle.SetActive(false);
                 pistol.SetActive(true);
@@ -39,6 +41,8 @@ public class GunSwapScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1) && !Input.GetMouseButton(1))
         {
 
+            hudScript.panelPistol.SetActive(false);
+            hudScript.panelRifle.SetActive(true);
             SetCanShootTrue();
                 rifle.SetActive(true);
                 pistol.SetActive(false);
@@ -47,25 +51,19 @@ public class GunSwapScript : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3) && !Input.GetMouseButton(1))
-        {
-
-            SetCanShootTrue();
-                rifle.SetActive(false);
-                pistol.SetActive(false);
-            chunger.SetActive(true);
-
-
-        }
-
-
+       // if (Input.GetKeyDown(KeyCode.Alpha3) && !Input.GetMouseButton(1))
+       // {
+       //
+       //     SetCanShootTrue();
+       //         rifle.SetActive(false);
+       //         pistol.SetActive(false);
+       //     chunger.SetActive(true);
+       //
+       // }
     }
-
 
     void SetCanShootTrue()
     {
-
-
         rifleScript.canShoot = true;
         pistolScript.canShoot = true;
         chungerScript.canShoot = true;

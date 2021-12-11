@@ -14,8 +14,8 @@ public class PistolScript : MonoBehaviour
 
     [Header("Ammo Management")]
     public bool canShoot;
-    private int currentAmmoInMag; //Remaining ammo outside of mag
-    private int ammoInReserve;
+    public int currentAmmoInMag; //Remaining ammo outside of mag
+    public int ammoInReserve;
     public  int magSize = 7;
     public  int maxTotalAmmo = 32;
 
