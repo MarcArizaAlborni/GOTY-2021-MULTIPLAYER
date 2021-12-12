@@ -466,7 +466,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: 'Ammo in Mag
+
+'
 --- !u!222 &168983210
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1281,7 +1283,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Ammo in Mag
 --- !u!222 &970288967
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1766,7 +1768,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Ammo in Reserve
 --- !u!222 &1380425924
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2213,7 +2215,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Ammo in Reserve
 --- !u!222 &1676573420
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2801,7 +2803,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Current Money
 --- !u!222 &2011080400
 CanvasRenderer:
   m_ObjectHideFlags: 0
