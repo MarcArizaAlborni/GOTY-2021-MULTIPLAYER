@@ -5,6 +5,19 @@ using UnityEngine;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using System.IO;
+
+
+struct PacketHeader
+{
+    //PacketHeader
+    public uint sequenceNumber;
+    public short aknowledgeMask;
+    public long time;
+    //
+    //Data
+    public byte[] data;
+}
 
 public class ServerNetwork : MonoBehaviour
 {
@@ -28,26 +41,41 @@ public class ServerNetwork : MonoBehaviour
     Thread NetSimThread;
     //--------------------------------------------------------------------------------------------------------------------------------------------
 
+    private struct ClientInput
+    {
+        public float position;
+        public float rotation;
+        //all these bools send as bitflags i a single byte
+        //public bool grounded;
+        //public bool shoot;
+        //public bool run; we have two velocities
+    }
 
+    private struct Client
+    {
+        public IPEndPoint address;
+        uint packetSequenceNum;
+        public ClientInput[] inputBuffer;
+    }
+
+    [SerializeField] private int maxClients = 2;
+    Client[] clients;
     private int packetSequenceNum = 0;
     private Socket serverSocket;
-    private IPEndPoint[] clientAddresses;
-    [SerializeField] private int maxClients = 5;
-    private int numberofclients = 0;
+    private int numOfClients = 0;
     public int targetTickRate = 60;
     //necesitarem alguna mena de timer
     public int snapshotSendRate = 20;
 
     Thread listeningThread;
-    bool filterAddresses = false;
-    object filterLock = new object();
+    object frameProcessingLock = new object();
 
     private void Start()
     {
         serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
         serverSocket.Bind(ipep);
-        clientAddresses = new IPEndPoint[5];
+        //clientAddresses = new IPEndPoint[maxClients];
 
 
         //TODO: improve ticking counter
@@ -82,22 +110,50 @@ public class ServerNetwork : MonoBehaviour
     {
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 0);
         EndPoint remote = (EndPoint)ipep;
-        byte[] data = new byte[1700];
-        int reciv = serverSocket.ReceiveFrom(data, ref remote);
-        bool filter;
-        lock (filterLock) 
+        while (true) 
         {
-            filter = filterAddresses; 
-        }
-        if (reciv != 0)
-        {
+            byte[] data = new byte[1700];
+            int reciv = serverSocket.ReceiveFrom(data, ref remote);
+            if (reciv != 0)
+            {
+                lock (frameProcessingLock)
+                {
+                                        //Checking if the sender is our client
+                    bool newClient = true;
+                    for (int i = 0; i < numOfClients; ++i)
+                    {
+                        if (clients[i].address == remote)
+                        {
+                            newClient = false;
+                            break;
+                        }
+                    }
 
+                    if (newClient)
+                    {
+                        //create a new client
+                        clients[numOfClients] = new Client();
+                        clients[numOfClients].address = (IPEndPoint)remote;
+                        ++numOfClients;
+                    }
+                    else
+                    {
+
+                        //process the packet
+                        MemoryStream stream = new MemoryStream(data);
+                        BinaryReader reader = new BinaryReader(stream);
+                        //Reading packet header
+                        uint SequenceNumber = reader.ReadUInt32();
+                        //Client update sequence number
+                        //Reading Packet Data
+                        ClientInput input = new ClientInput();
+                        input.position = reader.ReadSingle();
+                        input.rotation = reader.ReadSingle();
+                    }
+                }
+            }
         }
     }
-    //private bool IsClientAddress(IPEndPoint address)
-    //{
-    //    for (int i = 0; i< numberofclients)
-    //}
 
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
     public List<Message> messageBuffer = new List<Message>();
