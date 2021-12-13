@@ -14,16 +14,18 @@ public class playerAnimationController : MonoBehaviour
         animator = GetComponent<Animator>();
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
         bool fwrdPressed = Input.GetKey("w");
+        bool bwrdPressed = Input.GetKey("s");
         bool runPressed = Input.GetKey("left shift");
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
-  
 
         if (!isWalking && fwrdPressed)
         {
