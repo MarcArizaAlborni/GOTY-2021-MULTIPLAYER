@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
+using System.Text;
 
 
 struct PacketHeader
@@ -22,6 +23,7 @@ struct PacketHeader
 public class ServerNetwork : MonoBehaviour
 {
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
+    [Header("Teacher jitter script")]
     public bool jitter = true;
     public bool packetLoss = true;
     public int minJitt = 0;
@@ -40,40 +42,80 @@ public class ServerNetwork : MonoBehaviour
     bool exit = false;
     Thread NetSimThread;
     //--------------------------------------------------------------------------------------------------------------------------------------------
-
     private struct ClientInput
     {
-        public float position;
-        public float rotation;
+        public uint lastInputSeqNum;
+        public Vector3 position;
+        public Quaternion rotation;
         //all these bools send as bitflags i a single byte
         //public bool grounded;
         //public bool shoot;
         //public bool run; we have two velocities
     }
 
-    private struct Client
+    private class Client
     {
+        //public int rtt;
         public IPEndPoint address;
-        uint packetSequenceNum;
-        public ClientInput[] inputBuffer;
+        private uint _sendSequenceNumber = 0;
+        private uint _receiveSequenceNumber = 0;
+        public uint sendSequenceNumber{
+            get
+            {
+                return _sendSequenceNumber;
+            }
+        }
+        public void IncrementReceiveSequenceNumber()
+        {
+            ++_receiveSequenceNumber;
+        }
+        public void IncrementSendSequenceNumber()
+        {
+            ++_sendSequenceNumber;
+        }
+        private ClientInput lastInput = new ClientInput();
+        public bool inputToRead = false;
+        public void StoreInput(ClientInput input)
+        {
+            if (input.lastInputSeqNum > lastInput.lastInputSeqNum)
+            {
+                inputToRead = true;
+                lastInput.lastInputSeqNum = input.lastInputSeqNum;
+            }
+        }
+        public ClientInput GetStoredInput()
+        {
+            inputToRead = false;
+            return lastInput;
+        }
+        //private List<ClientInput> inputBufer = new List<ClientInput>(16);
+        //public void StoreInput(ClientInput input)
+        //{ 
+        //    inputBufer.Insert(0, input);
+        //}
     }
 
+    [Header("Server Settings")]
+    //private uint serverTick;
     [SerializeField] private int maxClients = 2;
+    private int numOfClients = 0;
     Client[] clients;
     private int packetSequenceNum = 0;
     private Socket serverSocket;
-    private int numOfClients = 0;
-    public int targetTickRate = 60;
-    //necesitarem alguna mena de timer
-    public int snapshotSendRate = 20;
+    public int targetTickRate = 30;
 
     Thread listeningThread;
     object frameProcessingLock = new object();
 
+    private void Awake()
+    {
+        Application.targetFrameRate = targetTickRate;
+    }
+
     private void Start()
     {
         serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 9050);
+        IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
         serverSocket.Bind(ipep);
         //clientAddresses = new IPEndPoint[maxClients];
 
@@ -91,11 +133,22 @@ public class ServerNetwork : MonoBehaviour
         listeningThread.IsBackground = true;
         listeningThread.Start();
     }
+
     private void Update()
     {
-        
+        lock(frameProcessingLock)
+        {
+            //ProcessClientInputs();
+
+            //Simulate world
+
+            //TROLL
+            EchangePlayersPositions();
+        }
+        //SendWorldSnapshot();
     }
 
+    //fER UN DESTRUCTOR PER ASSEGURARME K ES CRIDA?
     private void OnDestroy()
     {
         //Fer un lock del exit???
@@ -104,6 +157,49 @@ public class ServerNetwork : MonoBehaviour
             exit = true;
         }
         serverSocket.Close();
+    }
+
+    //TROLL
+    private void EchangePlayersPositions()
+    {
+        for (int i = 0; i < numOfClients; ++i)
+        {
+            if (clients[i].inputToRead)
+            {
+                ClientInput input = clients[i].GetStoredInput();
+                MemoryStream stream = new MemoryStream();
+                BinaryWriter writer = new BinaryWriter(stream);
+                writer.Write(clients[i].sendSequenceNumber);
+                writer.Write(input.position.x);
+                writer.Write(input.position.y);
+                writer.Write(input.position.z);
+                writer.Write(input.rotation.x);
+                writer.Write(input.rotation.y);
+                writer.Write(input.rotation.z);
+                for (int j = 0; j < numOfClients; ++j)
+                {
+                    if (j != i)
+                    {
+                        clients[i].IncrementSendSequenceNumber();
+                        sendMessage(stream.GetBuffer(),clients[i].address);
+                    }
+                }
+            }
+        }
+    }
+    private void ProcessClientInputs()
+    {
+        for (int i = 0; i < numOfClients; ++i)
+        {
+            if(clients[i].inputToRead)
+            {
+                clients[i].GetStoredInput();
+            }
+        }
+    }
+    private void SendWorldSnapshot()
+    {
+        
     }
 
     private void Listening()
@@ -118,23 +214,33 @@ public class ServerNetwork : MonoBehaviour
             {
                 lock (frameProcessingLock)
                 {
-                                        //Checking if the sender is our client
+                    //Checking if the sender is our client
+                    Client client = new Client();
                     bool newClient = true;
                     for (int i = 0; i < numOfClients; ++i)
                     {
                         if (clients[i].address == remote)
                         {
                             newClient = false;
+                            client = clients[i];
                             break;
                         }
                     }
 
-                    if (newClient)
+                    if (newClient && Encoding.ASCII.GetString(data,0,reciv) == "New Player")
                     {
                         //create a new client
-                        clients[numOfClients] = new Client();
-                        clients[numOfClients].address = (IPEndPoint)remote;
-                        ++numOfClients;
+                        if (numOfClients < maxClients)
+                        {
+                            clients[numOfClients] = new Client();
+                            clients[numOfClients].address = (IPEndPoint)remote;
+                            ++numOfClients;
+                        }
+                        //Send refuse message
+                        //else
+                        //{
+                        //    
+                        //}
                     }
                     else
                     {
@@ -147,8 +253,14 @@ public class ServerNetwork : MonoBehaviour
                         //Client update sequence number
                         //Reading Packet Data
                         ClientInput input = new ClientInput();
-                        input.position = reader.ReadSingle();
-                        input.rotation = reader.ReadSingle();
+                        input.lastInputSeqNum = SequenceNumber;
+                        input.position.x = reader.ReadSingle();
+                        input.position.y = reader.ReadSingle();
+                        input.position.z = reader.ReadSingle();
+                        input.rotation.x = reader.ReadSingle();
+                        input.rotation.y = reader.ReadSingle();
+                        input.rotation.z = reader.ReadSingle();
+                        client.StoreInput(input);
                     }
                 }
             }
@@ -157,7 +269,7 @@ public class ServerNetwork : MonoBehaviour
 
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
     public List<Message> messageBuffer = new List<Message>();
-    void sendMessage(Byte[] text, IPEndPoint ip)
+    private void sendMessage(Byte[] text, IPEndPoint ip)
     {
         System.Random r = new System.Random();
         if (((r.Next(0, 100) > lossThreshold) && packetLoss) || !packetLoss) // Don't schedule the message with certain probability
@@ -183,7 +295,7 @@ public class ServerNetwork : MonoBehaviour
 
     }
     //Run this always in a separate Thread, to send the delayed messages
-    void sendMessages()
+    private void sendMessages()
     {
         Debug.Log("really sending..");
         //Fer un lock del exit???

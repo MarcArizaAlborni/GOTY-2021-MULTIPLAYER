@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//TENIR EN COMPTE LA RESOLUTION DE LA SCREEN PER LA SENSIBILITAT DEL MOUSE
 public class TestingInput : MonoBehaviour
 {
     public float mouseSensitivity = 100f;
