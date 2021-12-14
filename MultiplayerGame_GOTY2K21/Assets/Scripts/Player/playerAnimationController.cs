@@ -5,6 +5,7 @@ using UnityEngine;
 public class playerAnimationController : MonoBehaviour
 {
     Animator animator;
+    TestingInput input;
     int isWalkingHash;
     int isRunningHash;
 
@@ -12,22 +13,36 @@ public class playerAnimationController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        input = GetComponent<TestingInput>();
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
-
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool fwrdPressed = Input.GetKey("w");
+        /*bool fwrdPressed = Input.GetKey("w");
         bool bwrdPressed = Input.GetKey("s");
         bool runPressed = Input.GetKey("left shift");
         bool isWalking = animator.GetBool(isWalkingHash);
-        bool isRunning = animator.GetBool(isRunningHash);
+        bool isRunning = animator.GetBool(isRunningHash);*/
+   
+        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
 
-        if (!isWalking && fwrdPressed)
+        if(movement.magnitude > 0)
+        {
+            movement.Normalize();
+            movement *= input.characterSpeed * Time.deltaTime;
+            transform.Translate(movement, Space.World);
+        }
+
+        float velZ = Vector3.Dot(movement.normalized, transform.forward);
+        float velX = Vector3.Dot(movement.normalized, transform.right);
+
+        animator.SetFloat("VelZ", velZ, 0.1f, Time.deltaTime);
+        animator.SetFloat("VelX", velX, 0.1f, Time.deltaTime);
+
+        /*if (!isWalking && fwrdPressed)
         {
             animator.SetBool(isWalkingHash, true);
         }
@@ -45,6 +60,7 @@ public class playerAnimationController : MonoBehaviour
         if (isRunning && (!fwrdPressed || !runPressed))
         {
             animator.SetBool(isRunningHash, false);
-        }
+        }*/
     }
+
 }
