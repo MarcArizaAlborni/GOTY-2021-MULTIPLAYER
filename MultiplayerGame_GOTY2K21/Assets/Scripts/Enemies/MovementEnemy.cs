@@ -47,14 +47,11 @@ public class MovementEnemy : MonoBehaviour
 
     void SteeringSeek(Vector3 targetPos)
     {
-        if (Vector3.Distance(targetPos, position) < stopDistance)
+        if (Vector3.Distance(targetPos, position) < agent.stoppingDistance)
         {
             SetAttack();
             return;
         }
-            
-
-            
 
         //seek delay so it does not iterate every frame
         if (timer > 0.5)
@@ -66,17 +63,18 @@ public class MovementEnemy : MonoBehaviour
         turnSpeed += turnAcceleration * Time.deltaTime;
         turnSpeed = Mathf.Min(turnSpeed, maxTurnSpeed);
 
-        if (Vector3.Distance(targetPos, position) < slowDistance)
+        if (Vector3.Distance(targetPos, position) < agent.stoppingDistance)
         {
             //slows movement when arriving destination
             movSpeed = (maxSpeed * Vector3.Distance(targetPos, position)) / slowDistance;
         }
         else
         {
+            SetRunning();
             movSpeed += acceleration * Time.deltaTime;
             movSpeed = Mathf.Min(movSpeed, maxSpeed);
+            
         }
-
         rot = Quaternion.Slerp(rot, rotation, Time.deltaTime * turnSpeed);
         position += transform.forward.normalized * movSpeed * Time.deltaTime;
 
