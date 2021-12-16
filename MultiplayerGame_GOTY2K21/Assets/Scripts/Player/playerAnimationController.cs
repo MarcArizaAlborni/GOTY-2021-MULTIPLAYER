@@ -9,9 +9,12 @@ public class playerAnimationController : MonoBehaviour
     int isWalkingHash;
     int isRunningHash;
 
+    Transform parentTransfrom;
+
     // Start is called before the first frame update
     void Start()
     {
+        parentTransfrom = transform.parent.transform;
         animator = GetComponent<Animator>();
         input = GetComponent<TestingInput>();
         isWalkingHash = Animator.StringToHash("isWalking");
@@ -33,14 +36,21 @@ public class playerAnimationController : MonoBehaviour
         {
             movement.Normalize();
             movement *= input.characterSpeed * Time.deltaTime;
-            transform.Translate(movement, Space.World);
+
         }
 
-        float velZ = Vector3.Dot(movement.normalized, transform.forward);
-        float velX = Vector3.Dot(movement.normalized, transform.right);
+        float velZ = Vector3.Dot(movement.normalized, parentTransfrom.forward);
+        float velX = Vector3.Dot(movement.normalized, parentTransfrom.right);
 
-        animator.SetFloat("VelZ", velZ, 0.1f, Time.deltaTime);
+      
+        animator.SetFloat("VelZ", -velZ, 0.1f, Time.deltaTime);
         animator.SetFloat("VelX", velX, 0.1f, Time.deltaTime);
+    
+
+
+
+
+
 
         /*if (!isWalking && fwrdPressed)
         {
