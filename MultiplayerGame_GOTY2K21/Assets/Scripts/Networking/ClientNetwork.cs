@@ -62,6 +62,8 @@ public class ClientNetwork : MonoBehaviour
     private float ackConnectSec = 10.0f;
     private float maxAckConnectSec = 1.5f;
 
+    private uint lastSeqNum = 0;
+
     private Socket clientSocket;
     private IPEndPoint serverIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
 
@@ -96,8 +98,25 @@ public class ClientNetwork : MonoBehaviour
             byte[] data = new byte[1700];
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 0);
             EndPoint remote = (EndPoint)ipep;
-            int reciv = clientSocket.ReceiveFrom(data, ref remote);
-            if (remote == serverIpep && reciv > 0)
+            int reciv = 0;
+            bool exception = false;
+            try
+            {
+                reciv = clientSocket.ReceiveFrom(data, ref remote);
+            }
+            catch(SocketException e)
+            {
+                switch (e.SocketErrorCode)
+                {
+                    //TODO: why does this happen
+                    case SocketError.ConnectionReset:
+                        Debug.Log("The server is not up");
+                        exception = true;
+                        break;
+
+                }
+            }
+            if (!exception && serverIpep.Equals(remote) && reciv > 0)
             {
                 //Mal haber de setear la variable tot el rato ??
                 connected = true;
@@ -122,8 +141,12 @@ public class ClientNetwork : MonoBehaviour
                 }
                 else
                 {
-                    otherPlayerTransform.localPosition = position;
-                    otherPlayerTransform.rotation = rotation;
+                    if (lastInputSeqNum >= lastSeqNum) 
+                    {
+                        otherPlayerTransform.localPosition = position;
+                        otherPlayerTransform.rotation = rotation;
+                        lastSeqNum = lastInputSeqNum;
+                    }
                 }
             }
         }   
@@ -188,7 +211,7 @@ public class ClientNetwork : MonoBehaviour
             {
                 messageBuffer.Add(m);
             }
-            Debug.Log(m.time.ToString());
+            //Debug.Log(m.time.ToString());
         }
 
     }

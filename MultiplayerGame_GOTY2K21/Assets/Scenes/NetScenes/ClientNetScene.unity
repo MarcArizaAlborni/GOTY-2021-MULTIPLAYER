@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c65e097b42cc748961b77b9018e3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 10
+  mouseSensitivity: 80
   characterSpeed: 12
   gravity: -20
   jumpHeight: 3
@@ -634,9 +634,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jitter: 1
   packetLoss: 1
-  minJitt: 0
-  maxJitt: 800
-  lossThreshold: 90
+  minJitt: 20
+  maxJitt: 300
+  lossThreshold: 25
   playerPrefab: {fileID: 537953152283126609, guid: 20f662a0f8b0ebf478f515c7a7718f1c, type: 3}
   playerTransform: {fileID: 170605411}
   sendPerSec: 60

@@ -4,6 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/NetScenes/ServerNetScene.unity
+    guid: b528608882ff90440bc9c10c959e9f90
+  - enabled: 1
+    path: Assets/Scenes/NetScenes/ClientNetScene.unity
+    guid: 7b90888e5782cfc43ba2e94543962248
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c6429e9af70564f44ad7ca762990fbd6, type: 2}

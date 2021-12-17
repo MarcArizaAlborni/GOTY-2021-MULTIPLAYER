@@ -79,6 +79,7 @@ public class ServerNetwork : MonoBehaviour
         {
             if (input.lastInputSeqNum > lastInput.lastInputSeqNum)
             {
+                lastInput = input;
                 inputToRead = true;
                 lastInput.lastInputSeqNum = input.lastInputSeqNum;
             }
@@ -110,6 +111,7 @@ public class ServerNetwork : MonoBehaviour
     private void Awake()
     {
         Application.targetFrameRate = targetTickRate;
+        clients = new Client[maxClients];
     }
 
     private void Start()
@@ -181,7 +183,7 @@ public class ServerNetwork : MonoBehaviour
                     if (j != i)
                     {
                         clients[i].IncrementSendSequenceNumber();
-                        sendMessage(stream.GetBuffer(),clients[i].address);
+                        sendMessage(stream.GetBuffer(),clients[j].address);
                     }
                 }
             }
@@ -209,7 +211,22 @@ public class ServerNetwork : MonoBehaviour
         while (true) 
         {
             byte[] data = new byte[1700];
-            int reciv = serverSocket.ReceiveFrom(data, ref remote);
+            int reciv = 0;
+            try
+            {
+                reciv = serverSocket.ReceiveFrom(data, ref remote);
+            }
+            catch(SocketException e)
+            {
+                SocketError error = e.SocketErrorCode;
+                switch (e.SocketErrorCode)
+                {
+                    //WSACancelBlockingCall() by the Socket.close()
+                    case SocketError.Interrupted:
+                        Debug.Log("Socket was closed");
+                        return;
+                }
+            }
             if (reciv != 0)
             {
                 lock (frameProcessingLock)
@@ -219,7 +236,7 @@ public class ServerNetwork : MonoBehaviour
                     bool newClient = true;
                     for (int i = 0; i < numOfClients; ++i)
                     {
-                        if (clients[i].address == remote)
+                        if (clients[i].address.Equals(remote))
                         {
                             newClient = false;
                             client = clients[i];
@@ -227,14 +244,15 @@ public class ServerNetwork : MonoBehaviour
                         }
                     }
 
-                    if (newClient && Encoding.ASCII.GetString(data,0,reciv) == "New Player")
+                    if (newClient)
                     {
-                        //create a new client
-                        if (numOfClients < maxClients)
+                        if ((Encoding.ASCII.GetString(data, 0, reciv) == "New Player") && numOfClients < maxClients)
                         {
+                            //create a new client
                             clients[numOfClients] = new Client();
                             clients[numOfClients].address = (IPEndPoint)remote;
                             ++numOfClients;
+                            Debug.Log("New client connected");
                         }
                         //Send refuse message
                         //else
@@ -246,21 +264,24 @@ public class ServerNetwork : MonoBehaviour
                     {
 
                         //process the packet
-                        MemoryStream stream = new MemoryStream(data);
-                        BinaryReader reader = new BinaryReader(stream);
-                        //Reading packet header
-                        uint SequenceNumber = reader.ReadUInt32();
-                        //Client update sequence number
-                        //Reading Packet Data
-                        ClientInput input = new ClientInput();
-                        input.lastInputSeqNum = SequenceNumber;
-                        input.position.x = reader.ReadSingle();
-                        input.position.y = reader.ReadSingle();
-                        input.position.z = reader.ReadSingle();
-                        input.rotation.x = reader.ReadSingle();
-                        input.rotation.y = reader.ReadSingle();
-                        input.rotation.z = reader.ReadSingle();
-                        client.StoreInput(input);
+                        if ((Encoding.ASCII.GetString(data, 0, reciv) != "New Player"))
+                        {
+                            MemoryStream stream = new MemoryStream(data);
+                            BinaryReader reader = new BinaryReader(stream);
+                            //Reading packet header
+                            uint SequenceNumber = reader.ReadUInt32();
+                            //Client update sequence number
+                            //Reading Packet Data
+                            ClientInput input = new ClientInput();
+                            input.lastInputSeqNum = SequenceNumber;
+                            input.position.x = reader.ReadSingle();
+                            input.position.y = reader.ReadSingle();
+                            input.position.z = reader.ReadSingle();
+                            input.rotation.x = reader.ReadSingle();
+                            input.rotation.y = reader.ReadSingle();
+                            input.rotation.z = reader.ReadSingle();
+                            client.StoreInput(input); 
+                        }
                     }
                 }
             }
