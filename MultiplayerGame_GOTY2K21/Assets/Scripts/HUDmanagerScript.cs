@@ -23,6 +23,10 @@ public class HUDmanagerScript : MonoBehaviour
     public Text moneyText;
     public MoneyManager moneyScript;
 
+    [Header("Round")]
+    public Text roundText;
+    public WaveManagerScript waveScript;
+
 
     void Update()
     {
@@ -53,7 +57,12 @@ public class HUDmanagerScript : MonoBehaviour
 
 
         //AMMO
-        moneyText.text = moneyScript.totalMoney.ToString();
+        moneyText.text ="$" +moneyScript.totalMoney.ToString();
+
+
+        //ROUNDS
+
+        roundText.text = waveScript.currentRoundNum.ToString();
     }
     
 }
