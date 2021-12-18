@@ -14,6 +14,9 @@ public class MovementEnemy : MonoBehaviour
     private NavMeshAgent agent;
     private Animator currentAnimation;
     // Start is called before the first frame update
+
+    [HideInInspector] public bool attackingNow=false;
+
     void Start()
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
@@ -29,7 +32,7 @@ public class MovementEnemy : MonoBehaviour
         float test = agent.remainingDistance;
         if (test <= agent.stoppingDistance)
         {
-            SetAttack();
+            //SetAttack();
             
         }
         else
@@ -37,6 +40,8 @@ public class MovementEnemy : MonoBehaviour
             SetRunning();
 
         }
+
+       
 
 
         if (timer > timeToSearch)
@@ -75,6 +80,9 @@ public class MovementEnemy : MonoBehaviour
         currentAnimation.SetBool("IsRunning", false);
         currentAnimation.SetBool("IsDead", false);
         currentAnimation.SetBool("IsAttacking", true);
+
+        
+        
     }
 
     public void SetDead()
