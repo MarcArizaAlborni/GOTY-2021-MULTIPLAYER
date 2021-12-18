@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2776399240824553489}
   - component: {fileID: 99984294454490331}
   - component: {fileID: 8259043535350547677}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1901587079058183438}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.35, y: 0.2, z: 1.8}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children:
   - {fileID: 8259043535055579923}
   - {fileID: 8259043535147066938}
@@ -100,10 +100,12 @@ MonoBehaviour:
   gunDamage: 10
   gunRange: 30
   canShoot: 0
+  currentAmmoInMag: 0
+  ammoInReserve: 0
   magSize: 7
   maxTotalAmmo: 32
   ourCamera: {fileID: 0}
-  normalLocalPosition: {x: 0.35, y: 0.2, z: 1.8}
+  normalLocalPosition: {x: 0.29, y: 0.415, z: 0.746}
   aimingLocalPosition: {x: 0, y: 0.28, z: 1.8}
   aimSpeed: 10
   removeCrosshairAim: 0
@@ -126,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8259043535147066938}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: bulletSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_IsActive
@@ -168,7 +170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_IsActive
@@ -176,11 +178,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_RootOrder

@@ -9,7 +9,7 @@ public class RifleScript : MonoBehaviour
     [Header("Gun Performance Management")]
 
     public float fireRate = 0.1f;
-    public float gunDamage=5f;
+    public float gunDamage=20;
     public float gunRange=100f;
 
    public CameraShake cameraShakeScript;

@@ -2480,6 +2480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf7e8b46fc9a1449adadf67076f09eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ourCamera: {fileID: 1986547663}
+  WalkingFov: 50
 --- !u!143 &1354736007
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4187,6 +4189,7 @@ MonoBehaviour:
   vmidArm_L_obj: {fileID: 2438390135795875276}
   body_obj: {fileID: 4493914614284389709}
   maxGeneralHP: 1000
+  currHPCount: 0
 --- !u!136 &2033410222
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6705,29 +6708,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: rifle
       objectReference: {fileID: 0}
-    - target: {fileID: 159244563376087601, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 159244563376087601, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 684002587321694347, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 684002587321694347, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 684002587321694347, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 684002587321694347, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 684002587321694347, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6774,10 +6757,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1550284233}
     - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: gunDamage
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: ourCamera
       value: 
       objectReference: {fileID: 1867313192}
@@ -6786,49 +6765,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1948749542}
     - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: projectileSpeed
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: wantCameraShake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: cameraShakeScript
       value: 
       objectReference: {fileID: 1182894225}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: normalLocalPosition.x
-      value: 0.23
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: normalLocalPosition.y
-      value: 0.415
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: normalLocalPosition.z
-      value: 0.554
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650921238399808, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650921238399810, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650921238399812, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650921238399814, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3834650922236711371, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
 --- !u!1 &3847861894786729756
@@ -9502,18 +9441,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1236268828439875508, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1236268828439875508, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1236268828439875508, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1236268828439875508, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.29
       objectReference: {fileID: 0}
@@ -9557,34 +9484,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: pistol
       objectReference: {fileID: 0}
-    - target: {fileID: 1901587079058183438, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1901587079058183438, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535055943473, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535055943475, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535055943477, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535055943479, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535147066939, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 8259043535350547677, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
       propertyPath: BulletAim
       value: 
@@ -9597,18 +9496,6 @@ PrefabInstance:
       propertyPath: crosshairImage
       value: 
       objectReference: {fileID: 1948749542}
-    - target: {fileID: 8259043535350547677, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: normalLocalPosition.x
-      value: 0.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535350547677, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: normalLocalPosition.y
-      value: 0.415
-      objectReference: {fileID: 0}
-    - target: {fileID: 8259043535350547677, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
-      propertyPath: normalLocalPosition.z
-      value: 0.746
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
 --- !u!1 &8284346732514331704

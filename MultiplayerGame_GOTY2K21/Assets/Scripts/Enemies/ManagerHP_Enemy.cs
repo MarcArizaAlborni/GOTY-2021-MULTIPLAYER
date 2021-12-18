@@ -41,7 +41,7 @@ public class ManagerHP_Enemy : MonoBehaviour
 
 
     public float maxGeneralHP;
-    float currHPCount;
+    public float currHPCount;
 
    
     private void Start()
