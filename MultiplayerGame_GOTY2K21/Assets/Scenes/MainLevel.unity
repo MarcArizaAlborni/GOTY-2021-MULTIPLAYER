@@ -3043,7 +3043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRoundNum: 1
   difficultyModifier: 1
-  zombiePrefab: {fileID: 2258336338723890721, guid: b1c182448b7698c47b36f6cef871e634, type: 3}
+  zombiePrefab: {fileID: 7186710233927173666, guid: b195c69ccc4803d4988ef8501521e98a, type: 3}
   spawnerPointsList:
   - {fileID: 1191347176}
   - {fileID: 573849307}
@@ -3054,6 +3054,7 @@ MonoBehaviour:
   - {fileID: 1710691945}
   - {fileID: 503099492}
   activeZombiesList: []
+  numPlayers: 1
 --- !u!4 &1670484275
 Transform:
   m_ObjectHideFlags: 0
@@ -6772,6 +6773,10 @@ PrefabInstance:
       propertyPath: BulletAim
       value: 
       objectReference: {fileID: 1550284233}
+    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
+      propertyPath: gunDamage
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: ourCamera
       value: 

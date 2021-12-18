@@ -14,14 +14,14 @@ public class WaveManagerScript : MonoBehaviour
     public List<GameObject> spawnerPointsList;
    [HideInInspector] public List<GameObject> activeZombiesList;
     int zombiesOnWaitCount;
-
+    public int numPlayers = 1;
 
    
      int activeZombiesCap = 0;
 
     private void Start()
     {
-        activeZombiesCap = 24 + 6 * (5 - 1); //5 TAKING INTO ACCOUNT WE HAVE 5 PLAYERS ACTIVE
+        activeZombiesCap = 24 + 6 * (numPlayers - 1); //5 TAKING INTO ACCOUNT WE HAVE 5 PLAYERS ACTIVE
         zombiesOnWaitCount = 0;
         currentRoundNum=0;
     }
@@ -48,14 +48,16 @@ public class WaveManagerScript : MonoBehaviour
 
         }
         Debug.Log(num + "Zombies spawned this round");
+        Debug.Log(zombiesOnWaitCount + "Zombies on wait this round");
     }
 
     public int CalculateNumberZombies() 
     {
         float numF = 0;
 
-        numF = 0.15f * currentRoundNum * activeZombiesCap;
+        numF = 0.1f * currentRoundNum * activeZombiesCap;
 
+        
         int num = Mathf.RoundToInt(numF);
 
         return num;
@@ -107,6 +109,7 @@ public class WaveManagerScript : MonoBehaviour
         activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target = GameObject.Find("model").transform;
 
         --zombiesOnWaitCount;
+        Debug.Log(zombiesOnWaitCount + "remianing this round on wait");
     }
     public void CheckZombieStatus()
     {
