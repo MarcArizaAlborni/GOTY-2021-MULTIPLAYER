@@ -86,7 +86,7 @@ public class WaveManagerScript : MonoBehaviour
 
         activeZombiesList.Add( Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
 
-        activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target=GameObject.Find("Player").transform;
+        activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target=GameObject.Find("model").transform;
     }
 
     public void SpawnMidRoundZombie()
@@ -104,7 +104,7 @@ public class WaveManagerScript : MonoBehaviour
 
         activeZombiesList.Add(Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
 
-        activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target = GameObject.Find("Player").transform;
+        activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target = GameObject.Find("model").transform;
 
         --zombiesOnWaitCount;
     }

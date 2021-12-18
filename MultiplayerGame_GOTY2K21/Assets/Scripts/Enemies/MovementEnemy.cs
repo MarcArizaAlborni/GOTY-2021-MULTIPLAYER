@@ -34,13 +34,13 @@ public class MovementEnemy : MonoBehaviour
 
         position = gameObject.transform.position;
 
-        SteeringSeek(target.position);
+        SteeringSeek(target.GetChild(0).transform.position);
         SetRunning();
     }
     // Update is called once per frame
     void Update()
     {
-        SteeringSeek(target.position);
+        SteeringSeek(target.GetChild(0).transform.position);
         Debug.Log("Agent Position: " + agent.transform.position);
         Debug.Log("Position: " + position);
     }
