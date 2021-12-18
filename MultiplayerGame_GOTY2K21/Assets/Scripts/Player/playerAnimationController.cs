@@ -9,6 +9,8 @@ public class playerAnimationController : MonoBehaviour
     int isWalkingHash;
     int isRunningHash;
 
+    public Camera ourCamera;
+
     Transform parentTransfrom;
 
     // Start is called before the first frame update
@@ -39,18 +41,25 @@ public class playerAnimationController : MonoBehaviour
 
         }
 
+        float rotX = ourCamera.transform.eulerAngles.x;
         float velZ = Vector3.Dot(movement.normalized, parentTransfrom.forward);
         float velX = Vector3.Dot(movement.normalized, parentTransfrom.right);
 
       
         animator.SetFloat("VelZ", -velZ, 0.1f, Time.deltaTime);
         animator.SetFloat("VelX", velX, 0.1f, Time.deltaTime);
-    
 
+        if (rotX >= 91.0f)
+        {
+            rotX = rotX - 360.0f;
+            animator.SetFloat("aimVert", rotX, 0.1f, Time.deltaTime);
+        }
+        else
+        {
+            animator.SetFloat("aimVert", rotX, 0.1f, Time.deltaTime);
+        }
 
-
-
-
+        Debug.Log("Camera Rot: " + rotX);
 
         /*if (!isWalking && fwrdPressed)
         {
