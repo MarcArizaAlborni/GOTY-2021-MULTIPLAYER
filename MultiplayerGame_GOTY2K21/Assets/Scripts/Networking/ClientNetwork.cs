@@ -125,17 +125,17 @@ public class ClientNetwork : MonoBehaviour
                 BinaryReader reader = new BinaryReader(stream);
                 uint lastInputSeqNum = reader.ReadUInt32();
                 Vector3 position;
-                Quaternion rotation;
+                Vector3 rotation;
                 position.x = reader.ReadSingle();
                 position.y = reader.ReadSingle();
                 position.z = reader.ReadSingle();
                 rotation.x = reader.ReadSingle();
                 rotation.y = reader.ReadSingle();
                 rotation.z = reader.ReadSingle();
-                rotation.w = reader.ReadSingle();
+                Quaternion rotQuat = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
                 if(!otherPlayer)
                 {
-                    var instantiated = Instantiate(playerPrefab, position, rotation);
+                    var instantiated = Instantiate(playerPrefab, position, rotQuat);
                     otherPlayerTransform = instantiated.GetComponent<Transform>();
                     otherPlayer = true;
                 }
@@ -144,7 +144,7 @@ public class ClientNetwork : MonoBehaviour
                     if (lastInputSeqNum >= lastSeqNum) 
                     {
                         otherPlayerTransform.localPosition = position;
-                        otherPlayerTransform.rotation = rotation;
+                        otherPlayerTransform.rotation = rotQuat;
                         lastSeqNum = lastInputSeqNum;
                     }
                 }
@@ -163,9 +163,10 @@ public class ClientNetwork : MonoBehaviour
             writer.Write(playerTransform.position.x);
             writer.Write(playerTransform.position.y);
             writer.Write(playerTransform.position.z);
-            writer.Write(playerTransform.rotation.x);
-            writer.Write(playerTransform.rotation.y);
-            writer.Write(playerTransform.rotation.z);
+            Vector3 EulerAngles = playerTransform.rotation.eulerAngles;
+            writer.Write(EulerAngles.x);
+            writer.Write(EulerAngles.y);
+            writer.Write(EulerAngles.z);
             IncrementSendSequenceNumber();
             sendMessage(stream.GetBuffer(), serverIpep);
             timeSinceSend = 0.0f;
