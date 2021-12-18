@@ -74,10 +74,17 @@ public class WaveManagerScript : MonoBehaviour
 
     public void SpawnZombie()
     {
-       
-        int spawnerNum=Random.Range(1, spawnerPointsList.Count);
+       Vector2 vecCircl= Random.insideUnitCircle * 1;
+       int spawnerNum=Random.Range(1, spawnerPointsList.Count);
 
-        activeZombiesList.Add( Instantiate(zombiePrefab, spawnerPointsList[spawnerNum].transform.localPosition,Quaternion.identity));
+        Vector3 finalSpawnPos;
+
+        finalSpawnPos.x= spawnerPointsList[spawnerNum].transform.localPosition.x + vecCircl.x;
+        finalSpawnPos.z = spawnerPointsList[spawnerNum].transform.localPosition.z + vecCircl.y;
+        finalSpawnPos.y = 0.2f;
+
+
+        activeZombiesList.Add( Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
 
         activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target=GameObject.Find("Player").transform;
     }
@@ -85,9 +92,18 @@ public class WaveManagerScript : MonoBehaviour
     public void SpawnMidRoundZombie()
     {
 
+        Vector2 vecCircl = Random.insideUnitCircle * 1;
         int spawnerNum = Random.Range(1, spawnerPointsList.Count);
 
-        activeZombiesList.Add(Instantiate(zombiePrefab, spawnerPointsList[spawnerNum].transform.localPosition, Quaternion.identity));
+        Vector3 finalSpawnPos;
+
+        finalSpawnPos.x = spawnerPointsList[spawnerNum].transform.localPosition.x + vecCircl.x;
+        finalSpawnPos.z = spawnerPointsList[spawnerNum].transform.localPosition.z + vecCircl.y;
+        finalSpawnPos.y = 0.2f;
+
+
+        activeZombiesList.Add(Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
+
         activeZombiesList[activeZombiesList.Count - 1].GetComponent<MovementEnemy>().target = GameObject.Find("Player").transform;
 
         --zombiesOnWaitCount;
