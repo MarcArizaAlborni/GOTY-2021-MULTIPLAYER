@@ -46,7 +46,7 @@ public class ServerNetwork : MonoBehaviour
     {
         public uint lastInputSeqNum;
         public Vector3 position;
-        public Quaternion rotation;
+        public Vector3 rotation;
         //all these bools send as bitflags i a single byte
         //public bool grounded;
         //public bool shoot;
