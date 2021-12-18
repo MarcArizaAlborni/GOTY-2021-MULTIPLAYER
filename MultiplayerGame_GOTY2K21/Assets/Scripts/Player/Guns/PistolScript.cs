@@ -99,11 +99,11 @@ public class PistolScript : MonoBehaviour
         Vector3 target = normalLocalPosition;
         if (Input.GetMouseButton(1))
         {
-            target = aimingLocalPosition;
-            if (removeCrosshairAim == true)
-            {
-                crosshairImage.SetActive(false);
-            }
+           // target = aimingLocalPosition;
+           // if (removeCrosshairAim == true)
+           // {
+           //     crosshairImage.SetActive(false);
+           // }
         }
         else
         {
