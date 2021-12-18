@@ -83,7 +83,7 @@ public class WaveManagerScript : MonoBehaviour
 
         finalSpawnPos.x= spawnerPointsList[spawnerNum].transform.localPosition.x + vecCircl.x;
         finalSpawnPos.z = spawnerPointsList[spawnerNum].transform.localPosition.z + vecCircl.y;
-        finalSpawnPos.y = 0.2f;
+        finalSpawnPos.y = 0.1f;
 
 
         activeZombiesList.Add( Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
@@ -101,7 +101,7 @@ public class WaveManagerScript : MonoBehaviour
 
         finalSpawnPos.x = spawnerPointsList[spawnerNum].transform.localPosition.x + vecCircl.x;
         finalSpawnPos.z = spawnerPointsList[spawnerNum].transform.localPosition.z + vecCircl.y;
-        finalSpawnPos.y = 0.2f;
+        finalSpawnPos.y = 0.1f;
 
 
         activeZombiesList.Add(Instantiate(zombiePrefab, finalSpawnPos, Quaternion.identity));
@@ -117,6 +117,8 @@ public class WaveManagerScript : MonoBehaviour
         {
             if (activeZombiesList[i-1] == null)
             {
+                //Dead animation can't be played just before erase the GameObject
+                //activeZombiesList[i - 1].GetComponent<MovementEnemy>().SetDead();
                 activeZombiesList.RemoveAt(i-1);
             }
         }
