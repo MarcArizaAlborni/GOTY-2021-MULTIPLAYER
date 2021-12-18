@@ -342,7 +342,6 @@ GameObject:
   - component: {fileID: 175005915}
   - component: {fileID: 175005914}
   - component: {fileID: 175005913}
-  - component: {fileID: 175005917}
   m_Layer: 0
   m_Name: LongCube
   m_TagString: Untagged
@@ -426,22 +425,6 @@ Transform:
   m_Father: {fileID: 1788841535}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
---- !u!208 &175005917
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 175005912}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 3, y: 3, z: 30}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &331520313
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +503,6 @@ GameObject:
   - component: {fileID: 381171807}
   - component: {fileID: 381171806}
   - component: {fileID: 381171805}
-  - component: {fileID: 381171808}
   m_Layer: 0
   m_Name: SmallCube3
   m_TagString: Untagged
@@ -604,22 +586,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 381171803}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &381171808
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 381171803}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 5, y: 5, z: 5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &417590863
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,7 +631,6 @@ GameObject:
   - component: {fileID: 476997677}
   - component: {fileID: 476997676}
   - component: {fileID: 476997675}
-  - component: {fileID: 476997678}
   m_Layer: 0
   m_Name: SmallCube2
   m_TagString: Untagged
@@ -749,22 +714,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476997673}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &476997678
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 476997673}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 5, y: 5, z: 5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &503099492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1011,6 @@ GameObject:
   - component: {fileID: 638140157}
   - component: {fileID: 638140156}
   - component: {fileID: 638140155}
-  - component: {fileID: 638140158}
   m_Layer: 0
   m_Name: BigCube2
   m_TagString: Untagged
@@ -1146,22 +1094,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638140153}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &638140158
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 638140153}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 21.21424, y: 9.685719, z: 13.598}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &655156321
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1109,6 @@ GameObject:
   - component: {fileID: 655156323}
   - component: {fileID: 655156327}
   - component: {fileID: 655156328}
-  - component: {fileID: 655156329}
   m_Layer: 0
   m_Name: Ammo Interactuable
   m_TagString: Untagged
@@ -1301,22 +1232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moneyScript: {fileID: 1670484276}
   moneyRequired: 0
---- !u!208 &655156329
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 655156321}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 2.5, y: 2.5, z: 2.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &679670982 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8259043535350547677, guid: 4073850c210039d4c9bc714cf384d10d, type: 3}
@@ -1853,7 +1768,6 @@ GameObject:
   - component: {fileID: 967963280}
   - component: {fileID: 967963279}
   - component: {fileID: 967963278}
-  - component: {fileID: 967963281}
   m_Layer: 0
   m_Name: SmallCube1
   m_TagString: Untagged
@@ -1937,22 +1851,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 967963276}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &967963281
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967963276}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 5, y: 5, z: 5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &970288964
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,7 +1945,6 @@ GameObject:
   - component: {fileID: 986320473}
   - component: {fileID: 986320475}
   - component: {fileID: 986320474}
-  - component: {fileID: 986320476}
   m_Layer: 0
   m_Name: InteractuableDoor
   m_TagString: Untagged
@@ -2171,22 +2068,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9750519, y: 1.2289594, z: 2.1269233}
   m_Center: {x: 0.021627808, y: 0.11447954, z: -0.056785967}
---- !u!208 &986320476
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986320468}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 2.5, y: 2.5, z: 2.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1028384743
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,7 +2114,6 @@ GameObject:
   - component: {fileID: 1067049077}
   - component: {fileID: 1067049076}
   - component: {fileID: 1067049075}
-  - component: {fileID: 1067049078}
   m_Layer: 0
   m_Name: SmallCube4
   m_TagString: Untagged
@@ -2317,22 +2197,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067049073}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &1067049078
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067049073}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 5, y: 5, z: 5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &1182894222
 GameObject:
   m_ObjectHideFlags: 0
@@ -2521,7 +2385,6 @@ GameObject:
   - component: {fileID: 1307343704}
   - component: {fileID: 1307343703}
   - component: {fileID: 1307343702}
-  - component: {fileID: 1307343705}
   m_Layer: 0
   m_Name: BigCube1
   m_TagString: Untagged
@@ -2605,22 +2468,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307343700}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!208 &1307343705
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1307343700}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 21.21424, y: 9.685719, z: 13.598}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &1354736005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4905,7 +4752,7 @@ GameObject:
   - component: {fileID: 1354736008}
   m_Layer: 0
   m_Name: model
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

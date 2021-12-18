@@ -41,8 +41,8 @@ public class MovementEnemy : MonoBehaviour
     void Update()
     {
         SteeringSeek(target.GetChild(0).transform.position);
-        Debug.Log("Agent Position: " + agent.transform.position);
-        Debug.Log("Position: " + position);
+       // Debug.Log("Agent Position: " + agent.transform.position);
+       // Debug.Log("Position: " + position);
     }
 
     void SteeringSeek(Vector3 targetPos)
