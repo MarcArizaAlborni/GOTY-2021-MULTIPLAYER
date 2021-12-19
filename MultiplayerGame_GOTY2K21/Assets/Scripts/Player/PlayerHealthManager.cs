@@ -44,19 +44,22 @@ public class PlayerHealthManager : MonoBehaviour
             {
                 MovementEnemy movScript = wavesManager.activeZombiesList[i].GetComponent<MovementEnemy>();
 
-
-                if (movScript.attackingNow == true)
+                if (movScript != null)
                 {
-                    currentPlayerHP -= damageDealtToPlayer;
-                    movScript.attackingNow = false;
-                    currNonAttackedTime = 0f;
-                    if (currentPlayerHP <= 0)
-                    {
-                        playerDead = true;
-                        deadCollider.SetActive(true);
-                       
-                    }
 
+                    if (movScript.attackingNow == true)
+                    {
+                        currentPlayerHP -= damageDealtToPlayer;
+                        movScript.attackingNow = false;
+                        currNonAttackedTime = 0f;
+                        if (currentPlayerHP <= 0)
+                        {
+                            playerDead = true;
+                            deadCollider.SetActive(true);
+
+                        }
+
+                    }
                 }
 
             }
