@@ -7,6 +7,7 @@ using System.Text;
 using System;
 using System.Threading;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class ClientNetwork2 : MonoBehaviour
 {
@@ -34,6 +35,12 @@ public class ClientNetwork2 : MonoBehaviour
         while (clientNet.PollReceive())
         {
             clientNet.ReceiveMessage();
+        }
+        if (clientNet.newConnexion)
+        {
+            clientNet.PollNewConnexions();
+            DontDestroyOnLoad(this);
+            SceneManager.LoadScene("LobyScene");
         }
         //Conecting to server
         //if (!connected)

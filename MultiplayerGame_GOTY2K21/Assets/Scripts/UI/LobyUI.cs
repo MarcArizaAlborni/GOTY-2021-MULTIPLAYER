@@ -9,7 +9,6 @@ public class LobyUI : MonoBehaviour
 
     bool isReady = false;
 
-
     public void SetReady()
     {
         if (isReady)
