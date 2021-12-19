@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4526622507180947246}
   - component: {fileID: 1816424433613407204}
   - component: {fileID: 3834650920932159299}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: rifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 159244563376087601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.35, y: 0, z: 1.6}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_Children:
   - {fileID: 3834650921238632294}
   - {fileID: 3834650922236711370}
@@ -97,15 +97,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0.1
-  gunDamage: 5
+  gunDamage: 20
   gunRange: 35
   cameraShakeScript: {fileID: 0}
-  wantCameraShake: 1
+  wantCameraShake: 0
   canShoot: 0
+  currentAmmoInMag: 0
+  ammoInReserve: 0
   magSize: 30
   maxTotalAmmo: 1000
   ourCamera: {fileID: 0}
-  normalLocalPosition: {x: 0.35, y: 0, z: 1.6}
+  normalLocalPosition: {x: 0.23, y: 0.415, z: 0.554}
   aimingLocalPosition: {x: 0, y: 0.12, z: 0.26}
   aimSpeed: 10
   removeCrosshairAim: 0
@@ -118,7 +120,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 3834650921256981030}
   bulletPrefab: {fileID: 999618381732254091, guid: e1d659a55cbcd2b489c1ab801899acdd, type: 3}
   bulletSpawnPos: {fileID: 3834650922236711371}
-  projectileSpeed: 100
+  projectileSpeed: 25
   bulletRecoil: 1
 --- !u!1 &3834650922236711371
 GameObject:
@@ -129,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3834650922236711370}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: bulletSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_IsActive
@@ -171,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_IsActive
@@ -179,11 +181,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 03a4a1935a9f4454c861dfa0aa6df562, type: 3}
       propertyPath: m_RootOrder

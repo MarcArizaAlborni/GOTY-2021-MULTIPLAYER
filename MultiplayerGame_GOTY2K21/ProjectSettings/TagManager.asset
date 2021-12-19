@@ -9,11 +9,12 @@ TagManager:
   - FxTemporaire
   - Concrete
   - Zombie
+  - ZombieAttack
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Gun
   - Water
   - UI
   - 

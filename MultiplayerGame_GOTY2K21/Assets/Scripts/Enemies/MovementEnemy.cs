@@ -6,33 +6,21 @@ using UnityEngine.AI;
 
 public class MovementEnemy : MonoBehaviour
 {
-    [Header("Seek Parameters")]
-    public float stopDistance = 2.0f;
-    public float slowDistance = 4.0f;
-    public float maxTurnSpeed = 5.0f;
-    public float maxSpeed = 5.0f;
-    public float acceleration = 2.0f;
-    public float turnAcceleration = 2.0f;
-
-    //Private variables for using SteeringSeek
-    private float turnSpeed;
-    private float movSpeed;
-    private Quaternion rotation;
-    private Vector3 movement;
-    private Vector3 position;
-    private Quaternion rot;
-    private float timer = 0;
-
+    [Header("Time")]
+    public float timeToSearch = 10.0f;
+    private float timer = 0.0f;
+    
     public Transform target;
     private NavMeshAgent agent;
     private Animator currentAnimation;
     // Start is called before the first frame update
+
+    [HideInInspector] public bool attackingNow=false;
+
     void Start()
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
         currentAnimation = gameObject.GetComponent<Animator>();
-
-        position = gameObject.transform.position;
 
         SteeringSeek(target.GetChild(0).transform.position);
         SetRunning();
@@ -41,79 +29,73 @@ public class MovementEnemy : MonoBehaviour
     void Update()
     {
         SteeringSeek(target.GetChild(0).transform.position);
-        Debug.Log("Agent Position: " + agent.transform.position);
-        Debug.Log("Position: " + position);
-    }
-
-    void SteeringSeek(Vector3 targetPos)
-    {
-        if (Vector3.Distance(targetPos, position) < agent.stoppingDistance)
+        float test = agent.remainingDistance;
+        if (test <= agent.stoppingDistance)
         {
-            SetAttack();
-            return;
-        }
-
-        //seek delay so it does not iterate every frame
-        if (timer > 0.5)
-        {
-            Seek(targetPos);
-        }
-
-
-        turnSpeed += turnAcceleration * Time.deltaTime;
-        turnSpeed = Mathf.Min(turnSpeed, maxTurnSpeed);
-
-        if (Vector3.Distance(targetPos, position) < agent.stoppingDistance)
-        {
-            //slows movement when arriving destination
-            movSpeed = (maxSpeed * Vector3.Distance(targetPos, position)) / slowDistance;
+            //SetAttack();
+            
         }
         else
         {
             SetRunning();
-            movSpeed += acceleration * Time.deltaTime;
-            movSpeed = Mathf.Min(movSpeed, maxSpeed);
-            
-        }
-        rot = Quaternion.Slerp(rot, rotation, Time.deltaTime * turnSpeed);
-        position += transform.forward.normalized * movSpeed * Time.deltaTime;
 
-        if (timer > 0.5)
+        }
+
+       
+
+
+        if (timer > timeToSearch)
         {
-            agent.destination = position;
+            SearchNewTarget();
             timer = 0;
         }
-        transform.rotation = rot;
-
         timer += Time.smoothDeltaTime;
     }
 
-    void Seek(Vector3 targetPos)
+    void SteeringSeek(Vector3 targetPos)
     {
-        Vector3 direction = targetPos - position;
-        direction.y = 0f;
-        movement = direction.normalized * acceleration;
-        float angle = Mathf.Rad2Deg * Mathf.Atan2(movement.x, movement.z);
-        rotation = Quaternion.AngleAxis(angle, Vector3.up);
+
+        agent.SetDestination(targetPos);
+      
     }
 
 
+    //Search new target
+    public void SearchNewTarget() 
+    {
+        GameObject[] goes = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject go in goes)
+        {
+            if (!go.GetComponent<PlayerHealthManager>().playerDead)
+            {
+                //If distance of current target is bigger than a new one, set this as new target
+                if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+                {
+                    target = go.transform;
+                }
+            }
+        }
+    }
+
     //Animation functions
-    void SetAttack()
+    public void SetAttack()
     {
         currentAnimation.SetBool("IsRunning", false);
         currentAnimation.SetBool("IsDead", false);
         currentAnimation.SetBool("IsAttacking", true);
+
+        
+        
     }
 
-    void SetDead()
+    public void SetDead()
     {
         currentAnimation.SetBool("IsRunning", false);
         currentAnimation.SetBool("IsDead", true);
         currentAnimation.SetBool("IsAttacking", false);
     }
 
-    void SetRunning()
+    public void SetRunning()
     {
         currentAnimation.SetBool("IsRunning", true);
         currentAnimation.SetBool("IsDead", false);

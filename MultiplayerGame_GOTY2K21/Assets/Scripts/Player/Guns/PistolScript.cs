@@ -49,6 +49,9 @@ public class PistolScript : MonoBehaviour
     public GameObject bulletSpawnPos;
     public float projectileSpeed = 2;
 
+    [Header("Dead Player")]
+    public PlayerHealthManager healthPlayerScript;
+
     private void Start()
     {
         currentAmmoInMag = magSize;
@@ -64,7 +67,7 @@ public class PistolScript : MonoBehaviour
         SetAim();
 
 
-        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0)
+        if (Input.GetMouseButtonDown(0) && canShoot && currentAmmoInMag > 0 && !healthPlayerScript.playerDead)
         {
             //Debug.Log("CurrentMag" + currentAmmoInMag);
             //Debug.Log("InReserve" + ammoInReserve);
@@ -72,7 +75,7 @@ public class PistolScript : MonoBehaviour
             currentAmmoInMag--;
             StartCoroutine(ShootGun());
         }
-        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoInMag < magSize && ammoInReserve > 0)
+        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoInMag < magSize && ammoInReserve > 0 && !healthPlayerScript.playerDead)
         {
             int amountToReload = magSize - currentAmmoInMag;
 
@@ -99,11 +102,11 @@ public class PistolScript : MonoBehaviour
         Vector3 target = normalLocalPosition;
         if (Input.GetMouseButton(1))
         {
-            target = aimingLocalPosition;
-            if (removeCrosshairAim == true)
-            {
-                crosshairImage.SetActive(false);
-            }
+           // target = aimingLocalPosition;
+           // if (removeCrosshairAim == true)
+           // {
+           //     crosshairImage.SetActive(false);
+           // }
         }
         else
         {

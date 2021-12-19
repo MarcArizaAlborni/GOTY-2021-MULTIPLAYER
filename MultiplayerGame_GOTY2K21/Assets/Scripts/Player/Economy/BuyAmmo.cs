@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuyAmmo : MonoBehaviour
 {
@@ -9,27 +10,57 @@ public class BuyAmmo : MonoBehaviour
    
 
     public int moneyRequired = 0;
-  //  public int ammoGiven = 0;
+    //  public int ammoGiven = 0;
 
 
-  
+    public Text interactionText;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Press E to get Ammo");
+            //Debug.Log("Press E to get Ammo");
+            interactionText.text = "Press E to buy Ammo";
+        }
+
+     
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+
+            if (interactionText.text == "Press E to buy Ammo")
+            {
+                interactionText.text = "";
+            }
         }
     }
 
     private void OnTriggerStay(Collider other) //Checks if player is inside the box collider with trigger
     {
+
        
-        if (Input.GetKeyDown(KeyCode.E) && other.gameObject.tag == "Player" )
+        if ( other.gameObject.tag == "Player" )
         {
-            if (moneyScript.totalMoney >= moneyRequired)
+
+
+
+
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                moneyScript.ObtainAmmo(moneyRequired);
+
+
+                if (moneyScript.totalMoney >= moneyRequired)
+                {
+
+                    if (interactionText.text == "Press E to buy Ammo")
+                    {
+                        interactionText.text = "";
+                    }
+                    moneyScript.ObtainAmmo(moneyRequired);
+                }
             }
         }
     }
