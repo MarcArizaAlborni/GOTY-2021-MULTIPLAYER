@@ -67,6 +67,14 @@ public class ClientNetwork : MonoBehaviour
     private Socket clientSocket;
     private IPEndPoint serverIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
 
+    struct ServerSnapshot{
+        public uint lastInputSeqNum;
+        public Vector3 position;
+        public Vector3 rotation;
+        public double time;
+    }
+    private List<ServerSnapshot> serverSnapshots = new List<ServerSnapshot> ();
+
     private void Awake()
     {
         sendRateSec = (1f / (float)sendPerSec);
@@ -120,32 +128,35 @@ public class ClientNetwork : MonoBehaviour
             {
                 //Mal haber de setear la variable tot el rato ??
                 connected = true;
-
                 MemoryStream stream = new MemoryStream(data);
                 BinaryReader reader = new BinaryReader(stream);
-                uint lastInputSeqNum = reader.ReadUInt32();
-                Vector3 position;
-                Vector3 rotation;
-                position.x = reader.ReadSingle();
-                position.y = reader.ReadSingle();
-                position.z = reader.ReadSingle();
-                rotation.x = reader.ReadSingle();
-                rotation.y = reader.ReadSingle();
-                rotation.z = reader.ReadSingle();
-                Quaternion rotQuat = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
+                ServerSnapshot snap = new ServerSnapshot();
+                snap.lastInputSeqNum = reader.ReadUInt32();
+                snap.time = Time.realtimeSinceStartupAsDouble;
+                snap.position.x = reader.ReadSingle();
+                snap.position.y = reader.ReadSingle();
+                snap.position.z = reader.ReadSingle();
+                snap.rotation.x = reader.ReadSingle();
+                snap.rotation.y = reader.ReadSingle();
+                snap.rotation.z = reader.ReadSingle();
+                Quaternion rotQuat = Quaternion.Euler(snap.rotation.x, snap.rotation.y, snap.rotation.z);
+
                 if(!otherPlayer)
                 {
-                    var instantiated = Instantiate(playerPrefab, position, rotQuat);
+                    var instantiated = Instantiate(playerPrefab, snap.position, rotQuat);
                     otherPlayerTransform = instantiated.GetComponent<Transform>();
                     otherPlayer = true;
                 }
                 else
                 {
-                    if (lastInputSeqNum >= lastSeqNum) 
+                    //la seva pose no nomes es canvia kuan rebo el paket!!!!
+                    //fer el tije al k e rebut el paket
+                    //si no es mou laltre player k no senvii paket
+                    if (snap.lastInputSeqNum >= lastSeqNum) 
                     {
-                        otherPlayerTransform.localPosition = position;
+                        otherPlayerTransform.localPosition = snap.position;
                         otherPlayerTransform.rotation = rotQuat;
-                        lastSeqNum = lastInputSeqNum;
+                        lastSeqNum = snap.lastInputSeqNum;
                     }
                 }
             }
@@ -173,7 +184,6 @@ public class ClientNetwork : MonoBehaviour
         }
     }
 
-    //fER UN DESTRUCTOR PER ASSEGURARME K ES CRIDA?
     private void OnDestroy()
     {
         //Fer un lock del exit???
@@ -182,6 +192,14 @@ public class ClientNetwork : MonoBehaviour
             exit = true;
         }
         clientSocket.Close();
+    }
+    private void SaveSnap(ServerSnapshot snap)
+    {
+
+    }
+    private float LinearInterpolation(float currentY, float xLow, float xHigh, float yLow, float yHigh)
+    {
+        return xLow + ((xHigh - xLow) / (yHigh - yLow)) * (currentY - yLow);
     }
     private void SendHiMessage()
     {
