@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051886797, b: 0.1013117, a: 1}
+  m_Color: {r: 0.5294118, g: 0.03137255, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9425142, b: 0.7122642, a: 0.69411767}
+  m_Color: {r: 0.60784316, g: 0.6156863, b: 0.50980395, a: 0.78431374}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -866,15 +866,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Sprite
@@ -882,15 +882,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: da95275043cc44c4fbbb2f1907852893, type: 3}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.b
-      value: 0.18396229
+      value: 0.03137255
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.g
-      value: 0.18396229
+      value: 0.03137255
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.5294118
       objectReference: {fileID: 0}
     - target: {fileID: 22486494, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Pivot.x
@@ -2051,7 +2051,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051886797, b: 0.1013117, a: 1}
+  m_Color: {r: 0.5294118, g: 0.03137255, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2396,15 +2396,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11456478, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Type
@@ -2416,15 +2416,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: da95275043cc44c4fbbb2f1907852893, type: 3}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.b
-      value: 0.018600928
+      value: 0.023529412
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.g
-      value: 0.3584906
+      value: 0.45490196
       objectReference: {fileID: 0}
     - target: {fileID: 11493388, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Color.r
-      value: 0.11150105
+      value: 0.13725491
       objectReference: {fileID: 0}
     - target: {fileID: 22486494, guid: e7f41b7a532f2457b8616dfe603e35d6, type: 3}
       propertyPath: m_Pivot.x
@@ -2982,7 +2982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051886797, b: 0.1013117, a: 1}
+  m_Color: {r: 0.5294118, g: 0.03137255, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3061,7 +3061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3551,7 +3551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051886797, b: 0.1013117, a: 1}
+  m_Color: {r: 0.5294118, g: 0.03137255, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3725,7 +3725,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051016767, b: 0.101960786, a: 1}
+  m_Color: {r: 0.5294118, g: 0.03137255, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4205,7 +4205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4407,7 +4407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.051886797, b: 0.1013117, a: 1}
+  m_Color: {r: 0.13725491, g: 0.45490196, b: 0.023529412, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6120,7 +6120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1186844864270462166, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: m_Color.rgba
-      value: 4278190080
+      value: 4281545523
       objectReference: {fileID: 0}
     - target: {fileID: 4318127819813583797, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: gunDamage
