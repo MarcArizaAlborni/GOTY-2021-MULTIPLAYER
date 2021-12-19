@@ -1190,6 +1190,8 @@ GameObject:
   - component: {fileID: 4318127820481310452}
   - component: {fileID: 4318127820481310454}
   - component: {fileID: 4318127820481310459}
+  - component: {fileID: 1980553910}
+  - component: {fileID: 1980553911}
   m_Layer: 0
   m_Name: model
   m_TagString: Player
@@ -1290,6 +1292,41 @@ MonoBehaviour:
     m_Bits: 256
   cameraTransform: {fileID: 4318127821047881406}
   controller: {fileID: 4318127820481310452}
+--- !u!54 &1980553910
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3975688421984934249}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1980553911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3975688421984934249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2088124189344b47a92542b90743d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxPlayerHP: 100
+  currentPlayerHP: 100
+  damageDealtToPlayer: 25
+  cameraShakeScript: {fileID: 0}
+  ourCamera: {fileID: 0}
+  wavesManager: {fileID: 0}
+  attackTime: 0.5
 --- !u!1 &4175452735813969534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,7 +1638,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
+  near clip plane: 0.17
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1644,7 +1681,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4318127821048103580}
-  m_LocalRotation: {x: -0, y: -0.9998734, z: -0, w: 0.015914967}
+  m_LocalRotation: {x: 0, y: -0.99987334, z: 0, w: 0.015916906}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2576,8 +2613,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8524767613964175520}
   m_LocalRotation: {x: -0, y: 0.9998734, z: -0, w: 0.015914967}
-  m_LocalPosition: {x: 0, y: 2.95, z: 0}
-  m_LocalScale: {x: 0.79999965, y: 0.8, z: 0.79999965}
+  m_LocalPosition: {x: 0, y: 2.054, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4352635731030295507}
   m_RootOrder: 0
@@ -2590,8 +2627,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8524767613964175520}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -2601,12 +2638,12 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 0073ed12dd22146c6bfb87b15afbee84, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
+  m_ProbeAnchor: {fileID: 4352635731030295507}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
   m_ReceiveGI: 1
@@ -2643,10 +2680,10 @@ TextMesh:
   m_FontSize: 0
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Font: {fileID: 12800000, guid: 0073ed12dd22146c6bfb87b15afbee84, type: 3}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281545523
 --- !u!1 &8661038215537805680
 GameObject:
   m_ObjectHideFlags: 0
