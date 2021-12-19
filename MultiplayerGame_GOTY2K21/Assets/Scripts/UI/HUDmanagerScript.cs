@@ -43,7 +43,7 @@ public class HUDmanagerScript : MonoBehaviour
     public void ManageUI()
     {
 
-       // UpdateNumbers();
+        UpdateNumbers();
 
 
         CheckESCInput();
