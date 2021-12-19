@@ -28,7 +28,6 @@ public class PlayerHealthManager : MonoBehaviour
     {
 
 
-        
 
         if (attackTime < currTime)
         {
@@ -74,22 +73,7 @@ public class PlayerHealthManager : MonoBehaviour
     }
 
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.tag == "ZombieAttack")
-    //    {
-    //
-    //        GameObject parentObj = other.transform.parent.gameObject;
-    //        MovementEnemy movScript = parentObj.GetComponent<MovementEnemy>();
-    //
-    //        movScript.SetRunning();
-    //        movScript.attackingNow = false;
-    //
-    //
-    //
-    //
-    //    }
-    //}
+   
 
 
 }
