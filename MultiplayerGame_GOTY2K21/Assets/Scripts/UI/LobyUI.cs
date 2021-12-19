@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
+
+
 
 public class LobyUI : MonoBehaviour
 {
@@ -9,6 +13,8 @@ public class LobyUI : MonoBehaviour
 
     bool isReady = false;
 
+    public List<Text> PlayerStrings;
+        
     public void SetReady()
     {
         if (isReady)
@@ -25,6 +31,8 @@ public class LobyUI : MonoBehaviour
         }
     }
 
+
+    
 
 
 
