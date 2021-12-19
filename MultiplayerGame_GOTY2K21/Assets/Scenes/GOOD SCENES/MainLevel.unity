@@ -6013,6 +6013,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4318127819813583797, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
+      propertyPath: gunDamage
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318127819813583797, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: crosshairImage
       value: 
       objectReference: {fileID: 0}
