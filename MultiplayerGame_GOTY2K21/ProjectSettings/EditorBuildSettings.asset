@@ -8,17 +8,20 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/NetScenes/ServerNetScene.unity
     guid: b528608882ff90440bc9c10c959e9f90
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/NetScenes/ClientNetScene.unity
     guid: 7b90888e5782cfc43ba2e94543962248
-  - enabled: 1
-    path: Assets/Scenes/GOOD SCENES/LobyScene.unity
-    guid: 9f729ff679191d44a88e61cc15f9c0b3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GOOD SCENES/MainLevel.unity
     guid: 8057c04842053ea40b9e30162652555e
   - enabled: 1
     path: Assets/Scenes/GOOD SCENES/MainMenuScene.unity
     guid: bf42e737463d7c945a70f8660bf1bae9
+  - enabled: 1
+    path: Assets/Scenes/GOOD SCENES/LobyScene.unity
+    guid: 9f729ff679191d44a88e61cc15f9c0b3
+  - enabled: 0
+    path: Assets/Scenes/GOOD SCENES/ServerNetwork.unity
+    guid: 29a2c5160332b8d4e857171751c30edd
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c6429e9af70564f44ad7ca762990fbd6, type: 2}

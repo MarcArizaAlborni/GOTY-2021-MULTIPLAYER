@@ -23,6 +23,13 @@ public class MainMenuUI : MonoBehaviour
         clientName.text = "Name: "+field.text;
         //Obtencio Ip
         //connectedIp.text = 
+
+        if(network.clientNet.badName)
+        {
+            network.clientNet.PollBadNames();
+            field.ActivateInputField();
+            placeholder.text = "New name...";
+        }
     }
 
     public void ButtonInteraction(bool connect)
@@ -52,8 +59,10 @@ public class MainMenuUI : MonoBehaviour
         {
             string text = field.text;
             network.SendNameToServer(text);
-            panelLogin.SetActive(false);
-            panelMainmenu.SetActive(true);
+
+            placeholder.text = "Connecting...";
+            field.text = "";
+            field.DeactivateInputField();
         }
     }
 }

@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class ClientNetwork2 : MonoBehaviour
 {
-    private myNet clientNet = new myNet();
+    [HideInInspector] public myNet clientNet = new myNet();
 
     [SerializeField] private GameObject playerPrefab;
     //private bool otherPlayer = false;
