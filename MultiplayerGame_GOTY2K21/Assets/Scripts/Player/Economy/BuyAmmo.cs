@@ -19,17 +19,22 @@ public class BuyAmmo : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Press E to get Ammo");
+            //Debug.Log("Press E to get Ammo");
+            interactionText.text = "Press E to buy Ammo";
         }
 
-        interactionText.text = "Press E to buy Ammo";
+     
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (interactionText.text == "Press E to buy Ammo")
+        if (other.gameObject.tag == "Player")
         {
-            interactionText.text = "";
+
+            if (interactionText.text == "Press E to buy Ammo")
+            {
+                interactionText.text = "";
+            }
         }
     }
 

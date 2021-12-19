@@ -3593,7 +3593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4496,9 +4496,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1670484274}
     - target: {fileID: 4318127819813583797, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
+      propertyPath: maxTotalAmmo
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318127819813583797, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: crosshairImage
       value: 
       objectReference: {fileID: 1948749542}
+    - target: {fileID: 4318127819847918591, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
+      propertyPath: maxTotalAmmo
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 4318127819847918591, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: crosshairImage
       value: 
@@ -4554,6 +4562,10 @@ PrefabInstance:
     - target: {fileID: 4318127821048103580, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5985527268142377574, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a115d448af1f25b47a9aeec867c4f007, type: 3}

@@ -15,18 +15,22 @@ public class UnlockDoor : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            Debug.Log("Press E to Open Door");
+           // Debug.Log("Press E to Open Door");
+            interactionText.text = "Press E to open Door";
         }
 
-        interactionText.text = "Press E to open Door";
+       
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (interactionText.text == "Press E to open Door")
-        {
-            interactionText.text = "";
-        }
+        if (other.gameObject.tag == "Player") { 
+
+            if (interactionText.text == "Press E to open Door")
+            {
+                interactionText.text = "";
+            }
+         }
     }
 
 
