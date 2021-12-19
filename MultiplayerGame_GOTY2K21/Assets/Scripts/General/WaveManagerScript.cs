@@ -14,7 +14,7 @@ public class WaveManagerScript : MonoBehaviour
     public List<GameObject> spawnerPointsList;
    [HideInInspector] public List<GameObject> activeZombiesList;
     int zombiesOnWaitCount;
-    public int numPlayers = 1;
+    public int numPlayers = 5;
 
    
      int activeZombiesCap = 0;
@@ -55,7 +55,7 @@ public class WaveManagerScript : MonoBehaviour
     {
         float numF = 0;
 
-        numF = 0.1f * currentRoundNum * activeZombiesCap;
+        numF = 0.18f * currentRoundNum * activeZombiesCap;
 
         
         int num = Mathf.RoundToInt(numF);
