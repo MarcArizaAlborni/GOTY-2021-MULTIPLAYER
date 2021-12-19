@@ -27,6 +27,10 @@ public class HUDmanagerScript : MonoBehaviour
     public Text roundText;
     public WaveManagerScript waveScript;
 
+    [Header("Escape")]
+    public GameObject escPanel;
+    bool escActive = false;
+
 
     void Update()
     {
@@ -39,10 +43,10 @@ public class HUDmanagerScript : MonoBehaviour
     public void ManageUI()
     {
 
-        UpdateNumbers();
-       
+       // UpdateNumbers();
 
 
+        CheckESCInput();
 
     }
 
@@ -63,6 +67,58 @@ public class HUDmanagerScript : MonoBehaviour
         //ROUNDS
 
         roundText.text = waveScript.currentRoundNum.ToString();
+    }
+
+    void CheckESCInput()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!escActive) {
+                OpenEscapePanel();
+
+            }
+            else
+            {
+                CloseEscapePanel();
+            }
+        }
+
+      
+
+    }
+
+    void OpenEscapePanel()
+    {
+        escActive = true;
+        panelPistol.SetActive(false);
+        panelRifle.SetActive(false);
+        escPanel.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    void CloseEscapePanel()
+    {
+        escActive = false;
+        panelPistol.SetActive(true);
+        panelRifle.SetActive(true);
+        escPanel.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+
+    public void DisconnectGame(bool disconnect)
+    {
+        if (disconnect == true)
+        {
+           // Application.Quit();
+        }
+        else
+        {
+            CloseEscapePanel();
+        }
+
     }
     
 }
