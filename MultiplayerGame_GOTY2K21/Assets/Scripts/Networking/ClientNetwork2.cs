@@ -146,7 +146,303 @@ public class ClientNetwork2 : MonoBehaviour
     {
         return xLow + ((xHigh - xLow) / (yHigh - yLow)) * (currentY - yLow);
     }
+
+
+
+
+
+
+    struct dataSnapShot
+    {
+
+
+
+
+
+    }
+
+
+
+    public void SerializeMessage(networkMessages message, object obj=null,object obj2=null, object obj3=null)
+    {
+
+        MemoryStream stream = new MemoryStream();
+
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        switch (message)
+        {
+
+            case networkMessages.clientReady:
+
+                writer.Write((byte)message);
+
+                break;
+
+            case networkMessages.forceGameStart:
+                writer.Write((byte)message);
+                break;
+
+            case networkMessages.gameStart:
+                writer.Write((byte)message);
+                break;
+
+            case networkMessages.playerPositions:
+                writer.Write((byte)message);
+
+                writer.Write(((Vector3)obj).x);
+                writer.Write(((Vector3)obj).y);
+                writer.Write(((Vector3)obj).z);
+
+                writer.Write(((Vector3)obj2).x);
+                writer.Write(((Vector3)obj2).y);
+                writer.Write(((Vector3)obj2).z);
+
+                writer.Write((int)obj3);
+
+                break;
+
+            case networkMessages.playerShoot:
+                writer.Write((byte)message);
+
+                writer.Write(((Vector3)obj).x);
+                writer.Write(((Vector3)obj).y);
+                writer.Write(((Vector3)obj).z);
+
+                writer.Write(((Vector3)obj2).x);
+                writer.Write(((Vector3)obj2).y);
+                writer.Write(((Vector3)obj2).z);
+
+                //writer.Write((int)obj3); //Questionable
+
+                break;
+
+            case networkMessages.playerDown:
+                writer.Write((byte)message);
+                writer.Write((int)obj);
+                break;
+
+            case networkMessages.playerRevived:
+                writer.Write((byte)message);
+                writer.Write((int)obj);
+                break;
+
+            case networkMessages.playerSwapGun:
+                writer.Write((byte)message);
+                writer.Write((int)obj);
+                break;
+
+            case networkMessages.zombiePositions:
+                writer.Write((byte)message);
+
+                writer.Write(((Vector3)obj).x);
+                writer.Write(((Vector3)obj).y);
+                writer.Write(((Vector3)obj).z);
+
+                writer.Write(((Vector3)obj2).x);
+                writer.Write(((Vector3)obj2).y);
+                writer.Write(((Vector3)obj2).z);
+
+                writer.Write((int)obj3);
+
+                break;
+
+            case networkMessages.zombieAttack:
+                writer.Write((byte)message);
+                writer.Write((int)obj2);
+                break;
+
+            case networkMessages.zombieDie:
+                writer.Write((byte)message);
+                writer.Write((int)obj);
+                break;
+
+            case networkMessages.zombieSpawned:
+                writer.Write((byte)message);
+
+                writer.Write(((Vector3)obj).x);
+                writer.Write(((Vector3)obj).y);
+                writer.Write(((Vector3)obj).z);
+
+                writer.Write((int)obj2);
+
+                break;
+
+            case networkMessages.doorOpen:
+                writer.Write((byte)message);
+                writer.Write((int)obj);
+                break;
+
+            case networkMessages.messageEnd:
+                writer.Write((byte)message);
+                break;
+
+        }
+
+    }
+
+
+    public void DeserializeMessage(byte[] data)
+    {
+
+        MemoryStream stream = new MemoryStream(data);
+
+        BinaryReader reader = new BinaryReader(stream);
+
+        networkMessages messagesNet = (networkMessages)reader.ReadByte();
+
+
+        while (messagesNet != networkMessages.messageEnd)
+        {
+
+            switch (messagesNet)
+            {
+
+                case networkMessages.clientReady:
+
+                    break;
+
+                case networkMessages.forceGameStart:
+         
+                    break;
+
+                case networkMessages.gameStart:
+                 
+                    break;
+
+                case networkMessages.playerPositions:
+                    //Pos
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    //Rot
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+
+                    reader.ReadInt32();
+
+                    break;
+
+                case networkMessages.playerShoot:
+                    //Pos
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    //Rot
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+
+                    //writer.Write((int)obj3); //Questionable
+
+                    break;
+
+                case networkMessages.playerDown:
+                    reader.ReadInt32();
+                    break;
+
+                case networkMessages.playerRevived:
+                    reader.ReadInt32();
+                    break;
+
+                case networkMessages.playerSwapGun:
+                    reader.ReadInt32();
+                    break;
+
+                case networkMessages.zombiePositions:
+                    //Pos
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+
+                    //Rot
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+
+                    reader.ReadInt32();
+
+                    break;
+
+                case networkMessages.zombieAttack:
+                    reader.ReadInt32();
+                    break;
+
+                case networkMessages.zombieDie:
+                    reader.ReadInt32();
+                    break;
+
+                case networkMessages.zombieSpawned:
+
+                    //Pos
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+                    reader.ReadSingle();
+
+                    reader.ReadInt32();
+
+                    break;
+
+                case networkMessages.doorOpen:
+
+                    reader.ReadInt32();
+                    break;
+
+                
+
+            }
+
+             messagesNet = (networkMessages)reader.ReadByte();
+        }
+
+
+
+    }
+
+
 }
+
+
+
+public enum networkMessages:byte
+{
+    messageEnd,
+    //Loby
+    clientReady, //Player sets ready state
+    forceGameStart, //Player forces game to start players>2
+    gameStart,//Game starts, tell all players
+
+
+    //Gameplay Player
+    playerPositions, //Player Positions
+    playerShoot, //If player has shot
+    playerDown, //If player is alive or dead
+    playerRevived, //If player is revived
+    playerSwapGun,
+
+
+    //Gameplay Zombies
+    zombiePositions,
+    zombieAttack,
+    zombieDie,
+    zombieSpawned,
+
+
+    //Gameplay Environment
+    doorOpen,
+
+
+    //Gameplay Loop
+   
+}
+
+
+
+
+
+
+
 
 //Serialitzar i deserialitzar la data dels missatges
 
