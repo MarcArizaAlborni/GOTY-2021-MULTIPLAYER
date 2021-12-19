@@ -39,10 +39,10 @@ public class TestingInput : MonoBehaviour
     {
         Rotate();
 
-        if (!gameObject.GetComponent<PlayerHealthManager>().playerDead)
-        {
-            UpdateMove();
-        }
+        //if (!gameObject.GetComponent<PlayerHealthManager>().playerDead)
+        //{
+           UpdateMove();
+        //}
     }
     private void OnEnable()
     {

@@ -16,6 +16,7 @@ public class MainMenuUI : MonoBehaviour
     public GameObject panelMainmenu;
     public Text clientName;
     public Text connectedIp;
+    public ClientNetwork2 network;
 
     private void Update()
     {
@@ -49,6 +50,8 @@ public class MainMenuUI : MonoBehaviour
         }
         else if (field.text.Length > 0 && validate.Length > 0)
         {
+            string text = field.text;
+            network.SendNameToServer(text);
             panelLogin.SetActive(false);
             panelMainmenu.SetActive(true);
         }

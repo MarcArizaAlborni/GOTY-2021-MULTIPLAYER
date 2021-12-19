@@ -10,7 +10,7 @@ using System.IO;
 
 public class ClientNetwork2 : MonoBehaviour
 {
-    myNet clientNet = new myNet();
+    private myNet clientNet = new myNet();
 
     [SerializeField] private GameObject playerPrefab;
     //private bool otherPlayer = false;
@@ -28,12 +28,13 @@ public class ClientNetwork2 : MonoBehaviour
         sendRateSec = (1f / (float)sendPerSec);
         clientNet.InitializeJitterSim();
     }
-    private void Start()
-    {
-        //clientNet.InitializeConnexion(serverIpep, name);
-    }
     private void Update()
     {
+        clientNet.UpdatePendent();
+        while (clientNet.PollReceive())
+        {
+            clientNet.ReceiveMessage();
+        }
         //Conecting to server
         //if (!connected)
         //{
@@ -107,6 +108,7 @@ public class ClientNetwork2 : MonoBehaviour
         //    }
         //}
     }
+
     private void LateUpdate()
     {
         timeSinceSend += Time.deltaTime;
@@ -129,8 +131,9 @@ public class ClientNetwork2 : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
+    public void SendNameToServer(string name)
     {
+        clientNet.InitializeConexion(serverIpep, name);
     }
     private float LinearInterpolation(float currentY, float xLow, float xHigh, float yLow, float yHigh)
     {
@@ -170,7 +173,8 @@ public class myNet
         connected,
         badNameReceived,
         waitingNameAcceptAck,
-        waitingInputBadName
+        waitingInputBadName,
+        requestNewConnection
     }
     public class Connexion
     {
@@ -254,26 +258,30 @@ public class myNet
             ++i;
         }
         pendingConnexions = newHeaders;
+        pendingConnexions[pendingConnexions.Length - 1] = new Connexion();
         pendingConnexions[pendingConnexions.Length - 1].header.seqNum = 0;
         pendingConnexions[pendingConnexions.Length - 1].header.lastRecSeqNum = 0;
         pendingConnexions[pendingConnexions.Length - 1].header.ackBitmask = 0;
         pendingConnexions[pendingConnexions.Length - 1].header.time = 0;
         pendingConnexions[pendingConnexions.Length - 1].address = address;
         pendingConnexions[pendingConnexions.Length - 1].name = name;
+        pendingConnexions[pendingConnexions.Length - 1].state =ConnexionState.requestNewConnection;
+        pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
         //Send to acknowledge message
         sendMessage(Encoding.ASCII.GetBytes("New Connexion " + name), (IPEndPoint)address);
     }
     private void NewConnexion(Connexion connexion)
     {
-        Connexion[] newHeaders = new Connexion[pendingConnexions.Length + 1];
+        RemovePendingConnexion(connexion.address);
+        Connexion[] newHeaders = new Connexion[currentConnexions.Length + 1];
         int i = 0;
-        foreach (Connexion con in pendingConnexions)
+        foreach (Connexion con in currentConnexions)
         {
             newHeaders[i] = con;
             ++i;
         }
-        pendingConnexions = newHeaders;
-        pendingConnexions[pendingConnexions.Length - 1] = connexion;
+        currentConnexions = newHeaders;
+        currentConnexions[currentConnexions.Length - 1] = connexion;
         NewConnexionToList(connexion.address);
     }
     private void NewConnexionToList(IPEndPoint address)
@@ -324,7 +332,7 @@ public class myNet
         {
             if (found)
                 pendingConnexions[i] = pendingConnexions[i - 1];
-            if (pendingConnexions[i].Equals(address))
+            if (pendingConnexions[i].address.Equals(address))
             {
                 found = true;
             }
@@ -332,11 +340,12 @@ public class myNet
         if (found)
         {
             Connexion[] newHeaders = new Connexion[pendingConnexions.Length - 1];
-            foreach (Connexion con in pendingConnexions)
+            for (int j=0; j<pendingConnexions.Length-1;++j)
             {
-                newHeaders[i] = con;
+                newHeaders[j] = pendingConnexions[j];
                 ++i;
             }
+            pendingConnexions = newHeaders;
         }
     }
     private int FindConnexionIndex(IPEndPoint address)
@@ -370,6 +379,31 @@ public class myNet
         }
         return false;
     }
+    private double resendSeconds = 2;
+    public void UpdatePendent()
+    {
+        foreach(Connexion con in pendingConnexions)
+        {
+            if (DateTime.Now > con.lastReceivedMsgTime.AddSeconds(resendSeconds)) 
+            {
+                switch (con.state)
+                {
+                    case ConnexionState.waitingInputBadName:
+                        sendMessage(Encoding.ASCII.GetBytes("Bad Name"), con.address);
+                        con.lastReceivedMsgTime = DateTime.Now;
+                        break;
+                    case ConnexionState.waitingNameAcceptAck:
+                        sendMessage(Encoding.ASCII.GetBytes("Ready"), con.address);
+                        con.lastReceivedMsgTime = DateTime.Now;
+                        break;
+                    case ConnexionState.requestNewConnection:
+                        sendMessage(Encoding.ASCII.GetBytes("New Connexion " + con.name), con.address);
+                        con.lastReceivedMsgTime = DateTime.Now;
+                        break;
+                } 
+            }
+        }
+    }
     public void RemoveAllConnections()
     {
         currentConnexions = new Connexion[0];
@@ -387,6 +421,12 @@ public class myNet
     //{
     //    ++currentConnexions[index].seqNum;
     //}
+    public bool PollReceive()
+    {
+        if (mySocket.Poll(0, SelectMode.SelectRead))
+            return true;
+        return false;
+    }
     public void ReceiveMessage()
     {
         byte[] data = new byte[1700];
@@ -443,24 +483,24 @@ public class myNet
                         return;
                     InitializeConexion((IPEndPoint)remote, name);
                     pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.badNameReceived;
-                    pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
                     sendMessage(Encoding.ASCII.GetBytes("Bad Name"), (IPEndPoint)remote);
+                    pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
                 }
                 else
                 {
                     InitializeConexion((IPEndPoint)remote, name);
                     int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
-                    pendingConnexions[pendIndex].state = ConnexionState.waitingNameAcceptAck;
-                    pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
+                    pendingConnexions[pendIndex].state = ConnexionState.waitingNameAcceptAck;                   
                     NewConnexion(pendingConnexions[pendingConnexions.Length - 1]);
                     sendMessage(Encoding.ASCII.GetBytes("Ready"), (IPEndPoint)remote);
+                    if((pendingConnexions.Length - 1) >= 0)
+                        pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
                 }
             }
             else if (received == "Bad Name")
             {
                 int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
                 pendingConnexions[pendIndex].state = ConnexionState.waitingInputBadName;
-
                 _badName = true;
             }
             else if (received == "Ready")
@@ -479,7 +519,7 @@ public class myNet
     public bool packetLoss = true;
     public int minJitt = 0;
     public int maxJitt = 800;
-    public int lossThreshold = 90;
+    public int lossThreshold = 10;
     public struct Message
     {
         public Byte[] message;
