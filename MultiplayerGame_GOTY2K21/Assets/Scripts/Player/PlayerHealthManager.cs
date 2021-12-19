@@ -103,10 +103,22 @@ public class PlayerHealthManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
+
         if (other.tag == "DeadPlayer")
         {
-            interactionText.text = "Press E to revive Player";
+
+
+            if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
+            {
+                
+                
+                    interactionText.text = "Press E to revive Player";
+                
+            }
         }
+
+        
     }
 
 
@@ -114,9 +126,15 @@ public class PlayerHealthManager : MonoBehaviour
     {
         if (other.tag == "DeadPlayer")
         {
-            if(interactionText.text == "Press E to revive Player")
+            if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
             {
-                interactionText.text = "";
+
+
+                if (interactionText.text == "Press E to revive Player")
+                {
+                    interactionText.text = "";
+                }
+
             }
         }
     }
