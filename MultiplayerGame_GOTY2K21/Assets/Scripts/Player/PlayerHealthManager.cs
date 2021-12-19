@@ -19,17 +19,23 @@ public class PlayerHealthManager : MonoBehaviour
     public WaveManagerScript wavesManager;
 
 
-    public float attackTime=0.5f;
+    public float attackTime=1.0f;
     float currTime=0;
 
+    public bool playerDead = false;
 
-   
+
+    public GameObject deadCollider;
+
+
+
+    public float beenAttackedTime = 4.0f;
+    float currNonAttackedTime = 0f;
+
+
     void Update()
     {
-
-
-
-        if (attackTime < currTime)
+        if (attackTime < currTime && !playerDead)
         {
 
             for (int i = 0; i < wavesManager.activeZombiesList.Count; ++i)
@@ -41,16 +47,52 @@ public class PlayerHealthManager : MonoBehaviour
                 {
                     currentPlayerHP -= damageDealtToPlayer;
                     movScript.attackingNow = false;
-
+                    currNonAttackedTime = 0f;
+                    if (currentPlayerHP <= 0)
+                    {
+                        playerDead = true;
+                        deadCollider.SetActive(true);
+                       
+                    }
 
                 }
 
             }
-            currTime = 0;
+
+            currTime = 0f;
+        }
+
+
+
+        if (beenAttackedTime < currNonAttackedTime && !playerDead && currentPlayerHP < maxPlayerHP)
+        {
+            currentPlayerHP += 1;
         }
 
 
         currTime += Time.deltaTime;
+
+        currNonAttackedTime += Time.deltaTime;
+
+       
+
+
+       
+
+
+    }
+
+    public void ReviveOtherPlayer()
+    {
+
+    }
+
+
+    public void ReviveThisPlayer()
+    {
+        playerDead = false;
+        currentPlayerHP = maxPlayerHP;
+        deadCollider.SetActive(false);
     }
 
    
@@ -69,6 +111,19 @@ public class PlayerHealthManager : MonoBehaviour
             Animator animatorZ= parentObj.GetComponent<Animator>();
         
            
+        }
+        else if (other.tag == "DeadPlayer")
+        {
+
+            if( other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
+            {
+                if (Input.GetKeyDown(KeyCode.E)) {
+
+                    other.transform.parent.GetComponent<PlayerHealthManager>().ReviveThisPlayer();
+                }
+            }
+
+
         }
     }
 

@@ -55,6 +55,8 @@ public class RifleScript : MonoBehaviour
     public float projectileSpeed = 20;
     public bool bulletRecoil = true;
 
+    [Header("Dead Player")]
+    public PlayerHealthManager healthPlayerScript;
 
 
     private void Start()
@@ -81,7 +83,7 @@ public class RifleScript : MonoBehaviour
         
         
 
-        if (Input.GetMouseButton(0) && canShoot && currentAmmoInMag > 0)
+        if (Input.GetMouseButton(0) && canShoot && currentAmmoInMag > 0 && !healthPlayerScript.playerDead)
         {
             //Debug.Log("CurrentMag"+currentAmmoInMag);
             //Debug.Log("InReserve" + ammoInReserve);
@@ -94,7 +96,7 @@ public class RifleScript : MonoBehaviour
             currentAmmoInMag--;
             StartCoroutine(ShootGun());
         }
-        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoInMag < magSize && ammoInReserve > 0)
+        else if (Input.GetKeyDown(KeyCode.R) && currentAmmoInMag < magSize && ammoInReserve > 0 && !healthPlayerScript.playerDead)
         {
             int amountToReload = magSize - currentAmmoInMag;
 

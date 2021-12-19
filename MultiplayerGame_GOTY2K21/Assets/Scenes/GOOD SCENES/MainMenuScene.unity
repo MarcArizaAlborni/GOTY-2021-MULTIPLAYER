@@ -1312,7 +1312,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "ORTHOPEDIC \nZOMBIE HUNTER POLICEMAN"
+  m_Text: "TACTICALLY ORTHOPEDIC \nZOMBIE HUNTER POLICEMAN"
 --- !u!222 &1816150719
 CanvasRenderer:
   m_ObjectHideFlags: 0
