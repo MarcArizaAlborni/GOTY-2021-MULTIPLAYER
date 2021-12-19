@@ -66,10 +66,13 @@ public class MovementEnemy : MonoBehaviour
         GameObject[] goes = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject go in goes)
         {
-            //If distance of current target is bigger than a new one, set this as new target
-            if(Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+            if (!go.GetComponent<PlayerHealthManager>().playerDead)
             {
-                target = go.transform;
+                //If distance of current target is bigger than a new one, set this as new target
+                if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+                {
+                    target = go.transform;
+                }
             }
         }
     }

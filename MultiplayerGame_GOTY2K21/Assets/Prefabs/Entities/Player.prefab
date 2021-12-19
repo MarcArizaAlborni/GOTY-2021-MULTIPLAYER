@@ -1331,6 +1331,7 @@ MonoBehaviour:
   playerDead: 0
   deadCollider: {fileID: 5662237949849842593}
   beenAttackedTime: 4
+  interactionText: {fileID: 0}
 --- !u!1 &4175452735813969534
 GameObject:
   m_ObjectHideFlags: 0

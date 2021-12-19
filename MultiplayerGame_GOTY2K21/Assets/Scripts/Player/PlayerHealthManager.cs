@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerHealthManager : MonoBehaviour
 {
 
@@ -32,6 +32,8 @@ public class PlayerHealthManager : MonoBehaviour
     public float beenAttackedTime = 4.0f;
     float currNonAttackedTime = 0f;
 
+
+    public Text interactionText;
 
     void Update()
     {
@@ -95,7 +97,26 @@ public class PlayerHealthManager : MonoBehaviour
         deadCollider.SetActive(false);
     }
 
-   
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "DeadPlayer")
+        {
+            interactionText.text = "Press E to revive Player";
+        }
+    }
+
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "DeadPlayer")
+        {
+            if(interactionText.text == "Press E to revive Player")
+            {
+                interactionText.text = "";
+            }
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
