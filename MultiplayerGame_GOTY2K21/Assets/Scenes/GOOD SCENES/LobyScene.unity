@@ -1053,6 +1053,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   readyPanel: {fileID: 321916635}
   notReadyPanel: {fileID: 327247574}
+  PlayerStrings:
+  - {fileID: 853438851}
+  - {fileID: 535478149}
+  - {fileID: 1223237864}
+  - {fileID: 1914619803}
+  - {fileID: 1451554762}
 --- !u!1 &853438849
 GameObject:
   m_ObjectHideFlags: 0
