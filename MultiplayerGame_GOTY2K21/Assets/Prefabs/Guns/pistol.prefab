@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 0.5
-  gunDamage: 10
+  gunDamage: 30
   gunRange: 30
   canShoot: 0
   currentAmmoInMag: 0
