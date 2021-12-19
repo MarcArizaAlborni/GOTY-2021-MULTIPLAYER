@@ -8,7 +8,7 @@ using System.Threading;
 using System.IO;
 using System.Text;
 
-public class ServerNetwork : MonoBehaviour
+public class ServerNetwork2 : MonoBehaviour
 {
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
     [Header("Teacher jitter script")]
@@ -47,7 +47,8 @@ public class ServerNetwork : MonoBehaviour
         public IPEndPoint address;
         private uint _sendSequenceNumber = 0;
         private uint _receiveSequenceNumber = 0;
-        public uint sendSequenceNumber{
+        public uint sendSequenceNumber
+        {
             get
             {
                 return _sendSequenceNumber;
@@ -126,7 +127,7 @@ public class ServerNetwork : MonoBehaviour
 
     private void Update()
     {
-        lock(frameProcessingLock)
+        lock (frameProcessingLock)
         {
             //ProcessClientInputs();
 
@@ -171,7 +172,7 @@ public class ServerNetwork : MonoBehaviour
                     if (j != i)
                     {
                         clients[i].IncrementSendSequenceNumber();
-                        sendMessage(stream.GetBuffer(),clients[j].address);
+                        sendMessage(stream.GetBuffer(), clients[j].address);
                     }
                 }
             }
@@ -181,7 +182,7 @@ public class ServerNetwork : MonoBehaviour
     {
         for (int i = 0; i < numOfClients; ++i)
         {
-            if(clients[i].inputToRead)
+            if (clients[i].inputToRead)
             {
                 clients[i].GetStoredInput();
             }
@@ -189,14 +190,14 @@ public class ServerNetwork : MonoBehaviour
     }
     private void SendWorldSnapshot()
     {
-        
+
     }
 
     private void Listening()
     {
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 0);
         EndPoint remote = (EndPoint)ipep;
-        while (true) 
+        while (true)
         {
             byte[] data = new byte[1700];
             int reciv = 0;
@@ -204,7 +205,7 @@ public class ServerNetwork : MonoBehaviour
             {
                 reciv = serverSocket.ReceiveFrom(data, ref remote);
             }
-            catch(SocketException e)
+            catch (SocketException e)
             {
                 SocketError error = e.SocketErrorCode;
                 switch (e.SocketErrorCode)
@@ -268,7 +269,7 @@ public class ServerNetwork : MonoBehaviour
                             input.rotation.x = reader.ReadSingle();
                             input.rotation.y = reader.ReadSingle();
                             input.rotation.z = reader.ReadSingle();
-                            client.StoreInput(input); 
+                            client.StoreInput(input);
                         }
                     }
                 }
