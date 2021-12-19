@@ -25,7 +25,10 @@ public class HUDmanagerScript : MonoBehaviour
 
     [Header("Round")]
     public Text roundText;
+    public Text zombieNumber;
     public WaveManagerScript waveScript;
+
+    
 
     [Header("Escape")]
     public GameObject escPanel;
@@ -66,7 +69,8 @@ public class HUDmanagerScript : MonoBehaviour
 
         //ROUNDS
 
-        roundText.text = waveScript.currentRoundNum.ToString();
+        roundText.text = "Round: " + waveScript.currentRoundNum.ToString();
+        zombieNumber.text = "Zombies: "+ waveScript.activeZombiesList.Count.ToString();
     }
 
     void CheckESCInput()
