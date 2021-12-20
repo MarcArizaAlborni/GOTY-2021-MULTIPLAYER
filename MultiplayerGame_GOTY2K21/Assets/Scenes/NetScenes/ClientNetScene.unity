@@ -636,8 +636,8 @@ MonoBehaviour:
   jitter: 1
   packetLoss: 1
   minJitt: 20
-  maxJitt: 300
-  lossThreshold: 25
+  maxJitt: 90
+  lossThreshold: 10
   playerPrefab: {fileID: 537953152283126609, guid: 20f662a0f8b0ebf478f515c7a7718f1c, type: 3}
   playerTransform: {fileID: 170605411}
   sendPerSec: 60
