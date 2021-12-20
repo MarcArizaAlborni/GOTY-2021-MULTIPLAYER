@@ -42,21 +42,23 @@ public class PlayerHealthManager : MonoBehaviour
 
             for (int i = 0; i < wavesManager.activeZombiesList.Count; ++i)
             {
+                if (wavesManager.activeZombiesList[i] != null) { 
                 MovementEnemy movScript = wavesManager.activeZombiesList[i].GetComponent<MovementEnemy>();
 
                 if (movScript != null)
                 {
 
-                    if (movScript.attackingNow == true)
-                    {
-                        currentPlayerHP -= damageDealtToPlayer;
-                        movScript.attackingNow = false;
-                        currNonAttackedTime = 0f;
-                        if (currentPlayerHP <= 0)
+                        if (movScript.attackingNow == true)
                         {
-                            playerDead = true;
-                            deadCollider.SetActive(true);
+                            currentPlayerHP -= damageDealtToPlayer;
+                            movScript.attackingNow = false;
+                            currNonAttackedTime = 0f;
+                            if (currentPlayerHP <= 0)
+                            {
+                                playerDead = true;
+                                deadCollider.SetActive(true);
 
+                            }
                         }
 
                     }

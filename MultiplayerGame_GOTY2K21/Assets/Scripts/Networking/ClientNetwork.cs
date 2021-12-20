@@ -132,7 +132,8 @@ public class ClientNetwork : MonoBehaviour
                 BinaryReader reader = new BinaryReader(stream);
                 ServerSnapshot snap = new ServerSnapshot();
                 snap.lastInputSeqNum = reader.ReadUInt32();
-                snap.time = Time.realtimeSinceStartupAsDouble;
+                snap.time = Time.realtimeSinceStartup;
+                
                 snap.position.x = reader.ReadSingle();
                 snap.position.y = reader.ReadSingle();
                 snap.position.z = reader.ReadSingle();
