@@ -33,32 +33,34 @@ public class ServerNetwork2 : MonoBehaviour
             listeningThread.Start();
             once = false;
 
-            listeningThread = new Thread(Listening);
-            listeningThread.IsBackground = true;
-            listeningThread.Start();
+            //listeningThread = new Thread(Listening);
+            //listeningThread.IsBackground = true;
+            //listeningThread.Start();
         }
     }
 
     private void Update()
     {
-        //lock (frameProcessingLock)
-        //{
-        //    //ProcessClientInputs();
-        //
-        //    //Simulate world
-        //
-        //    //TROLL
-        //}
+        lock (frameProcessingLock)
+        {
+            //ProcessClientInputs();
+        
+            //Simulate world
+        
+            //TROLL
+        }
         //SendWorldSnapshot();
     }
     private void Listening()
     {
         while (true)
         {
+            myNet.RawMessage msg = serverNetwork.ReceiveMessage();
             lock (frameProcessingLock)
             {
+                if (!msg.exception)
+                    serverNetwork.ProcessMessage(msg);
                 serverNetwork.UpdatePendent();
-                serverNetwork.ReceiveMessage();
             }
         }
     }

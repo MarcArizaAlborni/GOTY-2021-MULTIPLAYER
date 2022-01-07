@@ -34,7 +34,9 @@ public class ClientNetwork2 : MonoBehaviour
         clientNet.UpdatePendent();
         while (clientNet.PollReceive())
         {
-            clientNet.ReceiveMessage();
+            myNet.RawMessage msg = clientNet.ReceiveMessage();
+            if(!msg.exception)
+                clientNet.ProcessMessage(msg);
         }
         if (clientNet.newConnexion)
         {
@@ -770,7 +772,14 @@ public class myNet
             return true;
         return false;
     }
-    public void ReceiveMessage()
+    public struct RawMessage
+    {
+        public bool exception;
+        public IPEndPoint remote;
+        public byte[] data;
+        public int reciv;
+    }
+    public RawMessage ReceiveMessage()
     {
         byte[] data = new byte[1700];
         IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 0);
@@ -782,33 +791,44 @@ public class myNet
         }
         catch (SocketException e)
         {
+            RawMessage msg = new RawMessage();
+            msg.exception = true;
             switch (e.SocketErrorCode)
             {
                 //TODO: HANDLE EXCEPTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 case SocketError.ConnectionReset:
                     Debug.Log("The connexion is not up");
                     //K fem kuan es desconecta algu ???
-                    return;
+                    return msg;
                 //WSACancelBlockingCall() by the Socket.close()
                 case SocketError.Interrupted:
                     Debug.Log("Socket was closed");
-                    return;
+                    return msg;
             }
         }
-        int index = FindConnexionIndex((IPEndPoint)remote);
+        RawMessage message = new RawMessage();
+        message.exception = false;
+        message.remote = (IPEndPoint)remote;
+        message.data = data;
+        message.reciv = reciv;
+        return message;
+    }
+    public void ProcessMessage(RawMessage msg)
+    {
+        int index = FindConnexionIndex(msg.remote);
         //packet de algu connectat
         if (index != -1)
         {
             //message accepting conections
             //S'hauria de millorar amb algun bool o algo per si es un missatge
             //Warning: puc rebre acki algun missatge trash k arriba tard al fer els acknowledgements
-            string received = Encoding.ASCII.GetString(data, 0, reciv);
+            string received = Encoding.ASCII.GetString(msg.data, 0, msg.reciv);
             if (received.StartsWith("New Connexion ") || received == "Bad Name" || received == "Ready")
                 return;
 
             if (currentConnexions[index].state == ConnexionState.waitingNameAcceptAck)
             {
-                RemovePendingConnexion((IPEndPoint)remote);
+                RemovePendingConnexion(msg.remote);
                 currentConnexions[index].state = ConnexionState.connected;
             }
 
@@ -816,13 +836,13 @@ public class myNet
         //packet de algu no connectat
         else
         {
-            string received = Encoding.ASCII.GetString(data, 0, reciv);
+            string received = Encoding.ASCII.GetString(msg.data, 0, msg.reciv);
             if (received.StartsWith("New Connexion "))
             {
                 string name = received.Substring(14);
                 if (NameExists(name))
                 {
-                    ConnexionBadName((IPEndPoint)remote, name);
+                    ConnexionBadName(msg.remote, name);
                 }
                 else
                 {
@@ -832,17 +852,17 @@ public class myNet
                     newCon.header.lastRecSeqNum = 0;
                     newCon.header.ackBitmask = 0;
                     newCon.header.time = 0;
-                    newCon.address = (IPEndPoint)remote;
+                    newCon.address = msg.remote;
                     newCon.name = name;
                     newCon.state = ConnexionState.waitingNameAcceptAck;
-                    newCon.lastReceivedMsgTime = DateTime.Now;               
+                    newCon.lastReceivedMsgTime = DateTime.Now;
                     NewConnexion(newCon);
-                    sendMessage(Encoding.ASCII.GetBytes("Ready"), (IPEndPoint)remote);
+                    sendMessage(Encoding.ASCII.GetBytes("Ready"), msg.remote);
                 }
             }
             else if (received == "Bad Name")
             {
-                int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
+                int pendIndex = FindPendingConnexionIndex(msg.remote);
                 if (pendIndex != -1)
                 {
                     pendingConnexions[pendIndex].state = ConnexionState.waitingInputBadName;
@@ -851,7 +871,7 @@ public class myNet
             }
             else if (received == "Ready")
             {
-                int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
+                int pendIndex = FindPendingConnexionIndex(msg.remote);
                 if (pendIndex != -1)
                 {
                     NewConnexion(pendingConnexions[pendIndex]);
