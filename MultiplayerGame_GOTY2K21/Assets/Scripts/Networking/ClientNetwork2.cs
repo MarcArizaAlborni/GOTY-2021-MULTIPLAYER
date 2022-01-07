@@ -553,10 +553,21 @@ public class myNet
     //public bool acceptConnexions = true;
     public void InitializeConexion(IPEndPoint address, string name)
     {
+        if (FindConnexionIndex(address) != -1)
+            return;
         Connexion[] newHeaders = new Connexion[pendingConnexions.Length + 1];
         int i = 0;
         foreach (Connexion con in pendingConnexions)
         {
+            if(con.address.Equals(address))
+            {
+                //connexion already pending, just send the new name request
+                con.name = name;
+                con.state = ConnexionState.requestNewConnection;
+                sendMessage(Encoding.ASCII.GetBytes("New Connexion " + name), (IPEndPoint)address);
+                con.lastReceivedMsgTime = DateTime.Now;
+                return;
+            }
             newHeaders[i] = con;
             ++i;
         }
@@ -568,10 +579,39 @@ public class myNet
         pendingConnexions[pendingConnexions.Length - 1].header.time = 0;
         pendingConnexions[pendingConnexions.Length - 1].address = address;
         pendingConnexions[pendingConnexions.Length - 1].name = name;
-        pendingConnexions[pendingConnexions.Length - 1].state =ConnexionState.requestNewConnection;
+        pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.requestNewConnection;
         pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
         //Send to acknowledge message
         sendMessage(Encoding.ASCII.GetBytes("New Connexion " + name), (IPEndPoint)address);
+    }
+    private void ConnexionBadName(IPEndPoint address, string name)
+    {
+        Connexion[] newHeaders = new Connexion[pendingConnexions.Length + 1];
+        int i = 0;
+        foreach (Connexion con in pendingConnexions)
+        {
+            if (con.address.Equals(address))
+            {
+                //connexion already pending, just send the new name request
+                con.name = name;
+                sendMessage(Encoding.ASCII.GetBytes("Bad Name"), address);
+                con.lastReceivedMsgTime = DateTime.Now;
+                return;
+            }
+            newHeaders[i] = con;
+            ++i;
+        }
+        pendingConnexions = newHeaders;
+        pendingConnexions[pendingConnexions.Length - 1] = new Connexion();
+        pendingConnexions[pendingConnexions.Length - 1].header.seqNum = 0;
+        pendingConnexions[pendingConnexions.Length - 1].header.lastRecSeqNum = 0;
+        pendingConnexions[pendingConnexions.Length - 1].header.ackBitmask = 0;
+        pendingConnexions[pendingConnexions.Length - 1].header.time = 0;
+        pendingConnexions[pendingConnexions.Length - 1].address = address;
+        pendingConnexions[pendingConnexions.Length - 1].name = name;
+        pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.badNameReceived;
+        sendMessage(Encoding.ASCII.GetBytes("Bad Name"), address);
+        pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
     }
     private void NewConnexion(Connexion connexion)
     {
@@ -761,10 +801,11 @@ public class myNet
         {
             //message accepting conections
             //S'hauria de millorar amb algun bool o algo per si es un missatge
+            //Warning: puc rebre acki algun missatge trash k arriba tard al fer els acknowledgements
             string received = Encoding.ASCII.GetString(data, 0, reciv);
             if (received.StartsWith("New Connexion ") || received == "Bad Name" || received == "Ready")
                 return;
-            //Warning: puc rebre acki algun missatge trash k arriba tard al fer els acknowledgements
+
             if (currentConnexions[index].state == ConnexionState.waitingNameAcceptAck)
             {
                 RemovePendingConnexion((IPEndPoint)remote);
@@ -781,30 +822,32 @@ public class myNet
                 string name = received.Substring(14);
                 if (NameExists(name))
                 {
-                    int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
-                    if (pendIndex != -1)
-                        return;
-                    InitializeConexion((IPEndPoint)remote, name);
-                    pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.badNameReceived;
-                    sendMessage(Encoding.ASCII.GetBytes("Bad Name"), (IPEndPoint)remote);
-                    pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
+                    ConnexionBadName((IPEndPoint)remote, name);
                 }
                 else
                 {
-                    InitializeConexion((IPEndPoint)remote, name);
-                    int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
-                    pendingConnexions[pendIndex].state = ConnexionState.waitingNameAcceptAck;                   
-                    NewConnexion(pendingConnexions[pendingConnexions.Length - 1]);
+                    //Acknowledging a connection
+                    Connexion newCon = new Connexion();
+                    newCon.header.seqNum = 0;
+                    newCon.header.lastRecSeqNum = 0;
+                    newCon.header.ackBitmask = 0;
+                    newCon.header.time = 0;
+                    newCon.address = (IPEndPoint)remote;
+                    newCon.name = name;
+                    newCon.state = ConnexionState.waitingNameAcceptAck;
+                    newCon.lastReceivedMsgTime = DateTime.Now;               
+                    NewConnexion(newCon);
                     sendMessage(Encoding.ASCII.GetBytes("Ready"), (IPEndPoint)remote);
-                    if((pendingConnexions.Length - 1) >= 0)
-                        pendingConnexions[pendingConnexions.Length - 1].lastReceivedMsgTime = DateTime.Now;
                 }
             }
             else if (received == "Bad Name")
             {
                 int pendIndex = FindPendingConnexionIndex((IPEndPoint)remote);
-                pendingConnexions[pendIndex].state = ConnexionState.waitingInputBadName;
-                _badName = true;
+                if (pendIndex != -1)
+                {
+                    pendingConnexions[pendIndex].state = ConnexionState.waitingInputBadName;
+                    _badName = true;
+                }
             }
             else if (received == "Ready")
             {

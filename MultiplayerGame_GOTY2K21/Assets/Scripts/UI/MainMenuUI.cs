@@ -20,7 +20,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void Update()
     {
-        clientName.text = "Name: "+field.text;
+        clientName.text = "Name: " + field.text;
         //Obtencio Ip
         //connectedIp.text = 
 
