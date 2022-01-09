@@ -417,20 +417,20 @@ public enum networkMessages:byte
 
     clientDisconnect,
 
+    characterId,
+    characterPos,
+    characterRot,
+    characterDie,
+    characterSpawn,
 
     //Gameplay Player
-    playerPositions, //Player Positions
     playerShoot, //If player has shot
-    playerDie, //If player is alive or dead
+    playerCurrentGun,
     playerRevived, //If player is revived
-    playerSwapGun,
-
+    playerInputAnimation,
 
     //Gameplay Zombies
-    zombiePositions,
     zombieAttack,
-    zombieDie,
-    zombieSpawned,
 
 
     //Gameplay Environment
@@ -907,36 +907,40 @@ public class myNet
             case networkMessages.clientDisconnect:
                 serializable = new DisconnectEvents();
                 break;
-            case networkMessages.playerPositions:
+            case networkMessages.characterId:
                 serializable = new CharacterEvents();
                 break;
-            /*case networkMessages.playerShoot:
+            case networkMessages.characterPos:
                 serializable = new CharacterEvents();
                 break;
-            case networkMessages.playerDie:
+            case networkMessages.characterRot:
                 serializable = new CharacterEvents();
+                break;
+            case networkMessages.characterDie:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.characterSpawn:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.playerShoot:
+                serializable = new PlayerEvents();
                 break;
             case networkMessages.playerRevived:
                 serializable = new PlayerEvents();
                 break;
-            case networkMessages.playerSwapGun:
+            case networkMessages.playerCurrentGun:
                 serializable = new PlayerEvents();
-                break;*/
-            case networkMessages.zombiePositions:
-                serializable = new CharacterEvents();
                 break;
-            /*case networkMessages.zombieAttack:
-                serializable = new CharacterEvents();
+            case networkMessages.playerInputAnimation:
+                serializable = new PlayerEvents();
                 break;
-            case networkMessages.zombieDie:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.zombieSpawned:
+            case networkMessages.zombieAttack:
                 serializable = new ZombieEvents();
                 break;
             case networkMessages.doorOpen:
                 serializable = new MainLoopEvents();
-                break;*/
+                break;
+  
         }
 
         serializable.DeserializeEvents(stream);

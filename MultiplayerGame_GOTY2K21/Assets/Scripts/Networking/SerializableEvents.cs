@@ -11,6 +11,7 @@ class MainLoopEvents : SerializableEvents
     bool forceGameStart;    //Less than 5 players but players>2 and want to play
     bool gameStart;         //All slots completed and players ready
 
+    //uint playerId;          //Necessary?
     List<string> playerList;
 
     public override MemoryStream SerializeEvents(MemoryStream stream)
@@ -23,10 +24,26 @@ class MainLoopEvents : SerializableEvents
         writer.Write(forceGameStart);
         writer.Write(gameStart);
 
+        for(int i = 0; i < playerList.Count; ++i)
+        {
+            writer.Write(playerList[i]);
+        }
+
         return stream;
     }
 
     public override void DeserializeEvents(MemoryStream stream)
+    {
+        BinaryReader reader = new BinaryReader(stream);
+
+        reader.ReadBoolean();
+        reader.ReadBoolean();
+        reader.ReadBoolean();
+
+
+    }
+
+    public override void ExecuteEventts()
     {
         throw new NotImplementedException();
     }
@@ -36,10 +53,19 @@ class DisconnectEvents : SerializableEvents
 {
     public override MemoryStream SerializeEvents(MemoryStream stream)
     {
-        throw new NotImplementedException();
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        writer.Write((byte)networkMessagesType);
+
+        return stream;
     }
 
     public override void DeserializeEvents(MemoryStream stream)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void ExecuteEventts()
     {
         throw new NotImplementedException();
     }
@@ -48,7 +74,7 @@ class DisconnectEvents : SerializableEvents
 
 class CharacterEvents : SerializableEvents
 {
-    uint id;
+    uint characterId;
 
     Vector3 position;
     Vector3 rotation;
@@ -61,11 +87,43 @@ class CharacterEvents : SerializableEvents
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
+        writer.Write(characterId);
+
+        writer.Write(position.x);
+        writer.Write(position.y);
+        writer.Write(position.z);
+
+        writer.Write(rotation.x);
+        writer.Write(rotation.y);
+        writer.Write(rotation.z);
+
+        writer.Write(hasDied);
+        writer.Write(hasSpawned);
 
         return stream;
     }
 
     public override void DeserializeEvents(MemoryStream stream)
+    {
+        BinaryReader reader = new BinaryReader(stream);
+
+        //not necessary first byte;
+
+        reader.ReadUInt32();
+        //position
+        reader.ReadSingle();
+        reader.ReadSingle();
+        reader.ReadSingle();
+        //rotation
+        reader.ReadSingle();
+        reader.ReadSingle();
+        reader.ReadSingle();
+
+        reader.ReadBoolean();
+        reader.ReadBoolean();
+    }
+
+    public override void ExecuteEventts()
     {
         throw new NotImplementedException();
     }
@@ -73,9 +131,12 @@ class CharacterEvents : SerializableEvents
 
 
 class PlayerEvents : CharacterEvents
-{
+{ 
     bool playerShoot;       //Playershoot
     bool currentGun;        //0 pistol 1 rifle;
+    bool playerRevived;
+
+    Vector2 inputAnim;
 
     public override MemoryStream SerializeEvents(MemoryStream stream)
     {
@@ -83,7 +144,19 @@ class PlayerEvents : CharacterEvents
 
         writer.Write((byte)networkMessagesType);
 
+        writer.Write(playerShoot);
+        writer.Write(currentGun);
+        writer.Write(playerRevived);
+
+        writer.Write(inputAnim.x);
+        writer.Write(inputAnim.y);  //This will be z axis because y is always 0
+
         return stream;
+    }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+
     }
 
 }
@@ -99,6 +172,11 @@ class ZombieEvents : CharacterEvents
 
         return stream;
     }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+
+    }
 }
 
 
@@ -112,6 +190,11 @@ class EnviorentmentEvents : SerializableEvents
     public override void DeserializeEvents(MemoryStream stream)
     {
     }
+
+    public override void ExecuteEventts()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public abstract class SerializableEvents 
@@ -121,6 +204,7 @@ public abstract class SerializableEvents
     public abstract MemoryStream SerializeEvents(MemoryStream stream);
 
     public abstract void DeserializeEvents(MemoryStream stream);
-   
+
+    public abstract void ExecuteEventts();
 }
 
