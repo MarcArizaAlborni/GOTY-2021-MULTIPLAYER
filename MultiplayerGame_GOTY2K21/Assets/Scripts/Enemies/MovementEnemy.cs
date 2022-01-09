@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class MovementEnemy : MonoBehaviour
 {
     [Header("Time")]
-    public float timeToSearch = 10.0f;
+    public float timeToSearch = 2.0f;
     private float timer = 0.0f;
     
     public Transform target;
@@ -28,17 +28,24 @@ public class MovementEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        SteeringSeek(target.GetChild(0).transform.position);
-        float test = agent.remainingDistance;
-        if (test <= agent.stoppingDistance)
+        if (target != null)
         {
-            //SetAttack();
-            
+            SteeringSeek(target.GetChild(0).transform.position);
+            float test = agent.remainingDistance;
+            if (test <= agent.stoppingDistance)
+            {
+                //SetAttack();
+
+            }
+            else
+            {
+                SetRunning();
+
+            }
         }
         else
         {
-            SetRunning();
-
+            SearchNewTarget();
         }
 
        
@@ -64,16 +71,55 @@ public class MovementEnemy : MonoBehaviour
     public void SearchNewTarget() 
     {
         GameObject[] goes = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject go in goes)
+
+        bool forceNewTarget = false;
+
+        if (target != null)
         {
-            if (!go.GetComponent<PlayerHealthManager>().playerDead)
+            if (target.gameObject.transform.parent.gameObject.activeSelf == false)
             {
+                forceNewTarget = true;
+            }
+        }
+        else
+        {
+            forceNewTarget = true;
+        }
+
+       
+
+
+        if (forceNewTarget==false)
+        {
+
+            foreach (GameObject go in goes)
+            {
+
+
                 //If distance of current target is bigger than a new one, set this as new target
                 if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
                 {
                     target = go.transform;
                 }
+
             }
+        }
+        else
+        {
+            target = goes[0].transform;
+
+            foreach (GameObject go in goes)
+            {
+
+
+                //If distance of current target is bigger than a new one, set this as new target
+                if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+                {
+                    target = go.transform;
+                }
+
+            }
+
         }
     }
 
