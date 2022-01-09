@@ -81,35 +81,7 @@ public class playerAnimationController : MonoBehaviour
         }
 
 
-        /*if(!isShooting && leftClickPressed)
-        {
-            animator.SetBool(isShootingHash, true);
-        }
-
-        if (isShooting && !leftClickPressed)
-        {
-            animator.SetBool(isShootingHash, false);
-        }*/
-
-        /*if (!isWalking && fwrdPressed)
-        {
-            animator.SetBool(isWalkingHash, true);
-        }
-
-        if (isWalking && !fwrdPressed)
-        {
-            animator.SetBool(isWalkingHash, false);
-        }
-
-        if (!isRunning && (fwrdPressed && runPressed))
-        {
-            animator.SetBool(isRunningHash, true);
-        }
-
-        if (isRunning && (!fwrdPressed || !runPressed))
-        {
-            animator.SetBool(isRunningHash, false);
-        }*/
+      
     }
 
 }

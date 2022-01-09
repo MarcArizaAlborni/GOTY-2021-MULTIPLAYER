@@ -18,6 +18,10 @@ public class BulletManager : MonoBehaviour
     private void Start()
     {
         StartCoroutine(DestroyBulletTime());
+
+
+
+
     }
 
      IEnumerator DestroyBulletTime() //After time has passed, destroy bullet
