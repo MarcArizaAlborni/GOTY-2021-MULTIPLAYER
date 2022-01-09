@@ -107,18 +107,18 @@ public class PlayerHealthManager : MonoBehaviour
     {
 
 
-        if (other.tag == "DeadPlayer")
-        {
-
-
-            if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
-            {
-                
-                
-                    interactionText.text = "Press E to revive Player";
-                
-            }
-        }
+        //if (other.tag == "DeadPlayer")
+        //{
+        //
+        //
+        //    if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
+        //    {
+        //        
+        //        
+        //            interactionText.text = "Press E to revive Player";
+        //        
+        //    }
+        //}
 
         
     }
@@ -126,19 +126,19 @@ public class PlayerHealthManager : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "DeadPlayer")
-        {
-            if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
-            {
-
-
-                if (interactionText.text == "Press E to revive Player")
-                {
-                    interactionText.text = "";
-                }
-
-            }
-        }
+       // if (other.tag == "DeadPlayer")
+       // {
+       //     if (other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
+       //     {
+       //
+       //
+       //         if (interactionText.text == "Press E to revive Player")
+       //         {
+       //             interactionText.text = "";
+       //         }
+       //
+       //     }
+       // }
     }
 
     private void OnTriggerStay(Collider other)
@@ -156,19 +156,19 @@ public class PlayerHealthManager : MonoBehaviour
         
            
         }
-        else if (other.tag == "DeadPlayer")
-        {
-
-            if( other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
-            {
-                if (Input.GetKeyDown(KeyCode.E)) {
-
-                    other.transform.parent.GetComponent<PlayerHealthManager>().ReviveThisPlayer();
-                }
-            }
-
-
-        }
+       // else if (other.tag == "DeadPlayer")
+       // {
+       //
+       //     if( other.transform.parent.Find("Name").GetComponent<TextMesh>().text != gameObject.transform.Find("Name").GetComponent<TextMesh>().text)
+       //     {
+       //         if (Input.GetKeyDown(KeyCode.E)) {
+       //
+       //             other.transform.parent.GetComponent<PlayerHealthManager>().ReviveThisPlayer();
+       //         }
+       //     }
+       //
+       //
+       // }
     }
 
 
