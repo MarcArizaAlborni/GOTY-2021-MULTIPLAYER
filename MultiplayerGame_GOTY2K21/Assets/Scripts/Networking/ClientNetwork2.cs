@@ -165,7 +165,7 @@ public class ClientNetwork2 : MonoBehaviour
 
 
 
-    public void SerializeMessage(networkMessages message, object obj=null,object obj2=null, object obj3=null)
+    /*public void SerializeMessage(networkMessages message, object obj=null,object obj2=null, object obj3=null)
     {
 
         MemoryStream stream = new MemoryStream();
@@ -400,7 +400,7 @@ public class ClientNetwork2 : MonoBehaviour
 
 
 
-    }
+    }*/
 
 
 }
@@ -409,17 +409,19 @@ public class ClientNetwork2 : MonoBehaviour
 
 public enum networkMessages:byte
 {
-    messageEnd,
     //Loby
     clientReady, //Player sets ready state
     forceGameStart, //Player forces game to start players>2
     gameStart,//Game starts, tell all players
+    playerList,
+
+    clientDisconnect,
 
 
     //Gameplay Player
     playerPositions, //Player Positions
     playerShoot, //If player has shot
-    playerDown, //If player is alive or dead
+    playerDie, //If player is alive or dead
     playerRevived, //If player is revived
     playerSwapGun,
 
@@ -438,8 +440,6 @@ public enum networkMessages:byte
     //Gameplay Loop
    
 }
-
-
 
 
 
@@ -880,6 +880,70 @@ public class myNet
             }
         }
     }
+
+    //---------------------------------------Deserialize---------------------------------------------------------------------------------------
+    public SerializableEvents DeserializeEvent(MemoryStream stream)
+    {
+        BinaryReader reader = new BinaryReader(stream);
+
+        networkMessages messageType = (networkMessages)reader.ReadByte();
+
+        SerializableEvents serializable = null;
+
+        switch (messageType)
+        {
+            case networkMessages.clientReady:
+                serializable = new MainLoopEvents();
+                break;
+            case networkMessages.forceGameStart:
+                serializable = new MainLoopEvents();
+                break;
+            case networkMessages.gameStart:
+                serializable = new MainLoopEvents();
+                break;
+            case networkMessages.playerList:
+                serializable = new MainLoopEvents();
+                break;
+            case networkMessages.clientDisconnect:
+                serializable = new DisconnectEvents();
+                break;
+            case networkMessages.playerPositions:
+                serializable = new CharacterEvents();
+                break;
+            /*case networkMessages.playerShoot:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.playerDie:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.playerRevived:
+                serializable = new PlayerEvents();
+                break;
+            case networkMessages.playerSwapGun:
+                serializable = new PlayerEvents();
+                break;*/
+            case networkMessages.zombiePositions:
+                serializable = new CharacterEvents();
+                break;
+            /*case networkMessages.zombieAttack:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.zombieDie:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.zombieSpawned:
+                serializable = new ZombieEvents();
+                break;
+            case networkMessages.doorOpen:
+                serializable = new MainLoopEvents();
+                break;*/
+        }
+
+        serializable.DeserializeEvents(stream);
+
+        return serializable;
+    }
+
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
     public bool jitter = true;
     public bool packetLoss = true;
