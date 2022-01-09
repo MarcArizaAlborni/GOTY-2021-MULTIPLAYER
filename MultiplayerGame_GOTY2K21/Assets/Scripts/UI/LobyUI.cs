@@ -11,6 +11,10 @@ public class LobyUI : MonoBehaviour
     public GameObject readyPanel;
     public GameObject notReadyPanel;
 
+    private ClientNetwork2 net;
+    [SerializeField]private float nameRequestSec = 1.0f;
+    private float currentSec = 0.0f;
+
     bool isReady = false;
 
     public List<Text> PlayerStrings;
@@ -31,9 +35,19 @@ public class LobyUI : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ClientNetwork2>();
+    }
 
-    
-
-
+    private void Update()
+    {
+        currentSec += Time.deltaTime;
+        if(currentSec >= nameRequestSec)
+        {
+            //SendNamesRequest()
+            currentSec = 0.0f;
+        }
+    }
 
 }

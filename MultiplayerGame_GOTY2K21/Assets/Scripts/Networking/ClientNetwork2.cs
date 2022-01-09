@@ -149,11 +149,6 @@ public class ClientNetwork2 : MonoBehaviour
         return xLow + ((xHigh - xLow) / (yHigh - yLow)) * (currentY - yLow);
     }
 
-
-
-
-
-
     struct dataSnapShot
     {
 
@@ -162,8 +157,6 @@ public class ClientNetwork2 : MonoBehaviour
 
 
     }
-
-
 
     public void SerializeMessage(networkMessages message, object obj=null,object obj2=null, object obj3=null)
     {
@@ -483,12 +476,17 @@ public class myNet
     }
     public class Connexion
     {
-        public PacketHeader header;
         public IPEndPoint address;
-        public Packet[] lastReceivedPackets;
+        public Packet[] lastSendPackets = new Packet[16];
+        public uint currentSendPackets = 0;
+        public uint lastReceivedPacket = 0;
+        public ushort ackBitmask = 0;
         public string name = "";
         public ConnexionState state = ConnexionState.disconnected;
         public DateTime lastReceivedMsgTime = new DateTime(1, 1, 1);
+        //public float rtt = 0.0f;
+        //public uint numMsgToTestRtt = 0;
+        //public uint currMsgToTestRtt = 0;
     }
     ~myNet()
     {
@@ -575,10 +573,6 @@ public class myNet
         }
         pendingConnexions = newHeaders;
         pendingConnexions[pendingConnexions.Length - 1] = new Connexion();
-        pendingConnexions[pendingConnexions.Length - 1].header.seqNum = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.lastRecSeqNum = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.ackBitmask = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.time = 0;
         pendingConnexions[pendingConnexions.Length - 1].address = address;
         pendingConnexions[pendingConnexions.Length - 1].name = name;
         pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.requestNewConnection;
@@ -605,10 +599,6 @@ public class myNet
         }
         pendingConnexions = newHeaders;
         pendingConnexions[pendingConnexions.Length - 1] = new Connexion();
-        pendingConnexions[pendingConnexions.Length - 1].header.seqNum = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.lastRecSeqNum = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.ackBitmask = 0;
-        pendingConnexions[pendingConnexions.Length - 1].header.time = 0;
         pendingConnexions[pendingConnexions.Length - 1].address = address;
         pendingConnexions[pendingConnexions.Length - 1].name = name;
         pendingConnexions[pendingConnexions.Length - 1].state = ConnexionState.badNameReceived;
@@ -820,8 +810,8 @@ public class myNet
         if (index != -1)
         {
             //message accepting conections
-            //S'hauria de millorar amb algun bool o algo per si es un missatge
             //Warning: puc rebre acki algun missatge trash k arriba tard al fer els acknowledgements
+            //AIXO STA MAL: revisar
             string received = Encoding.ASCII.GetString(msg.data, 0, msg.reciv);
             if (received.StartsWith("New Connexion ") || received == "Bad Name" || received == "Ready")
                 return;
@@ -848,10 +838,6 @@ public class myNet
                 {
                     //Acknowledging a connection
                     Connexion newCon = new Connexion();
-                    newCon.header.seqNum = 0;
-                    newCon.header.lastRecSeqNum = 0;
-                    newCon.header.ackBitmask = 0;
-                    newCon.header.time = 0;
                     newCon.address = msg.remote;
                     newCon.name = name;
                     newCon.state = ConnexionState.waitingNameAcceptAck;
@@ -879,6 +865,33 @@ public class myNet
                 }
             }
         }
+    }
+    public void SendMessage(IPEndPoint address, byte[]data)
+    {
+        int id = FindConnexionIndex(address);
+        if(id == -1)
+            return;
+
+        Packet packet = new Packet();
+        packet.header = new PacketHeader();
+        packet.header.seqNum = currentConnexions[id].currentSendPackets;
+        ++currentConnexions[id].currentSendPackets;
+        packet.header.lastRecSeqNum = currentConnexions[id].lastReceivedPacket;
+        packet.header.ackBitmask = currentConnexions[id].ackBitmask;
+        //falta el time pel rtt
+
+        MemoryStream stream = new MemoryStream();
+        BinaryWriter writer = new BinaryWriter(stream);
+        //writing the header
+        writer.Write(currentConnexions[id].currentSendPackets);
+        writer.Write(currentConnexions[id].lastReceivedPacket);
+        writer.Write(currentConnexions[id].ackBitmask);
+        //writer.Write(currentConnexions[id].time);
+
+        //writing the serialized message
+        writer.Write(data);
+
+        sendMessage(stream.GetBuffer(), currentConnexions[id].address);
     }
     //---------------------------------------Net Simulation---------------------------------------------------------------------------------------
     public bool jitter = true;

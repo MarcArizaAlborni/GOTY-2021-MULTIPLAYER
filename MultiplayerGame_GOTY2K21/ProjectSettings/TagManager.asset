@@ -10,6 +10,8 @@ TagManager:
   - Concrete
   - Zombie
   - ZombieAttack
+  - DeadPlayer
+  - NetObject
   layers:
   - Default
   - TransparentFX

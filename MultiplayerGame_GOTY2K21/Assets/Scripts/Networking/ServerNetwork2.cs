@@ -32,10 +32,6 @@ public class ServerNetwork2 : MonoBehaviour
             listeningThread.IsBackground = true;
             listeningThread.Start();
             once = false;
-
-            //listeningThread = new Thread(Listening);
-            //listeningThread.IsBackground = true;
-            //listeningThread.Start();
         }
     }
 
