@@ -39,11 +39,7 @@ public class ServerNetwork2 : MonoBehaviour
     {
         lock (frameProcessingLock)
         {
-            //ProcessClientInputs();
-        
-            //Simulate world
-        
-            //TROLL
+            //serverNetwork.ExecutePendingEvents();
         }
         //SendWorldSnapshot();
     }

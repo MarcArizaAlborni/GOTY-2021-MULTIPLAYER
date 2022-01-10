@@ -4,15 +4,25 @@ using UnityEngine;
 using System.Text;
 using System.IO;
 using System;
+using System.Net;
 
-class MainLoopEvents : SerializableEvents
+public struct LobbyInfo
 {
-    bool clientReady;       //If a client is ready
-    bool forceGameStart;    //Less than 5 players but players>2 and want to play
-    bool gameStart;         //All slots completed and players ready
+    public bool clientReady;       
+    public bool forceGameStart;
+    public bool gameStart;         
+    public List<string> playerList;
+    public IPEndPoint addres;
+}
+
+class LobbyEvent : SerializableEvents
+{
+    public bool clientReady;       //If a client is ready
+    public bool forceGameStart;    //Less than 5 players but players>2 and want to play
+    public bool gameStart;         //All slots completed and players ready
 
     //uint playerId;          //Necessary?
-    List<string> playerList;
+    public List<string> playerList;
 
     public override MemoryStream SerializeEvents(MemoryStream stream)
     {
@@ -23,6 +33,7 @@ class MainLoopEvents : SerializableEvents
         writer.Write(clientReady);
         writer.Write(forceGameStart);
         writer.Write(gameStart);
+        writer.Write(playerList.Count);
 
         for(int i = 0; i < playerList.Count; ++i)
         {
@@ -36,16 +47,19 @@ class MainLoopEvents : SerializableEvents
     {
         BinaryReader reader = new BinaryReader(stream);
 
-        reader.ReadBoolean();
-        reader.ReadBoolean();
-        reader.ReadBoolean();
-
-
+        clientReady = reader.ReadBoolean();
+        forceGameStart = reader.ReadBoolean();
+        gameStart = reader.ReadBoolean();
+        int count = reader.ReadInt32();
+        for (int i=0; i < count; ++i)
+        {
+            playerList.Add(reader.ReadString());
+        }
     }
 
-    public override void ExecuteEventts()
+    public override void ExecuteEvent(/*ref object obj*/)
     {
-        throw new NotImplementedException();
+        return;
     }
 }
 
@@ -65,9 +79,38 @@ class DisconnectEvents : SerializableEvents
         throw new NotImplementedException();
     }
 
-    public override void ExecuteEventts()
+    public override void ExecuteEvent(/*ref object obj*/)
     {
         throw new NotImplementedException();
+    }
+}
+
+class RequestLobbyInfoEvents : SerializableEvents
+{
+    public override MemoryStream SerializeEvents(MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        writer.Write((byte)networkMessagesType);
+
+        return stream;
+    }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+        return;
+    }
+
+    public override void ExecuteEvent(/*ref object obj*/)
+    {
+        //LobbyInfo info = (LobbyInfo)obj;
+        //LobbyEvent eve = new LobbyEvent();
+        //eve.networkMessagesType = networkMessages.lobbyEvent;
+        //eve.clientReady = info.clientReady;
+        //eve.forceGameStart = info.forceGameStart;
+        //eve.gameStart = info.gameStart;
+        //eve.playerList = info.playerList;
+        return;
     }
 }
 
@@ -123,7 +166,7 @@ class CharacterEvents : SerializableEvents
         reader.ReadBoolean();
     }
 
-    public override void ExecuteEventts()
+    public override void ExecuteEvent(/*ref object obj*/)
     {
         throw new NotImplementedException();
     }
@@ -191,7 +234,7 @@ class EnviorentmentEvents : SerializableEvents
     {
     }
 
-    public override void ExecuteEventts()
+    public override void ExecuteEvent(/*ref object obj*/)
     {
         throw new NotImplementedException();
     }
@@ -200,11 +243,12 @@ class EnviorentmentEvents : SerializableEvents
 public abstract class SerializableEvents 
 {
     public networkMessages networkMessagesType;
+    //public DateTime sended;
 
     public abstract MemoryStream SerializeEvents(MemoryStream stream);
 
     public abstract void DeserializeEvents(MemoryStream stream);
 
-    public abstract void ExecuteEventts();
+    public abstract void ExecuteEvent(/*ref object obj*/);
 }
 
