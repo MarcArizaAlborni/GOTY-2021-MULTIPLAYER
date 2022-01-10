@@ -405,38 +405,15 @@ public class ClientNetwork2 : MonoBehaviour
 public enum networkMessages:byte
 {
     //Loby
-    requestLobbyInfo,
-    lobbyEvent,
-
-    clientReady, //Player sets ready state
-    forceGameStart, //Player forces game to start players>2
-    gameStart,//Game starts, tell all players
-    playerList,
-
+    requestLobbyInfo,       //Request Lobby
+    lobbyEvent,             //LobbyEvent
     clientDisconnect,
-
-    characterId,
-    characterPos,
-    characterRot,
     characterDie,
     characterSpawn,
-
-    //Gameplay Player
-    playerShoot, //If player has shot
-    playerCurrentGun,
-    playerRevived, //If player is revived
-    playerInputAnimation,
-
-    //Gameplay Zombies
-    zombieAttack,
-
-
-    //Gameplay Environment
-    doorOpen,
-
-
-    //Gameplay Loop
-   
+    characterTransformEvents,
+    playerEvents, 
+    zombieEvents,
+    enviorentEvents, 
 }
 
 
@@ -988,55 +965,6 @@ public class myNet
 
         switch (messageType)
         {
-            case networkMessages.clientReady:
-                serializable = new LobbyEvent();
-                break;
-            case networkMessages.forceGameStart:
-                serializable = new LobbyEvent();
-                break;
-            case networkMessages.gameStart:
-                serializable = new LobbyEvent();
-                break;
-            case networkMessages.playerList:
-                serializable = new LobbyEvent();
-                break;
-            case networkMessages.clientDisconnect:
-                serializable = new DisconnectEvents();
-                break;
-            case networkMessages.characterId:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.characterPos:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.characterRot:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.characterDie:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.characterSpawn:
-                serializable = new CharacterEvents();
-                break;
-            case networkMessages.playerShoot:
-                serializable = new PlayerEvents();
-                break;
-            case networkMessages.playerRevived:
-                serializable = new PlayerEvents();
-                break;
-            case networkMessages.playerCurrentGun:
-                serializable = new PlayerEvents();
-                break;
-            case networkMessages.playerInputAnimation:
-                serializable = new PlayerEvents();
-                break;
-            case networkMessages.zombieAttack:
-                serializable = new ZombieEvents();
-                break;
-            case networkMessages.doorOpen:
-                serializable = new LobbyEvent();
-                break;
-
 
             case networkMessages.requestLobbyInfo:
                 serializable = new RequestLobbyInfoEvents();
@@ -1044,7 +972,27 @@ public class myNet
             case networkMessages.lobbyEvent:
                 serializable = new LobbyEvent();
                 break;
-
+            case networkMessages.clientDisconnect:
+                serializable = new DisconnectEvents();
+                break;
+            case networkMessages.characterDie:
+                serializable = new DieEvent();
+                break;
+            case networkMessages.characterSpawn:
+                serializable = new SpawnEvent();
+                break;
+            case networkMessages.characterTransformEvents:
+                serializable = new CharacterEvents();
+                break;
+            case networkMessages.playerEvents:
+                serializable = new PlayerEvents();
+                break;
+            case networkMessages.zombieEvents:
+                serializable = new ZombieEvents();
+                break;
+            case networkMessages.enviorentEvents:
+                serializable = new EnviorentmentEvents();
+                break;
         }
 
         serializable.networkMessagesType = messageType;

@@ -14,6 +14,14 @@ public struct LobbyInfo
     public List<string> playerList;
     public IPEndPoint addres;
 }
+public struct PlayerInfo
+{
+
+}
+public struct ZombieInfo
+{
+
+}
 
 class LobbyEvent : SerializableEvents
 {
@@ -63,28 +71,6 @@ class LobbyEvent : SerializableEvents
     }
 }
 
-class DisconnectEvents : SerializableEvents
-{
-    public override MemoryStream SerializeEvents(MemoryStream stream)
-    {
-        BinaryWriter writer = new BinaryWriter(stream);
-
-        writer.Write((byte)networkMessagesType);
-
-        return stream;
-    }
-
-    public override void DeserializeEvents(MemoryStream stream)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        throw new NotImplementedException();
-    }
-}
-
 class RequestLobbyInfoEvents : SerializableEvents
 {
     public override MemoryStream SerializeEvents(MemoryStream stream)
@@ -113,17 +99,77 @@ class RequestLobbyInfoEvents : SerializableEvents
         return;
     }
 }
+class DisconnectEvents : SerializableEvents
+{
+    public override MemoryStream SerializeEvents(MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
 
+        writer.Write((byte)networkMessagesType);
+
+        return stream;
+    }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+        return;
+    }
+
+    public override void ExecuteEvent(/*ref object obj*/)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class DieEvent : SerializableEvents
+{
+    public override MemoryStream SerializeEvents(MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        writer.Write((byte)networkMessagesType);
+
+        return stream;
+    }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+        return;
+    }
+
+    public override void ExecuteEvent()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class SpawnEvent : SerializableEvents
+{
+    public override MemoryStream SerializeEvents(MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        writer.Write((byte)networkMessagesType);
+
+        return stream;
+    }
+
+    public override void DeserializeEvents(MemoryStream stream)
+    {
+        return;
+    }
+
+    public override void ExecuteEvent()
+    {
+        throw new NotImplementedException();
+    }
+}
 
 class CharacterEvents : SerializableEvents
 {
     uint characterId;
 
-    Vector3 position;
-    Vector3 rotation;
-
-    bool hasDied;           //Zombie or Player dead 
-    bool hasSpawned;
+    Transform transform;
 
     public override MemoryStream SerializeEvents(MemoryStream stream)
     {
@@ -132,16 +178,13 @@ class CharacterEvents : SerializableEvents
         writer.Write((byte)networkMessagesType);
         writer.Write(characterId);
 
-        writer.Write(position.x);
-        writer.Write(position.y);
-        writer.Write(position.z);
+        writer.Write(transform.position.x);
+        writer.Write(transform.position.y);
+        writer.Write(transform.position.z);
 
-        writer.Write(rotation.x);
-        writer.Write(rotation.y);
-        writer.Write(rotation.z);
-
-        writer.Write(hasDied);
-        writer.Write(hasSpawned);
+        writer.Write(transform.eulerAngles.x);
+        writer.Write(transform.eulerAngles.y);
+        writer.Write(transform.eulerAngles.z);
 
         return stream;
     }
@@ -151,19 +194,13 @@ class CharacterEvents : SerializableEvents
         BinaryReader reader = new BinaryReader(stream);
 
         //not necessary first byte;
+        characterId = reader.ReadUInt32();
 
-        reader.ReadUInt32();
         //position
-        reader.ReadSingle();
-        reader.ReadSingle();
-        reader.ReadSingle();
-        //rotation
-        reader.ReadSingle();
-        reader.ReadSingle();
-        reader.ReadSingle();
+        transform.position.Set(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
 
-        reader.ReadBoolean();
-        reader.ReadBoolean();
+        //rotation
+        transform.eulerAngles.Set(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
     }
 
     public override void ExecuteEvent(/*ref object obj*/)
@@ -199,7 +236,14 @@ class PlayerEvents : CharacterEvents
 
     public override void DeserializeEvents(MemoryStream stream)
     {
+        BinaryReader reader = new BinaryReader(stream);
 
+        playerShoot = reader.ReadBoolean();
+        currentGun = reader.ReadBoolean();
+        playerRevived = reader.ReadBoolean();
+
+        inputAnim.x = reader.ReadSingle();
+        inputAnim.y = reader.ReadSingle();
     }
 
 }
@@ -218,7 +262,9 @@ class ZombieEvents : CharacterEvents
 
     public override void DeserializeEvents(MemoryStream stream)
     {
+        BinaryReader reader = new BinaryReader(stream);
 
+        zombieAttack = reader.ReadBoolean();
     }
 }
 
