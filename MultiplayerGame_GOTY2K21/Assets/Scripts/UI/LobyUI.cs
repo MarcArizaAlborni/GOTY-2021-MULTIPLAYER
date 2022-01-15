@@ -45,7 +45,8 @@ public class LobyUI : MonoBehaviour
         currentSec += Time.deltaTime;
         if(currentSec >= nameRequestSec)
         {
-            //SendNamesRequest()
+            RequestLobbyInfoEvents eve = new RequestLobbyInfoEvents();
+            net.AddEvent(eve);
             currentSec = 0.0f;
         }
     }

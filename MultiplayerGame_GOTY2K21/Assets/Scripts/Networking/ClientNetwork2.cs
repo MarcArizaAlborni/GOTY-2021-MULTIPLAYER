@@ -44,6 +44,7 @@ public class ClientNetwork2 : MonoBehaviour
             DontDestroyOnLoad(this);
             SceneManager.LoadScene("LobyScene");
         }
+        clientNet.ExecuteAllPendingSnapshots();
         //Conecting to server
         //if (!connected)
         //{
@@ -144,263 +145,16 @@ public class ClientNetwork2 : MonoBehaviour
     {
         clientNet.InitializeConexion(serverIpep, name);
     }
+    public void AddEvent(SerializableEvents eve)
+    {
+        clientNet.AddEventToSend(serverIpep, eve);
+    }
     private float LinearInterpolation(float currentY, float xLow, float xHigh, float yLow, float yHigh)
     {
         return xLow + ((xHigh - xLow) / (yHigh - yLow)) * (currentY - yLow);
     }
 
-    struct dataSnapShot
-    {
-
-
-
-
-
-    }
-
-
-
-    /*public void SerializeMessage(networkMessages message, object obj=null,object obj2=null, object obj3=null)
-    {
-
-        MemoryStream stream = new MemoryStream();
-
-        BinaryWriter writer = new BinaryWriter(stream);
-
-        switch (message)
-        {
-
-            case networkMessages.clientReady:
-
-                writer.Write((byte)message);
-
-                break;
-
-            case networkMessages.forceGameStart:
-                writer.Write((byte)message);
-                break;
-
-            case networkMessages.gameStart:
-                writer.Write((byte)message);
-                break;
-
-            case networkMessages.playerPositions:
-                writer.Write((byte)message);
-
-                writer.Write(((Vector3)obj).x);
-                writer.Write(((Vector3)obj).y);
-                writer.Write(((Vector3)obj).z);
-
-                writer.Write(((Vector3)obj2).x);
-                writer.Write(((Vector3)obj2).y);
-                writer.Write(((Vector3)obj2).z);
-
-                writer.Write((int)obj3);
-
-                break;
-
-            case networkMessages.playerShoot:
-                writer.Write((byte)message);
-
-                writer.Write(((Vector3)obj).x);
-                writer.Write(((Vector3)obj).y);
-                writer.Write(((Vector3)obj).z);
-
-                writer.Write(((Vector3)obj2).x);
-                writer.Write(((Vector3)obj2).y);
-                writer.Write(((Vector3)obj2).z);
-
-                //writer.Write((int)obj3); //Questionable
-
-                break;
-
-            case networkMessages.playerDown:
-                writer.Write((byte)message);
-                writer.Write((int)obj);
-                break;
-
-            case networkMessages.playerRevived:
-                writer.Write((byte)message);
-                writer.Write((int)obj);
-                break;
-
-            case networkMessages.playerSwapGun:
-                writer.Write((byte)message);
-                writer.Write((int)obj);
-                break;
-
-            case networkMessages.zombiePositions:
-                writer.Write((byte)message);
-
-                writer.Write(((Vector3)obj).x);
-                writer.Write(((Vector3)obj).y);
-                writer.Write(((Vector3)obj).z);
-
-                writer.Write(((Vector3)obj2).x);
-                writer.Write(((Vector3)obj2).y);
-                writer.Write(((Vector3)obj2).z);
-
-                writer.Write((int)obj3);
-
-                break;
-
-            case networkMessages.zombieAttack:
-                writer.Write((byte)message);
-                writer.Write((int)obj2);
-                break;
-
-            case networkMessages.zombieDie:
-                writer.Write((byte)message);
-                writer.Write((int)obj);
-                break;
-
-            case networkMessages.zombieSpawned:
-                writer.Write((byte)message);
-
-                writer.Write(((Vector3)obj).x);
-                writer.Write(((Vector3)obj).y);
-                writer.Write(((Vector3)obj).z);
-
-                writer.Write((int)obj2);
-
-                break;
-
-            case networkMessages.doorOpen:
-                writer.Write((byte)message);
-                writer.Write((int)obj);
-                break;
-
-            case networkMessages.messageEnd:
-                writer.Write((byte)message);
-                break;
-
-        }
-
-    }
-
-
-    public void DeserializeMessage(byte[] data)
-    {
-
-        MemoryStream stream = new MemoryStream(data);
-
-        BinaryReader reader = new BinaryReader(stream);
-
-        networkMessages messagesNet = (networkMessages)reader.ReadByte();
-
-
-        while (messagesNet != networkMessages.messageEnd)
-        {
-
-            switch (messagesNet)
-            {
-
-                case networkMessages.clientReady:
-
-                    break;
-
-                case networkMessages.forceGameStart:
-         
-                    break;
-
-                case networkMessages.gameStart:
-                 
-                    break;
-
-                case networkMessages.playerPositions:
-                    //Pos
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    //Rot
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-
-                    reader.ReadInt32();
-
-                    break;
-
-                case networkMessages.playerShoot:
-                    //Pos
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    //Rot
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-
-                    //writer.Write((int)obj3); //Questionable
-
-                    break;
-
-                case networkMessages.playerDown:
-                    reader.ReadInt32();
-                    break;
-
-                case networkMessages.playerRevived:
-                    reader.ReadInt32();
-                    break;
-
-                case networkMessages.playerSwapGun:
-                    reader.ReadInt32();
-                    break;
-
-                case networkMessages.zombiePositions:
-                    //Pos
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-
-                    //Rot
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-
-                    reader.ReadInt32();
-
-                    break;
-
-                case networkMessages.zombieAttack:
-                    reader.ReadInt32();
-                    break;
-
-                case networkMessages.zombieDie:
-                    reader.ReadInt32();
-                    break;
-
-                case networkMessages.zombieSpawned:
-
-                    //Pos
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-                    reader.ReadSingle();
-
-                    reader.ReadInt32();
-
-                    break;
-
-                case networkMessages.doorOpen:
-
-                    reader.ReadInt32();
-                    break;
-
-                
-
-            }
-
-             messagesNet = (networkMessages)reader.ReadByte();
-        }
-
-
-
-    }*/
-
-
 }
-
-
 
 public enum networkMessages:byte
 {
@@ -462,7 +216,7 @@ public class myNet
         public ConnexionState state = ConnexionState.disconnected;
         public DateTime lastReceivedMsgTime = new DateTime(1, 1, 1);
         public List<SerializableEvents> eventsToSend = new List<SerializableEvents>();
-        public Queue<byte[]> lastMessagesSended = new Queue<byte[]>();
+        public Queue<byte[]> lastMessagesSended = new Queue<byte[]>(); //max size 24 (line 951)
         //public float rtt = 0.0f;
         //public uint numMsgToTestRtt = 0;
         //public uint currMsgToTestRtt = 0;
@@ -782,21 +536,86 @@ public class myNet
         message.reciv = reciv;
         return message;
     }
-    private List<SerializableEvents> EventsToExecute = new List<SerializableEvents>();
-    public void ExecutePendingEvents()
+    public struct Snapshot
     {
-        foreach(SerializableEvents eve in EventsToExecute)
+        public IPEndPoint address;
+        public uint seqNum;
+        //time received/sended ???
+        public List<SerializableEvents> snapshotEvents;
+    }
+    private List<Snapshot> snapshotsToExecute = new List<Snapshot>();
+    private void AddSnapshotsOrdered(ref Snapshot snap)
+    {
+        if (snapshotsToExecute.Count == 0)
         {
-            eve.ExecuteEvent();
+            snapshotsToExecute.Add(snap);
+            return;
         }
-        EventsToExecute.Clear();
+
+        for (int i = snapshotsToExecute.Count - 1; i >= 0; --i)
+            if(snap.seqNum > snapshotsToExecute[i].seqNum)
+                snapshotsToExecute.Insert(i + 1, snap);
     }
-    private List<SerializableEvents> GetPendingEvents()
+    public void ExecuteAllPendingSnapshots()
     {
-        List<SerializableEvents> returnList = EventsToExecute;
-        EventsToExecute.Clear();
-        return returnList;
+        foreach(Snapshot snap in snapshotsToExecute)
+            foreach(SerializableEvents eve in snap.snapshotEvents)
+                ExecuteEvent(eve, snap.address);
+        snapshotsToExecute.Clear();
+        SendAllEvents();
     }
+    private void ExecuteEvent(SerializableEvents eve, IPEndPoint address)
+    {
+
+        networkMessages messageType = eve.networkMessagesType;
+
+        switch (messageType)
+        {
+            case networkMessages.requestLobbyInfo:
+                //RequestLobbyInfoEvents req = (RequestLobbyInfoEvents)eve;
+                LobbyEvent sendEve = new LobbyEvent();
+                sendEve.networkMessagesType = networkMessages.lobbyEvent;
+                //sendEve.clientReady = info.clientReady;
+                //sendEve.forceGameStart = info.forceGameStart;
+                //sendEve.gameStart = info.gameStart;
+                List<string> names = new List<string>();
+                foreach (Connexion con in currentConnexions)
+                    names.Add(con.name);
+                sendEve.playerList = names;
+                AddEventToSend(address, eve);
+                break;
+            case networkMessages.lobbyEvent:
+
+                break;
+            case networkMessages.clientDisconnect:
+
+                break;
+            case networkMessages.characterDie:
+
+                break;
+            case networkMessages.characterSpawn:
+
+                break;
+            case networkMessages.characterTransformEvents:
+
+                break;
+            case networkMessages.playerEvents:
+
+                break;
+            case networkMessages.zombieEvents:
+
+                break;
+            case networkMessages.enviorentEvents:
+
+                break;
+        }
+    }
+    //private List<SerializableEvents> GetPendingEvents()
+    //{
+    //    List<SerializableEvents> returnList = EventsToExecute;
+    //    EventsToExecute.Clear();
+    //    return returnList;
+    //}
     public void ProcessMessage(RawMessage msg)
     {
         int index = FindConnexionIndex(msg.remote);
@@ -816,7 +635,7 @@ public class myNet
                 currentConnexions[index].state = ConnexionState.connected;
             }
 
-            MemoryStream stream = new MemoryStream();
+            MemoryStream stream = new MemoryStream(msg.data);
             BinaryReader reader = new BinaryReader(stream);
             uint recSeqNum = reader.ReadUInt32();
             uint lastAckseqNum = reader.ReadUInt32();
@@ -831,37 +650,45 @@ public class myNet
                 if ((currentConnexions[index].ackBitmask & (1 << (char)resta)) == 1 && currentConnexions[index].sendSeqNum > resta)
                     return;
 
-                //old new packet (update bitmask)
+                //packet older than last received (update bitmask)
                 currentConnexions[index].ackBitmask |= (ushort)(1 << (char)resta);
             }
             else
             {
                 //update bitmask
-                uint resta = currentConnexions[index].lastRecSeqNum - recSeqNum;
+                uint resta = recSeqNum - currentConnexions[index].lastRecSeqNum;
                 currentConnexions[index].ackBitmask <<= (char)resta;
                 currentConnexions[index].lastRecSeqNum = recSeqNum;
             }
 
+            //we maybe will have repeated resending if we process more than 1 message at a time!!!!
+            uint indexLastSended = currentConnexions[index].sendSeqNum - lastAckseqNum;
             //resend failed acknowledge messages
-            if ((currentConnexions[index].ackBitmask & (1 << 5)) == 0 && currentConnexions[index].sendSeqNum > 5)
+            if ((sckBitmask & (1 << 5)) == 0 && lastAckseqNum > 5 && (4 + indexLastSended) < 24/*MaxArraySize*/)
             {
-                ResendEvent(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[4]);
+                ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[4 + indexLastSended]);
             }
-            else if ((currentConnexions[index].ackBitmask & (1 << 10)) == 0 && currentConnexions[index].sendSeqNum > 10)
+            if ((sckBitmask & (1 << 10)) == 0 && lastAckseqNum > 10 && (9 + indexLastSended) < 24/*MaxArraySize*/)
             {
-                ResendEvent(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[9]);
+                ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[9 + indexLastSended]);
             }
-            else if ((currentConnexions[index].ackBitmask & (1 << 16)) == 0 && currentConnexions[index].sendSeqNum > 16)
+            if ((sckBitmask & (1 << 16)) == 0 && lastAckseqNum > 16 && (15 + indexLastSended) < 24/*MaxArraySize*/)
             {
-                ResendEvent(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[15]);
+                ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[15 + indexLastSended]);
             }
 
             int i = reader.ReadInt32();
+            Snapshot snapshot = new Snapshot();
+            snapshot.address = msg.remote;
+            snapshot.seqNum = recSeqNum;
+            snapshot.snapshotEvents = new List<SerializableEvents>();
             for (;i>0;--i)
             {
-                EventsToExecute.Add(DeserializeEvent(stream));
+                snapshot.snapshotEvents.Add(DeserializeEvent(ref stream));
             }
-
+            //podriem construir l'snapshot ia a la llista !!!!!
+            AddSnapshotsOrdered(ref snapshot);
+            //snapshotsToExecute.Add(snapshot);
         }
         //packet de algu no connectat
         else
@@ -906,7 +733,7 @@ public class myNet
             }
         }
     }
-    private void ResendEvent(IPEndPoint address, byte[] eve)
+    private void ResendMessage(IPEndPoint address, byte[] eve)
     {
         sendMessage(eve, address);
     }
@@ -942,12 +769,14 @@ public class myNet
             //writing the serialized messages
             foreach (SerializableEvents eve in con.eventsToSend)
             {
-                eve.SerializeEvents(stream);
+                eve.SerializeEvents(ref stream);
             }
 
+            if (stream.Length == 0)
+                break;
             byte[] data = stream.ToArray();
             con.lastMessagesSended.Enqueue(data);
-            if(con.lastMessagesSended.Count >= 16)
+            if(con.lastMessagesSended.Count >= 24)
                 con.lastMessagesSended.Dequeue();
             sendMessage(data, con.address);
             con.eventsToSend.Clear();
@@ -955,7 +784,7 @@ public class myNet
     }
 
     //---------------------------------------Deserialize---------------------------------------------------------------------------------------
-    public SerializableEvents DeserializeEvent(MemoryStream stream)
+    public SerializableEvents DeserializeEvent(ref MemoryStream stream)
     {
         BinaryReader reader = new BinaryReader(stream);
 
@@ -996,7 +825,7 @@ public class myNet
         }
 
         serializable.networkMessagesType = messageType;
-        serializable.DeserializeEvents(stream);
+        serializable.DeserializeEvents(ref stream);
 
         return serializable;
     }
@@ -1005,8 +834,8 @@ public class myNet
     public bool jitter = true;
     public bool packetLoss = true;
     public int minJitt = 0;
-    public int maxJitt = 800;
-    public int lossThreshold = 10;
+    public int maxJitt = 200;
+    public int lossThreshold = 5;
     public struct Message
     {
         public Byte[] message;

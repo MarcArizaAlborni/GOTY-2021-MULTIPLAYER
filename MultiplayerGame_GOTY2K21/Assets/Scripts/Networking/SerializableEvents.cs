@@ -4,24 +4,6 @@ using UnityEngine;
 using System.Text;
 using System.IO;
 using System;
-using System.Net;
-
-public struct LobbyInfo
-{
-    public bool clientReady;       
-    public bool forceGameStart;
-    public bool gameStart;         
-    public List<string> playerList;
-    public IPEndPoint addres;
-}
-public struct PlayerInfo
-{
-
-}
-public struct ZombieInfo
-{
-
-}
 
 class LobbyEvent : SerializableEvents
 {
@@ -32,7 +14,7 @@ class LobbyEvent : SerializableEvents
     //uint playerId;          //Necessary?
     public List<string> playerList;
 
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
        
         BinaryWriter writer = new BinaryWriter(stream);
@@ -48,10 +30,9 @@ class LobbyEvent : SerializableEvents
             writer.Write(playerList[i]);
         }
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         BinaryReader reader = new BinaryReader(stream);
 
@@ -64,104 +45,68 @@ class LobbyEvent : SerializableEvents
             playerList.Add(reader.ReadString());
         }
     }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        return;
-    }
 }
 
 class RequestLobbyInfoEvents : SerializableEvents
 {
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
-        return;
-    }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        //LobbyInfo info = (LobbyInfo)obj;
-        //LobbyEvent eve = new LobbyEvent();
-        //eve.networkMessagesType = networkMessages.lobbyEvent;
-        //eve.clientReady = info.clientReady;
-        //eve.forceGameStart = info.forceGameStart;
-        //eve.gameStart = info.gameStart;
-        //eve.playerList = info.playerList;
         return;
     }
 }
 class DisconnectEvents : SerializableEvents
 {
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         return;
-    }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        throw new NotImplementedException();
     }
 }
 
 class DieEvent : SerializableEvents
 {
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         return;
-    }
-
-    public override void ExecuteEvent()
-    {
-        throw new NotImplementedException();
     }
 }
 
 class SpawnEvent : SerializableEvents
 {
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         return;
-    }
-
-    public override void ExecuteEvent()
-    {
-        throw new NotImplementedException();
     }
 }
 
@@ -171,7 +116,7 @@ class CharacterEvents : SerializableEvents
 
     Transform transform;
 
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
@@ -186,10 +131,9 @@ class CharacterEvents : SerializableEvents
         writer.Write(transform.eulerAngles.y);
         writer.Write(transform.eulerAngles.z);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         BinaryReader reader = new BinaryReader(stream);
 
@@ -202,11 +146,6 @@ class CharacterEvents : SerializableEvents
         //rotation
         transform.eulerAngles.Set(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
     }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        throw new NotImplementedException();
-    }
 }
 
 
@@ -218,7 +157,7 @@ class PlayerEvents : CharacterEvents
 
     Vector2 inputAnim;
 
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
@@ -231,10 +170,9 @@ class PlayerEvents : CharacterEvents
         writer.Write(inputAnim.x);
         writer.Write(inputAnim.y);  //This will be z axis because y is always 0
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         BinaryReader reader = new BinaryReader(stream);
 
@@ -251,16 +189,15 @@ class PlayerEvents : CharacterEvents
 class ZombieEvents : CharacterEvents
 {
     bool zombieAttack;       //Zombie Attack 
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
 
-        return stream;
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
         BinaryReader reader = new BinaryReader(stream);
 
@@ -271,18 +208,13 @@ class ZombieEvents : CharacterEvents
 
 class EnviorentmentEvents : SerializableEvents
 {
-    public override MemoryStream SerializeEvents(MemoryStream stream)
+    public override void SerializeEvents(ref MemoryStream stream)
     { 
         throw new NotImplementedException();
     }
 
-    public override void DeserializeEvents(MemoryStream stream)
+    public override void DeserializeEvents(ref MemoryStream stream)
     {
-    }
-
-    public override void ExecuteEvent(/*ref object obj*/)
-    {
-        throw new NotImplementedException();
     }
 }
 
@@ -291,10 +223,9 @@ public abstract class SerializableEvents
     public networkMessages networkMessagesType;
     //public DateTime sended;
 
-    public abstract MemoryStream SerializeEvents(MemoryStream stream);
+    public abstract void SerializeEvents(ref MemoryStream stream);
 
-    public abstract void DeserializeEvents(MemoryStream stream);
+    public abstract void DeserializeEvents(ref MemoryStream stream);
 
-    public abstract void ExecuteEvent(/*ref object obj*/);
 }
 
