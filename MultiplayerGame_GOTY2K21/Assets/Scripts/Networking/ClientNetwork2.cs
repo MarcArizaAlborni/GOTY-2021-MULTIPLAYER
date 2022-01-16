@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class ClientNetwork2 : MonoBehaviour
 {
+    [HideInInspector]public List<PlayerSpawn> spawnPlayers = new List<PlayerSpawn>();
     [HideInInspector] public myNet clientNet = new myNet();
 
     [SerializeField] private GameObject playerPrefab;
@@ -22,7 +23,7 @@ public class ClientNetwork2 : MonoBehaviour
     private float sendRateSec;
     private float timeSinceSend = 0.0f;
 
-    private IPEndPoint serverIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
+    [HideInInspector]public IPEndPoint serverIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
 
     private void Awake()
     {
@@ -68,7 +69,19 @@ public class ClientNetwork2 : MonoBehaviour
             //timeSinceSend = 0.0f;
         }
     }
-
+    private void OnEnable()
+    {
+        myNet.startGameEvent += StartGame;
+    }
+    private void OnDisable()
+    {
+        myNet.startGameEvent -= StartGame;
+    }
+    public void StartGame(GameStartEvent eve)
+    {
+        spawnPlayers = eve.players;
+        SceneManager.LoadScene("Client_Main");
+    }
     public void SendNameToServer(string name)
     {
         clientNet.InitializeConexion(serverIpep, name);
@@ -89,6 +102,7 @@ public enum networkMessages:byte
     //Loby
     requestLobbyInfo,       //Request Lobby
     lobbyEvent,             //LobbyEvent
+    startGame,
     clientDisconnect,
     characterDie,
     characterSpawn,
@@ -490,6 +504,8 @@ public class myNet
     }
     public delegate void UpdateLobbyTextList(LobbyEvent eve, uint seqNum);
     public static event UpdateLobbyTextList lobbyEvent;
+    public delegate void StartGame(GameStartEvent eve);
+    public static event StartGame startGameEvent;
     public void ExecuteAllPendingSnapshots()
     {
         foreach(Snapshot snap in snapshotsToExecute)
@@ -511,8 +527,12 @@ public class myNet
                     return;
                 RequestLobbyInfoEvents reqEve = (RequestLobbyInfoEvents)eve;
                 currentConnexions[index].readyToPlay = reqEve.clientReady;
-                //if(reqEve.forceGameStart)
-                    //startTheGame
+                if (reqEve.forceGameStart) 
+                {
+                    //start the server game 
+                    acceptMoreConnections = false;
+                    inGame = true;
+                }
                 LobbyEvent sendEve = new LobbyEvent();
                 sendEve.networkMessagesType = networkMessages.lobbyEvent;
                 //sendEve.clientReady = info.clientReady;
@@ -527,6 +547,16 @@ public class myNet
             case networkMessages.lobbyEvent:
                 if (lobbyEvent != null)
                     lobbyEvent((LobbyEvent)eve, seqNum);
+                break;
+            case networkMessages.startGame:
+                if (inGame)
+                    return;
+                //start the game on client
+                acceptMoreConnections = false;
+                inGame = true;
+                GameStartEvent startEve = (GameStartEvent)eve;
+                if(startGameEvent != null)
+                    startGameEvent(startEve);
                 break;
             case networkMessages.clientDisconnect:
                 //Aki s'ha de fer com un timer de si no rebo missatge del client en x temps esta desconectat i el trec
@@ -560,6 +590,7 @@ public class myNet
     //}
     private const byte MAX_CONNEXIONS = 5;
     public bool acceptMoreConnections = true;
+    private bool inGame = false;
     public void ProcessMessage(RawMessage msg)
     {
         //FALTA EL DISCONECT
@@ -735,7 +766,13 @@ public class myNet
             con.eventsToSend.Clear();
         }
     }
-
+    public string GetName(IPEndPoint address)
+    {
+        int index = FindConnexionIndex(address);
+        if (index == -1)
+            return "";
+        return currentConnexions[index].name;
+    }
     //---------------------------------------Deserialize---------------------------------------------------------------------------------------
     public SerializableEvents DeserializeEvent(ref MemoryStream stream)
     {
@@ -753,6 +790,9 @@ public class myNet
                 break;
             case networkMessages.lobbyEvent:
                 serializable = new LobbyEvent();
+                break;
+            case networkMessages.startGame:
+                serializable = new GameStartEvent();
                 break;
             case networkMessages.clientDisconnect:
                 serializable = new DisconnectEvents();

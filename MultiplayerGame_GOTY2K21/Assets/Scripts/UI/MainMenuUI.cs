@@ -62,6 +62,7 @@ public class MainMenuUI : MonoBehaviour
 
             placeholder.text = "Connecting...";
             field.text = "";
+            field.enabled = false;
             field.DeactivateInputField();
         }
     }

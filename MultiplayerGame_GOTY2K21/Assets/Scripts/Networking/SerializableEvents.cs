@@ -10,7 +10,7 @@ public class LobbyEvent : SerializableEvents
     public bool gameStart;         //All slots completed and players ready
 
     //uint playerId;          //Necessary?
-    public List<string> playerList;
+    public List<string> playerList = new List<string>();
 
     public override void SerializeEvents(ref MemoryStream stream)
     {
@@ -34,7 +34,6 @@ public class LobbyEvent : SerializableEvents
 
         gameStart = reader.ReadBoolean();
         int count = reader.ReadInt32();
-        playerList = new List<string>();
         for (int i=0; i < count; ++i)
         {
             playerList.Add(reader.ReadString());
@@ -62,6 +61,41 @@ public class RequestLobbyInfoEvents : SerializableEvents
         forceGameStart = reader.ReadBoolean();
     }
 }
+
+public struct PlayerSpawn
+{
+    public string name;
+    public byte spawn;
+}
+public class GameStartEvent : SerializableEvents
+{
+    public List<PlayerSpawn> players = new List<PlayerSpawn>();
+    public override void SerializeEvents(ref MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
+        writer.Write((byte)networkMessagesType);
+        writer.Write(players.Count);
+        for (int i = 0; i < players.Count; ++i)
+        {
+            writer.Write(players[i].name);
+            writer.Write(players[i].spawn);
+        }
+    }
+
+    public override void DeserializeEvents(ref MemoryStream stream)
+    {
+        BinaryReader reader = new BinaryReader(stream);
+        int count = reader.ReadInt32();
+        PlayerSpawn spawn;
+        for (int i = 0; i < count; ++i)
+        {
+            spawn.name = reader.ReadString();
+            spawn.spawn = reader.ReadByte();
+            players.Add(spawn);
+        }
+    }
+}
+
 public class DisconnectEvents : SerializableEvents
 {
     public override void SerializeEvents(ref MemoryStream stream)

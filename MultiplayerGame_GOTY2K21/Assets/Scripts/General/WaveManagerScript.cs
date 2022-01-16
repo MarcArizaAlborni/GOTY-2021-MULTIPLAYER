@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaveManagerScript : MonoBehaviour
 {
-
+    public ClientNetwork2 clientNet;
     public int currentRoundNum = 0;
    
 
@@ -33,6 +33,7 @@ public class WaveManagerScript : MonoBehaviour
         activeZombiesCap = 24 + 6 * (numPlayers - 1); //5 TAKING INTO ACCOUNT WE HAVE 5 PLAYERS ACTIVE
         zombiesOnWaitCount = 0;
         currentRoundNum=0;
+
     }
     private void Update()
     {
