@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 
 
@@ -34,6 +34,16 @@ public class LobyUI : MonoBehaviour
             readyPanel.SetActive(true);
             isReady = true;
         }
+    }
+
+    public void StartGame(bool startGame)
+    {
+        if (startGame == true && isReady == true)
+        {
+            SceneManager.LoadScene("MainLevel");
+        }
+        else
+            Debug.Log("Don't Change Screen");
     }
 
     private void Start()
