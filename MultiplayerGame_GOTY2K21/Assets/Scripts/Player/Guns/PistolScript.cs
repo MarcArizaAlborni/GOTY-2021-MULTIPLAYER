@@ -110,7 +110,7 @@ public class PistolScript : MonoBehaviour
         }
         else
         {
-            crosshairImage.SetActive(true);
+            GameObject.Find("Crosshair").SetActive(true);
         }
 
         Vector3 desiredPosition;

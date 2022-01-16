@@ -19,8 +19,8 @@ public class GunSwapScript : MonoBehaviour
         rifle.SetActive(true);
         pistol.SetActive(false);
         chunger.SetActive(false);
-        hudScript.panelPistol.SetActive(false);
-        hudScript.panelRifle.SetActive(true);
+        GameObject.Find("PistolPanel").SetActive(false);
+        GameObject.Find("RiflePanel").SetActive(true);
     }
 
     void Update()
@@ -28,8 +28,8 @@ public class GunSwapScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && !Input.GetMouseButton(1))
         {
 
-            hudScript.panelPistol.SetActive(true);
-            hudScript.panelRifle.SetActive(false);
+            GameObject.Find("PistolPanel").SetActive(true);
+            GameObject.Find("RiflePanel").SetActive(false);
             SetCanShootTrue();
                 rifle.SetActive(false);
                 pistol.SetActive(true);

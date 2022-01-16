@@ -133,9 +133,9 @@ public class RifleScript : MonoBehaviour
         }
         else
         {
-            
-           
-                crosshairImage.SetActive(true);
+
+
+            GameObject.Find("Crosshair").SetActive(true);    
             
         }
 
