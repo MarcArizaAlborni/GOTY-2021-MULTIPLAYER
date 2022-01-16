@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaveManagerScript : MonoBehaviour
 {
-    public ClientNetwork2 clientNet;
+    private ClientNetwork2 net;
     public int currentRoundNum = 0;
    
 
@@ -34,6 +34,7 @@ public class WaveManagerScript : MonoBehaviour
         zombiesOnWaitCount = 0;
         currentRoundNum=0;
 
+        net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ClientNetwork2>();
     }
     private void Update()
     {
