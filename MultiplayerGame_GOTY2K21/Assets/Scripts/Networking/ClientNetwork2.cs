@@ -558,6 +558,8 @@ public class myNet
     //    EventsToExecute.Clear();
     //    return returnList;
     //}
+    private const byte MAX_CONNEXIONS = 5;
+    public bool acceptMoreConnections = true;
     public void ProcessMessage(RawMessage msg)
     {
         //FALTA EL DISCONECT
@@ -639,6 +641,9 @@ public class myNet
         //packet de algu no connectat
         else
         {
+            //don't accept more than 5 connexions
+            if (currentConnexions.Length >= MAX_CONNEXIONS || !acceptMoreConnections)
+                return;
             string received = Encoding.ASCII.GetString(msg.data, 0, msg.reciv);
             if (received.StartsWith("New Connexion "))
             {
