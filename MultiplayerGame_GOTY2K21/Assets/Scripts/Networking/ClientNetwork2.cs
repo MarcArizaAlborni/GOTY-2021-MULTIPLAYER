@@ -522,8 +522,6 @@ public class myNet
         switch (messageType)
         {
             case networkMessages.requestLobbyInfo:
-                if (inGame)
-                    return;
                 int index = FindConnexionIndex(address);
                 if (index == -1)
                     return;
@@ -535,6 +533,7 @@ public class myNet
                     acceptMoreConnections = false;
                     inGame = true;
                     GameStartEvent startingEve = new GameStartEvent();
+                    startingEve.networkMessagesType = networkMessages.startGame;
                     foreach(Connexion con in currentConnexions)
                     {
                         if (currentConnexions[index].readyToPlay)
@@ -542,7 +541,8 @@ public class myNet
                         //else
                         //    RemoveConnexion(currentConnexions[index].address);
                     }
-                    currentConnexions[index].eventsToSend.Add(startingEve);
+                    foreach(Connexion con in currentConnexions)
+                        con.eventsToSend.Add(startingEve);
                     break;
                     //SceneManager.LoadScene("Server_Main");
                 }
@@ -568,6 +568,7 @@ public class myNet
                 acceptMoreConnections = false;
                 inGame = true;
                 GameStartEvent startEve = (GameStartEvent)eve;
+                startEve.networkMessagesType = networkMessages.startGame;
                 if(startGameEvent != null)
                     startGameEvent(startEve);
                 break;
