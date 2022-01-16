@@ -47,20 +47,7 @@ public class WaveManagerScript : MonoBehaviour
     public void CreatePlayers()
     {
         
-        for (int i = 0; i < net.spawnPlayers.Count; ++i)
-        {
-
-            if (net.clientNet.GetName(net.serverIpep) == net.spawnPlayers[i])
-            {
-
-                Instantiate(ourPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
-
-            }
-            else
-            {
-                Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
-            }
-        }
+       
     }
 
     private void Update()
