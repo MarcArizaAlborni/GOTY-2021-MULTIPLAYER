@@ -531,7 +531,6 @@ public class myNet
                 {
                     //start the server game 
                     acceptMoreConnections = false;
-                    inGame = true;
                     GameStartEvent startingEve = new GameStartEvent();
                     startingEve.networkMessagesType = networkMessages.startGame;
                     foreach(Connexion con in currentConnexions)
@@ -543,8 +542,10 @@ public class myNet
                     }
                     foreach(Connexion con in currentConnexions)
                         con.eventsToSend.Add(startingEve);
+                    if (!inGame)
+                        SceneManager.LoadScene("Server_MainLevel");
+                    inGame = true;
                     break;
-                    //SceneManager.LoadScene("Server_Main");
                 }
                 LobbyEvent sendEve = new LobbyEvent();
                 sendEve.networkMessagesType = networkMessages.lobbyEvent;
@@ -786,6 +787,13 @@ public class myNet
         if (index == -1)
             return "";
         return currentConnexions[index].name;
+    }
+    public List<string> GetAllNames()
+    {
+        List<string> list = new List<string>();
+        foreach (Connexion con in currentConnexions)
+            list.Add(con.name);
+        return list;
     }
     //---------------------------------------Deserialize---------------------------------------------------------------------------------------
     public SerializableEvents DeserializeEvent(ref MemoryStream stream)

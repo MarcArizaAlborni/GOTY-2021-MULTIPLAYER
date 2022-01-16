@@ -7,33 +7,21 @@ public class Id_zombieGenerator : MonoBehaviour
 
    [HideInInspector]public int id;
 
-
-
     void Start()
     {
 
-       GameObject manager= GameObject.Find("Manager");
-
+        GameObject manager = GameObject.Find("Manager");
 
         WaveManagerScript waveScript = manager.GetComponent<WaveManagerScript>();
-
 
         id = Random.Range(100, 100000);
         // while (!GenerateID(waveScript))
         //{
         //      
         //}
-
-
         Debug.Log(id);
-      
-
-
-
 
     }
-
-
 
     bool GenerateID(WaveManagerScript script)
     {
@@ -54,8 +42,6 @@ public class Id_zombieGenerator : MonoBehaviour
             }
 
         }
-
-
 
         return true;
 

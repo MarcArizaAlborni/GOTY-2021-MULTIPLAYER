@@ -10,10 +10,10 @@ using System.Text;
 
 public class ServerNetwork2 : MonoBehaviour
 {
-    myNet serverNetwork = new myNet();
+    [HideInInspector]public myNet serverNetwork = new myNet();
 
-    Thread listeningThread;
-    object frameProcessingLock = new object();
+    private Thread listeningThread;
+    private object frameProcessingLock = new object();
     public int targetTickRate = 30;
     private bool once = true;
 
@@ -21,6 +21,7 @@ public class ServerNetwork2 : MonoBehaviour
     {
         if (once)
         {
+            DontDestroyOnLoad(this);
             Application.targetFrameRate = targetTickRate;
             IPEndPoint ipep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9050);
             serverNetwork.BindAddress(ipep);

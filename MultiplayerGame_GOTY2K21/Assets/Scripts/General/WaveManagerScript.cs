@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WaveManagerScript : MonoBehaviour
 {
-    private ClientNetwork2 net;
+    private ServerNetwork2 net;
     public int currentRoundNum = 0;
    
 
@@ -26,8 +26,6 @@ public class WaveManagerScript : MonoBehaviour
     float preStartTimer = 5.0f;
     float currStartTimer = 0.0f;
 
-
-    public GameObject ourPlayer;
     public GameObject theirPlayer;
 
 
@@ -38,17 +36,17 @@ public class WaveManagerScript : MonoBehaviour
         zombiesOnWaitCount = 0;
         currentRoundNum=0;
 
-        net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ClientNetwork2>();
+        net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ServerNetwork2>();
+        List<string> spawnPlayers = net.serverNetwork.GetAllNames();
 
-        CreatePlayers();
-
+        for (int i = 0; i < spawnPlayers.Count; ++i)
+        {
+            GameObject go = Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
+            go.GetComponentInChildren<TextMesh>().text = spawnPlayers[i];
+        }
     }
 
-    public void CreatePlayers()
-    {
-        
-       
-    }
+
 
     private void Update()
     {
