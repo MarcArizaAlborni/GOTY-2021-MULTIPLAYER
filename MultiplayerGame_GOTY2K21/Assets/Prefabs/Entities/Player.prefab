@@ -2768,9 +2768,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8524767613964175520}
-  m_Text: 'Player Name
-
-'
+  m_Text: Player Name
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -2968,6 +2966,10 @@ PrefabInstance:
       propertyPath: ourCamera
       value: 
       objectReference: {fileID: 4318127820933332827}
+    - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
+      propertyPath: maxTotalAmmo
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 3834650920932159299, guid: 1048430be889f024293d2b7fcdc46a3a, type: 3}
       propertyPath: crosshairImage
       value: 

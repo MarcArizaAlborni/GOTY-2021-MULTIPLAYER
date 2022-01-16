@@ -21,8 +21,10 @@ public class MovementEnemy : MonoBehaviour
     {
         agent = gameObject.GetComponent<NavMeshAgent>();
         currentAnimation = gameObject.GetComponent<Animator>();
-
-        SteeringSeek(target.GetChild(0).transform.position);
+        if (target != null)
+        {
+            SteeringSeek(target.GetChild(0).transform.position);
+        }
         SetRunning();
     }
     // Update is called once per frame
@@ -106,18 +108,21 @@ public class MovementEnemy : MonoBehaviour
         }
         else
         {
-            target = goes[0].transform;
-
-            foreach (GameObject go in goes)
+            if (goes.Length != 0)
             {
+                target = goes[0].transform;
 
-
-                //If distance of current target is bigger than a new one, set this as new target
-                if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+                foreach (GameObject go in goes)
                 {
-                    target = go.transform;
-                }
 
+
+                    //If distance of current target is bigger than a new one, set this as new target
+                    if (Vector3.Distance(agent.transform.position, go.transform.position) < Vector3.Distance(agent.transform.position, target.transform.position))
+                    {
+                        target = go.transform;
+                    }
+
+                }
             }
 
         }

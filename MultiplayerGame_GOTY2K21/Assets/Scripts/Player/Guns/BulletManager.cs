@@ -64,6 +64,12 @@ public class BulletManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+
+
+        if (collision.gameObject.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
     }
 
     void ZombieHitCollision(Collision collider)
