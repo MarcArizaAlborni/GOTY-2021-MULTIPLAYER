@@ -14,6 +14,7 @@ public class LobyUI : MonoBehaviour
     private ClientNetwork2 net;
     [SerializeField]private float nameRequestSec = 1.0f;
     private float currentSec = 0.0f;
+    private uint lastSeqNum = 0;
 
     bool isReady = false;
 
@@ -46,6 +47,8 @@ public class LobyUI : MonoBehaviour
         if(currentSec >= nameRequestSec)
         {
             RequestLobbyInfoEvents eve = new RequestLobbyInfoEvents();
+            eve.clientReady = isReady;
+            eve.forceGameStart = false;
             net.AddEvent(eve);
             currentSec = 0.0f;
         }
@@ -58,10 +61,11 @@ public class LobyUI : MonoBehaviour
     {
         myNet.lobbyEvent -= LobyEventExecution;
     }
-    public void LobyEventExecution(LobbyEvent eve)
+    public void LobyEventExecution(LobbyEvent eve, uint seqNum)
     {
-        //if (lastsequencenumexecuted > seqnum)
-          //  return;
+        if (lastSeqNum > seqNum)
+            return;
+        lastSeqNum = seqNum;
         int i = 0;
         foreach (string name in eve.playerList)
         {

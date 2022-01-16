@@ -7,8 +7,6 @@ using System;
 
 public class LobbyEvent : SerializableEvents
 {
-    public bool clientReady;       //If a client is ready
-    public bool forceGameStart;    //Less than 5 players but players>2 and want to play
     public bool gameStart;         //All slots completed and players ready
 
     //uint playerId;          //Necessary?
@@ -36,8 +34,6 @@ public class LobbyEvent : SerializableEvents
     {
         BinaryReader reader = new BinaryReader(stream);
 
-        clientReady = reader.ReadBoolean();
-        forceGameStart = reader.ReadBoolean();
         gameStart = reader.ReadBoolean();
         int count = reader.ReadInt32();
         playerList = new List<string>();
@@ -50,17 +46,22 @@ public class LobbyEvent : SerializableEvents
 
 public class RequestLobbyInfoEvents : SerializableEvents
 {
+    public bool clientReady;       //If a client is ready
+    public bool forceGameStart;    //Less than 5 players but players>2 and want to play
     public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
-
+        writer.Write(clientReady);
+        writer.Write(forceGameStart);
     }
 
     public override void DeserializeEvents(ref MemoryStream stream)
     {
-        return;
+        BinaryReader reader = new BinaryReader(stream);
+        clientReady = reader.ReadBoolean();
+        forceGameStart = reader.ReadBoolean();
     }
 }
 public class DisconnectEvents : SerializableEvents

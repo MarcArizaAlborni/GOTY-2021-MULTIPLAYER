@@ -136,6 +136,7 @@ public class myNet
     }
     public class Connexion
     {
+        public bool readyToPlay;
         public IPEndPoint address;
         public uint sendSeqNum = 0;
         public uint lastRecSeqNum = 0;
@@ -487,17 +488,17 @@ public class myNet
                 break;
             }
     }
-    public delegate void UpdateLobbyTextList(LobbyEvent eve);
+    public delegate void UpdateLobbyTextList(LobbyEvent eve, uint seqNum);
     public static event UpdateLobbyTextList lobbyEvent;
     public void ExecuteAllPendingSnapshots()
     {
         foreach(Snapshot snap in snapshotsToExecute)
             foreach(SerializableEvents eve in snap.snapshotEvents)
-                ExecuteEvent(eve, snap.address);
+                ExecuteEvent(eve, snap.address, snap.seqNum);
         snapshotsToExecute.Clear();
         SendAllEvents();
     }
-    private void ExecuteEvent(SerializableEvents eve, IPEndPoint address)
+    private void ExecuteEvent(SerializableEvents eve, IPEndPoint address, uint seqNum)
     {
 
         networkMessages messageType = eve.networkMessagesType;
@@ -505,7 +506,13 @@ public class myNet
         switch (messageType)
         {
             case networkMessages.requestLobbyInfo:
-                //RequestLobbyInfoEvents req = (RequestLobbyInfoEvents)eve;
+                int index = FindConnexionIndex(address);
+                if (index == -1)
+                    return;
+                RequestLobbyInfoEvents reqEve = (RequestLobbyInfoEvents)eve;
+                currentConnexions[index].readyToPlay = reqEve.clientReady;
+                //if(reqEve.forceGameStart)
+                    //startTheGame
                 LobbyEvent sendEve = new LobbyEvent();
                 sendEve.networkMessagesType = networkMessages.lobbyEvent;
                 //sendEve.clientReady = info.clientReady;
@@ -519,7 +526,7 @@ public class myNet
                 break;
             case networkMessages.lobbyEvent:
                 if (lobbyEvent != null)
-                    lobbyEvent((LobbyEvent)eve);
+                    lobbyEvent((LobbyEvent)eve, seqNum);
                 break;
             case networkMessages.clientDisconnect:
                 //Aki s'ha de fer com un timer de si no rebo missatge del client en x temps esta desconectat i el trec
