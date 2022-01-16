@@ -25,12 +25,13 @@ public class GeneratePlayers : MonoBehaviour
             if (net.clientNet.GetName(net.serverIpep) == net.spawnPlayers[i])
             {
 
-                Instantiate(ourPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
-
+                GameObject go = Instantiate(ourPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
+                go.GetComponentInChildren<TextMesh>().text = net.spawnPlayers[i];
             }
             else
             {
-                Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
+                GameObject go = Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
+                go.GetComponentInChildren<TextMesh>().text = net.spawnPlayers[i];
             }
         }
     }
