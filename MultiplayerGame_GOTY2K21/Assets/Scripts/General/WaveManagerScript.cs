@@ -19,6 +19,15 @@ public class WaveManagerScript : MonoBehaviour
    
      int activeZombiesCap = 0;
 
+
+    public List<GameObject> playerSpawnPositionsList;
+
+
+    float preStartTimer = 5.0f;
+    float currStartTimer = 0.0f;
+
+
+
     private void Start()
     {
         activeZombiesCap = 24 + 6 * (numPlayers - 1); //5 TAKING INTO ACCOUNT WE HAVE 5 PLAYERS ACTIVE
@@ -27,7 +36,18 @@ public class WaveManagerScript : MonoBehaviour
     }
     private void Update()
     {
-        CheckCurrentRoundState();
+
+        if(currStartTimer>= preStartTimer)
+        {
+            CheckCurrentRoundState();
+            currStartTimer = 0.0f;
+        }
+        else
+        {
+            currStartTimer += Time.deltaTime;
+
+        }
+
     }
 
     public void StartNewRound()

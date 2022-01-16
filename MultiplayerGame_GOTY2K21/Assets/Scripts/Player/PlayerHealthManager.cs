@@ -40,30 +40,34 @@ public class PlayerHealthManager : MonoBehaviour
         if (attackTime < currTime && !playerDead)
         {
 
-            for (int i = 0; i < wavesManager.activeZombiesList.Count; ++i)
+            if (wavesManager != null)
             {
-                if (wavesManager.activeZombiesList[i] != null) { 
-                MovementEnemy movScript = wavesManager.activeZombiesList[i].GetComponent<MovementEnemy>();
-
-                if (movScript != null)
+                for (int i = 0; i < wavesManager.activeZombiesList.Count; ++i)
                 {
+                    if (wavesManager.activeZombiesList[i] != null)
+                    {
+                        MovementEnemy movScript = wavesManager.activeZombiesList[i].GetComponent<MovementEnemy>();
 
-                        if (movScript.attackingNow == true)
+                        if (movScript != null)
                         {
-                            currentPlayerHP -= damageDealtToPlayer;
-                            movScript.attackingNow = false;
-                            currNonAttackedTime = 0f;
-                            if (currentPlayerHP <= 0)
+
+                            if (movScript.attackingNow == true)
                             {
-                                playerDead = true;
-                                deadCollider.SetActive(true);
+                                currentPlayerHP -= damageDealtToPlayer;
+                                movScript.attackingNow = false;
+                                currNonAttackedTime = 0f;
+                                if (currentPlayerHP <= 0)
+                                {
+                                    playerDead = true;
+                                    deadCollider.SetActive(true);
 
+                                }
                             }
+
                         }
-
                     }
-                }
 
+                }
             }
 
             currTime = 0f;

@@ -55,22 +55,35 @@ public class HUDmanagerScript : MonoBehaviour
 
     void UpdateNumbers()
     {
-        //RIFLE
-        ammoMagRifleText.text = rifleScript.currentAmmoInMag.ToString();
-        ammoReserveRifleText.text = rifleScript.ammoInReserve.ToString();
-        //PISTOL
-        ammoMagPistolText.text = pistolScript.currentAmmoInMag.ToString();
-        ammoReservePistolText.text = pistolScript.ammoInReserve.ToString();
+        if (rifleScript != null)
+        {
+            //RIFLE
+            ammoMagRifleText.text = rifleScript.currentAmmoInMag.ToString();
+            ammoReserveRifleText.text = rifleScript.ammoInReserve.ToString();
+        }
+
+        if (pistolScript != null)
+        {
+            //PISTOL
+            ammoMagPistolText.text = pistolScript.currentAmmoInMag.ToString();
+            ammoReservePistolText.text = pistolScript.ammoInReserve.ToString();
+        }
 
 
-        //AMMO
-        moneyText.text ="$" +moneyScript.totalMoney.ToString();
+        if (moneyScript != null)
+        {
+            //AMMO
+            moneyText.text = "$" + moneyScript.totalMoney.ToString();
+        }
 
 
         //ROUNDS
 
-        roundText.text = "Round: " + waveScript.currentRoundNum.ToString();
-        zombieNumber.text = "Zombies: "+ waveScript.activeZombiesList.Count.ToString();
+        if (waveScript != null)
+        {
+            roundText.text = "Round: " + waveScript.currentRoundNum.ToString();
+            zombieNumber.text = "Zombies: " + waveScript.activeZombiesList.Count.ToString();
+        }
     }
 
     void CheckESCInput()
