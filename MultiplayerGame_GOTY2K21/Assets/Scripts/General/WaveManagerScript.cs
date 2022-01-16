@@ -27,6 +27,10 @@ public class WaveManagerScript : MonoBehaviour
     float currStartTimer = 0.0f;
 
 
+    public GameObject ourPlayer;
+    public GameObject theirPlayer;
+
+
 
     private void Start()
     {
@@ -35,7 +39,37 @@ public class WaveManagerScript : MonoBehaviour
         currentRoundNum=0;
 
         net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ClientNetwork2>();
+
+        CreatePlayers();
+
     }
+
+    public void CreatePlayers()
+    {
+        
+        for (int i = 0; i < net.spawnPlayers.Count; ++i)
+        {
+
+            if (net.clientNet.GetName(net.serverIpep)==net.spawnPlayers[i].name)
+            {
+
+                Instantiate(ourPlayer, playerSpawnPositionsList[net.spawnPlayers[i].spawn].transform.position, Quaternion.identity);
+
+            }
+            else
+            {
+                Instantiate(theirPlayer, playerSpawnPositionsList[net.spawnPlayers[i].spawn].transform.position, Quaternion.identity);
+            }
+
+
+
+
+        }
+        
+
+
+    }
+
     private void Update()
     {
 
