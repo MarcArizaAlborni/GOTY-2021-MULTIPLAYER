@@ -62,14 +62,9 @@ public class RequestLobbyInfoEvents : SerializableEvents
     }
 }
 
-public struct PlayerSpawn
-{
-    public string name;
-    public byte spawn;
-}
 public class GameStartEvent : SerializableEvents
 {
-    public List<PlayerSpawn> players = new List<PlayerSpawn>();
+    public List<string> players = new List<string>();
     public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
@@ -77,8 +72,7 @@ public class GameStartEvent : SerializableEvents
         writer.Write(players.Count);
         for (int i = 0; i < players.Count; ++i)
         {
-            writer.Write(players[i].name);
-            writer.Write(players[i].spawn);
+            writer.Write(players[i]);
         }
     }
 
@@ -86,12 +80,9 @@ public class GameStartEvent : SerializableEvents
     {
         BinaryReader reader = new BinaryReader(stream);
         int count = reader.ReadInt32();
-        PlayerSpawn spawn;
         for (int i = 0; i < count; ++i)
         {
-            spawn.name = reader.ReadString();
-            spawn.spawn = reader.ReadByte();
-            players.Add(spawn);
+            players.Add(reader.ReadString());
         }
     }
 }

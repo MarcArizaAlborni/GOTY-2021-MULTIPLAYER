@@ -50,24 +50,17 @@ public class WaveManagerScript : MonoBehaviour
         for (int i = 0; i < net.spawnPlayers.Count; ++i)
         {
 
-            if (net.clientNet.GetName(net.serverIpep)==net.spawnPlayers[i].name)
+            if (net.clientNet.GetName(net.serverIpep) == net.spawnPlayers[i])
             {
 
-                Instantiate(ourPlayer, playerSpawnPositionsList[net.spawnPlayers[i].spawn].transform.position, Quaternion.identity);
+                Instantiate(ourPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
 
             }
             else
             {
-                Instantiate(theirPlayer, playerSpawnPositionsList[net.spawnPlayers[i].spawn].transform.position, Quaternion.identity);
+                Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
             }
-
-
-
-
         }
-        
-
-
     }
 
     private void Update()

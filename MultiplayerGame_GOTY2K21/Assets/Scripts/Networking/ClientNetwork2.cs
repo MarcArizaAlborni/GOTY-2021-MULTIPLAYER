@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class ClientNetwork2 : MonoBehaviour
 {
-    [HideInInspector]public List<PlayerSpawn> spawnPlayers = new List<PlayerSpawn>();
+    [HideInInspector]public List<string> spawnPlayers = new List<string>();
     [HideInInspector] public myNet clientNet = new myNet();
 
     [SerializeField] private GameObject playerPrefab;
@@ -80,7 +80,7 @@ public class ClientNetwork2 : MonoBehaviour
     public void StartGame(GameStartEvent eve)
     {
         spawnPlayers = eve.players;
-        SceneManager.LoadScene("Client_Main");
+        SceneManager.LoadScene("Client_MainLevel");
     }
     public void SendNameToServer(string name)
     {
@@ -522,6 +522,8 @@ public class myNet
         switch (messageType)
         {
             case networkMessages.requestLobbyInfo:
+                if (inGame)
+                    return;
                 int index = FindConnexionIndex(address);
                 if (index == -1)
                     return;
@@ -532,6 +534,17 @@ public class myNet
                     //start the server game 
                     acceptMoreConnections = false;
                     inGame = true;
+                    GameStartEvent startingEve = new GameStartEvent();
+                    foreach(Connexion con in currentConnexions)
+                    {
+                        if (currentConnexions[index].readyToPlay)
+                            startingEve.players.Add(con.name);
+                        //else
+                        //    RemoveConnexion(currentConnexions[index].address);
+                    }
+                    currentConnexions[index].eventsToSend.Add(startingEve);
+                    break;
+                    //SceneManager.LoadScene("Server_Main");
                 }
                 LobbyEvent sendEve = new LobbyEvent();
                 sendEve.networkMessagesType = networkMessages.lobbyEvent;
@@ -542,7 +555,7 @@ public class myNet
                 foreach (Connexion con in currentConnexions)
                     names.Add(con.name);
                 sendEve.playerList = names;
-                AddEventToSend(address, sendEve);
+                currentConnexions[index].eventsToSend.Add(sendEve);
                 break;
             case networkMessages.lobbyEvent:
                 if (lobbyEvent != null)
@@ -827,8 +840,8 @@ public class myNet
     public bool jitter = true;
     public bool packetLoss = true;
     public int minJitt = 0;
-    public int maxJitt = 200;
-    public int lossThreshold = 5;
+    public int maxJitt = 50;
+    public int lossThreshold = 3;
     public struct Message
     {
         public Byte[] message;
