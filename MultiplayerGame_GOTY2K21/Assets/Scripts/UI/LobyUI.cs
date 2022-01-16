@@ -50,5 +50,23 @@ public class LobyUI : MonoBehaviour
             currentSec = 0.0f;
         }
     }
-
+    private void OnEnable()
+    {
+        myNet.lobbyEvent += LobyEventExecution;
+    }
+    private void OnDisable()
+    {
+        myNet.lobbyEvent -= LobyEventExecution;
+    }
+    public void LobyEventExecution(LobbyEvent eve)
+    {
+        //if (lastsequencenumexecuted > seqnum)
+          //  return;
+        int i = 0;
+        foreach (string name in eve.playerList)
+        {
+            PlayerStrings[i].text = name;
+            ++i;
+        }
+    }
 }

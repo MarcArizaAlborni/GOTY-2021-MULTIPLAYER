@@ -45,78 +45,6 @@ public class ClientNetwork2 : MonoBehaviour
             SceneManager.LoadScene("LobyScene");
         }
         clientNet.ExecuteAllPendingSnapshots();
-        //Conecting to server
-        //if (!connected)
-        //{
-        //    //To be more precise not use delta time but datetime or some system time?
-        //    ackConnectSec += Time.deltaTime;
-        //    if (ackConnectSec > maxAckConnectSec)
-        //    {
-        //        SendHiMessage();
-        //        ackConnectSec = 0.0f;
-        //    }
-        //
-        //}
-        //while (clientSocket.Poll(0, SelectMode.SelectRead))
-        //{
-        //    byte[] data = new byte[1700];
-        //    IPEndPoint ipep = new IPEndPoint(IPAddress.Any, 0);
-        //    EndPoint remote = (EndPoint)ipep;
-        //    int reciv = 0;
-        //    bool exception = false;
-        //    try
-        //    {
-        //        reciv = clientSocket.ReceiveFrom(data, ref remote);
-        //    }
-        //    catch (SocketException e)
-        //    {
-        //        switch (e.SocketErrorCode)
-        //        {
-        //            //TODO: why does this happen
-        //            case SocketError.ConnectionReset:
-        //                Debug.Log("The server is not up");
-        //                exception = true;
-        //                break;
-        //
-        //        }
-        //    }
-        //    if (!exception && serverIpep.Equals(remote) && reciv > 0)
-        //    {
-        //        //Mal haber de setear la variable tot el rato ??
-        //        connected = true;
-        //        MemoryStream stream = new MemoryStream(data);
-        //        BinaryReader reader = new BinaryReader(stream);
-        //        ServerSnapshot snap = new ServerSnapshot();
-        //        snap.lastInputSeqNum = reader.ReadUInt32();
-        //        snap.time = Time.realtimeSinceStartupAsDouble;
-        //        snap.position.x = reader.ReadSingle();
-        //        snap.position.y = reader.ReadSingle();
-        //        snap.position.z = reader.ReadSingle();
-        //        snap.rotation.x = reader.ReadSingle();
-        //        snap.rotation.y = reader.ReadSingle();
-        //        snap.rotation.z = reader.ReadSingle();
-        //        Quaternion rotQuat = Quaternion.Euler(snap.rotation.x, snap.rotation.y, snap.rotation.z);
-        //
-        //        if (!otherPlayer)
-        //        {
-        //            var instantiated = Instantiate(playerPrefab, snap.position, rotQuat);
-        //            otherPlayerTransform = instantiated.GetComponent<Transform>();
-        //            otherPlayer = true;
-        //        }
-        //        else
-        //        {
-        //            //la seva pose no nomes es canvia kuan rebo el paket!!!!
-        //            //fer el tije al k e rebut el paket
-        //            //si no es mou laltre player k no senvii paket
-        //            if (snap.lastInputSeqNum >= lastSeqNum)
-        //            {
-        //                otherPlayerTransform.localPosition = snap.position;
-        //                otherPlayerTransform.rotation = rotQuat;
-        //                lastSeqNum = snap.lastInputSeqNum;
-        //            }
-        //        }
-        //    }
-        //}
     }
 
     private void LateUpdate()
@@ -553,9 +481,14 @@ public class myNet
         }
 
         for (int i = snapshotsToExecute.Count - 1; i >= 0; --i)
-            if(snap.seqNum > snapshotsToExecute[i].seqNum)
+            if (snap.seqNum > snapshotsToExecute[i].seqNum)
+            {
                 snapshotsToExecute.Insert(i + 1, snap);
+                break;
+            }
     }
+    public delegate void UpdateLobbyTextList(LobbyEvent eve);
+    public static event UpdateLobbyTextList lobbyEvent;
     public void ExecuteAllPendingSnapshots()
     {
         foreach(Snapshot snap in snapshotsToExecute)
@@ -582,13 +515,15 @@ public class myNet
                 foreach (Connexion con in currentConnexions)
                     names.Add(con.name);
                 sendEve.playerList = names;
-                AddEventToSend(address, eve);
+                AddEventToSend(address, sendEve);
                 break;
             case networkMessages.lobbyEvent:
-
+                if (lobbyEvent != null)
+                    lobbyEvent((LobbyEvent)eve);
                 break;
             case networkMessages.clientDisconnect:
-
+                //Aki s'ha de fer com un timer de si no rebo missatge del client en x temps esta desconectat i el trec
+                RemoveConnexion(address);
                 break;
             case networkMessages.characterDie:
 
@@ -618,6 +553,7 @@ public class myNet
     //}
     public void ProcessMessage(RawMessage msg)
     {
+        //FALTA EL DISCONECT
         int index = FindConnexionIndex(msg.remote);
         //packet de algu connectat
         if (index != -1)
@@ -642,12 +578,12 @@ public class myNet
             ushort sckBitmask = reader.ReadUInt16();
             if(recSeqNum <= currentConnexions[index].lastRecSeqNum)
             {
-                //check if packet is to old
+                //check if packet is too old
                 if ((currentConnexions[index].lastRecSeqNum - recSeqNum) > 16)
                     return;
-                //chack if we already have the packet
+                //chack if we already have the packet (packet duplication)
                 uint resta = currentConnexions[index].lastRecSeqNum - recSeqNum;
-                if ((currentConnexions[index].ackBitmask & (1 << (char)resta)) == 1 && currentConnexions[index].sendSeqNum > resta)
+                if ((currentConnexions[index].ackBitmask & (1 << (char)resta)) == 1 && (currentConnexions[index].sendSeqNum > resta))
                     return;
 
                 //packet older than last received (update bitmask)
@@ -657,27 +593,30 @@ public class myNet
             {
                 //update bitmask
                 uint resta = recSeqNum - currentConnexions[index].lastRecSeqNum;
-                currentConnexions[index].ackBitmask <<= (char)resta;
+                currentConnexions[index].ackBitmask <<= (int)resta;
+                currentConnexions[index].ackBitmask += 1;
                 currentConnexions[index].lastRecSeqNum = recSeqNum;
             }
 
             //we maybe will have repeated resending if we process more than 1 message at a time!!!!
             uint indexLastSended = currentConnexions[index].sendSeqNum - lastAckseqNum;
             //resend failed acknowledge messages
-            if ((sckBitmask & (1 << 5)) == 0 && lastAckseqNum > 5 && (4 + indexLastSended) < 24/*MaxArraySize*/)
+            if ((sckBitmask & (1 << 4)) == 0 && lastAckseqNum > 5 && (4 + indexLastSended) < 24/*MaxArraySize*/)
             {
                 ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[4 + indexLastSended]);
             }
-            if ((sckBitmask & (1 << 10)) == 0 && lastAckseqNum > 10 && (9 + indexLastSended) < 24/*MaxArraySize*/)
+            if ((sckBitmask & (1 << 9)) == 0 && lastAckseqNum > 10 && (9 + indexLastSended) < 24/*MaxArraySize*/)
             {
                 ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[9 + indexLastSended]);
             }
-            if ((sckBitmask & (1 << 16)) == 0 && lastAckseqNum > 16 && (15 + indexLastSended) < 24/*MaxArraySize*/)
+            if ((sckBitmask & (1 << 15)) == 0 && lastAckseqNum > 16 && (15 + indexLastSended) < 24/*MaxArraySize*/)
             {
                 ResendMessage(currentConnexions[index].address, currentConnexions[index].lastMessagesSended.ToArray()[15 + indexLastSended]);
             }
 
             int i = reader.ReadInt32();
+            if (i <= 0)
+                return;
             Snapshot snapshot = new Snapshot();
             snapshot.address = msg.remote;
             snapshot.seqNum = recSeqNum;
@@ -755,6 +694,8 @@ public class myNet
             //packet.header.lastRecSeqNum = con.lastRecSeqNum;
             //packet.header.ackBitmask = con.ackBitmask;
             //falta el time pel rtt
+            if (con.eventsToSend.Count == 0)
+                break;
 
             MemoryStream stream = new MemoryStream();
             BinaryWriter writer = new BinaryWriter(stream);
@@ -772,12 +713,12 @@ public class myNet
                 eve.SerializeEvents(ref stream);
             }
 
-            if (stream.Length == 0)
-                break;
             byte[] data = stream.ToArray();
             con.lastMessagesSended.Enqueue(data);
-            if(con.lastMessagesSended.Count >= 24)
+            if(con.lastMessagesSended.Count >= 25)
                 con.lastMessagesSended.Dequeue();
+            if (data.Length > 1500)
+                Debug.Log(data.Length);
             sendMessage(data, con.address);
             con.eventsToSend.Clear();
         }

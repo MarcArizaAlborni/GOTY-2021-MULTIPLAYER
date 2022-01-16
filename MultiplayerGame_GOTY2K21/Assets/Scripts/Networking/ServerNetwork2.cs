@@ -39,7 +39,7 @@ public class ServerNetwork2 : MonoBehaviour
     {
         lock (frameProcessingLock)
         {
-            //serverNetwork.ExecutePendingEvents();
+            serverNetwork.ExecuteAllPendingSnapshots();
         }
         //SendWorldSnapshot();
     }

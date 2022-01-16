@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System;
 
-class LobbyEvent : SerializableEvents
+public class LobbyEvent : SerializableEvents
 {
     public bool clientReady;       //If a client is ready
     public bool forceGameStart;    //Less than 5 players but players>2 and want to play
@@ -40,6 +40,7 @@ class LobbyEvent : SerializableEvents
         forceGameStart = reader.ReadBoolean();
         gameStart = reader.ReadBoolean();
         int count = reader.ReadInt32();
+        playerList = new List<string>();
         for (int i=0; i < count; ++i)
         {
             playerList.Add(reader.ReadString());
@@ -47,7 +48,7 @@ class LobbyEvent : SerializableEvents
     }
 }
 
-class RequestLobbyInfoEvents : SerializableEvents
+public class RequestLobbyInfoEvents : SerializableEvents
 {
     public override void SerializeEvents(ref MemoryStream stream)
     {
@@ -62,23 +63,7 @@ class RequestLobbyInfoEvents : SerializableEvents
         return;
     }
 }
-class DisconnectEvents : SerializableEvents
-{
-    public override void SerializeEvents(ref MemoryStream stream)
-    {
-        BinaryWriter writer = new BinaryWriter(stream);
-
-        writer.Write((byte)networkMessagesType);
-
-    }
-
-    public override void DeserializeEvents(ref MemoryStream stream)
-    {
-        return;
-    }
-}
-
-class DieEvent : SerializableEvents
+public class DisconnectEvents : SerializableEvents
 {
     public override void SerializeEvents(ref MemoryStream stream)
     {
@@ -94,7 +79,7 @@ class DieEvent : SerializableEvents
     }
 }
 
-class SpawnEvent : SerializableEvents
+public class DieEvent : SerializableEvents
 {
     public override void SerializeEvents(ref MemoryStream stream)
     {
@@ -110,7 +95,23 @@ class SpawnEvent : SerializableEvents
     }
 }
 
-class CharacterEvents : SerializableEvents
+public class SpawnEvent : SerializableEvents
+{
+    public override void SerializeEvents(ref MemoryStream stream)
+    {
+        BinaryWriter writer = new BinaryWriter(stream);
+
+        writer.Write((byte)networkMessagesType);
+
+    }
+
+    public override void DeserializeEvents(ref MemoryStream stream)
+    {
+        return;
+    }
+}
+
+public class CharacterEvents : SerializableEvents
 {
     uint characterId;
 
@@ -149,7 +150,7 @@ class CharacterEvents : SerializableEvents
 }
 
 
-class PlayerEvents : CharacterEvents
+public class PlayerEvents : CharacterEvents
 { 
     bool playerShoot;       //Playershoot
     bool currentGun;        //0 pistol 1 rifle;
@@ -186,7 +187,7 @@ class PlayerEvents : CharacterEvents
 
 }
 
-class ZombieEvents : CharacterEvents
+public class ZombieEvents : CharacterEvents
 {
     bool zombieAttack;       //Zombie Attack 
     public override void SerializeEvents(ref MemoryStream stream)
@@ -206,7 +207,7 @@ class ZombieEvents : CharacterEvents
 }
 
 
-class EnviorentmentEvents : SerializableEvents
+public class EnviorentmentEvents : SerializableEvents
 {
     public override void SerializeEvents(ref MemoryStream stream)
     { 
