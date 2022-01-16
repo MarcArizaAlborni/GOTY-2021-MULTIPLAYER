@@ -15,6 +15,7 @@ public class LobyUI : MonoBehaviour
     [SerializeField]private float nameRequestSec = 1.0f;
     private float currentSec = 0.0f;
     private uint lastSeqNum = 0;
+    private bool startGameRequested = false;
 
     bool isReady = false;
 
@@ -43,7 +44,8 @@ public class LobyUI : MonoBehaviour
             //SceneManager.LoadScene("MainLevel");
             RequestLobbyInfoEvents eve = new RequestLobbyInfoEvents();
             eve.clientReady = isReady;
-            eve.forceGameStart = true;
+            startGameRequested = true;
+            eve.forceGameStart = startGameRequested;
             net.AddEvent(eve);
         }
         else
@@ -62,7 +64,7 @@ public class LobyUI : MonoBehaviour
         {
             RequestLobbyInfoEvents eve = new RequestLobbyInfoEvents();
             eve.clientReady = isReady;
-            eve.forceGameStart = false;
+            eve.forceGameStart = startGameRequested;
             net.AddEvent(eve);
             currentSec = 0.0f;
         }
