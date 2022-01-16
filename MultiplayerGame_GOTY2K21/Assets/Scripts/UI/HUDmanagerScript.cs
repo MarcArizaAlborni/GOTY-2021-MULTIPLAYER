@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class HUDmanagerScript : MonoBehaviour
 {
@@ -121,6 +122,7 @@ public class HUDmanagerScript : MonoBehaviour
         panelPistol.SetActive(true);
         panelRifle.SetActive(true);
         escPanel.SetActive(false);
+        Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -129,7 +131,7 @@ public class HUDmanagerScript : MonoBehaviour
     {
         if (disconnect == true)
         {
-           // Application.Quit();
+           Application.Quit();
         }
         else
         {
