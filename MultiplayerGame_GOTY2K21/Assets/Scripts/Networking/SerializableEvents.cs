@@ -18,8 +18,6 @@ public class LobbyEvent : SerializableEvents
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
-        writer.Write(clientReady);
-        writer.Write(forceGameStart);
         writer.Write(gameStart);
         writer.Write(playerList.Count);
 

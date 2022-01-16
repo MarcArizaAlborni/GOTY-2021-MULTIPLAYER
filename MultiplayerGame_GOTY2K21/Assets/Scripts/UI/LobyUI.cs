@@ -40,7 +40,11 @@ public class LobyUI : MonoBehaviour
     {
         if (startGame == true && isReady == true)
         {
-            SceneManager.LoadScene("MainLevel");
+            //SceneManager.LoadScene("MainLevel");
+            RequestLobbyInfoEvents eve = new RequestLobbyInfoEvents();
+            eve.clientReady = isReady;
+            eve.forceGameStart = true;
+            net.AddEvent(eve);
         }
         else
             Debug.Log("Don't Change Screen");
