@@ -38,11 +38,13 @@ public class WaveManagerScript : MonoBehaviour
 
         net = GameObject.FindGameObjectsWithTag("NetObject")[0].GetComponent<ServerNetwork2>();
         List<string> spawnPlayers = net.serverNetwork.GetAllNames();
+        net.playerTransforms = new OnlineMovement[spawnPlayers.Count];
 
         for (int i = 0; i < spawnPlayers.Count; ++i)
         {
             GameObject go = Instantiate(theirPlayer, playerSpawnPositionsList[i].transform.position, Quaternion.identity);
             go.GetComponentInChildren<TextMesh>().text = spawnPlayers[i];
+            net.playerTransforms[i] = go.GetComponentInChildren<OnlineMovement>();
         }
     }
 

@@ -12,6 +12,9 @@ using UnityEngine.SceneManagement;
 public class ClientNetwork2 : MonoBehaviour
 {
     [HideInInspector]public List<string> spawnPlayers = new List<string>();
+    [HideInInspector] public OnlineMovement[] playerTransforms;
+    [HideInInspector] public OnlineMovement myPlayerTransform;
+    
     [HideInInspector] public myNet clientNet = new myNet();
 
     [SerializeField] private GameObject playerPrefab;
@@ -67,15 +70,32 @@ public class ClientNetwork2 : MonoBehaviour
             //IncrementSendSequenceNumber();
             //sendMessage(stream.GetBuffer(), serverIpep);
             //timeSinceSend = 0.0f;
+            if(myPlayerTransform != null)
+            {
+                CharacterEvents eve = new CharacterEvents();
+                eve.networkMessagesType = networkMessages.characterEvents;
+                Transform trans = myPlayerTransform.GetTransform();
+                eve.pos = trans.position;
+                eve.rot = trans.eulerAngles;
+                clientNet.AddEventToSend(serverIpep, eve);
+            }
         }
     }
     private void OnEnable()
     {
         myNet.startGameEvent += StartGame;
+        myNet.characterChangesEvent += CharactersUpdate;
     }
     private void OnDisable()
     {
         myNet.startGameEvent -= StartGame;
+        myNet.characterChangesEvent -= CharactersUpdate;
+    }
+    public void CharactersUpdate(CharacterEvents eve, int index, uint seqNum)
+    {
+        playerTransforms[index].SetTransform(eve.pos, eve.rot);
+        //playerTransforms[index].localPosition = eve.pos;
+        //playerTransforms[index].rotation = Quaternion.Euler(eve.rot);
     }
     public void StartGame(GameStartEvent eve)
     {
@@ -103,10 +123,10 @@ public enum networkMessages:byte
     requestLobbyInfo,       //Request Lobby
     lobbyEvent,             //LobbyEvent
     startGame,
+    characterEvents,
     clientDisconnect,
     characterDie,
     characterSpawn,
-    characterTransformEvents,
     playerEvents, 
     zombieEvents,
     enviorentEvents, 
@@ -506,6 +526,8 @@ public class myNet
     public static event UpdateLobbyTextList lobbyEvent;
     public delegate void StartGame(GameStartEvent eve);
     public static event StartGame startGameEvent;
+    public delegate void CharacterEvent(CharacterEvents eve, int index, uint seqNum);
+    public static event CharacterEvent characterChangesEvent;
     public void ExecuteAllPendingSnapshots()
     {
         foreach(Snapshot snap in snapshotsToExecute)
@@ -577,13 +599,19 @@ public class myNet
                 //Aki s'ha de fer com un timer de si no rebo missatge del client en x temps esta desconectat i el trec
                 RemoveConnexion(address);
                 break;
+            case networkMessages.characterEvents:
+                //CharacterEvents charSendEve = new CharacterEvents();
+                //charSendEve.networkMessagesType = networkMessages.characterEvents;
+                //charSendEve.transform
+                //foreach (Connexion con in currentConnexions)
+                //    con.eventsToSend.Add(charSendEve);
+                if (inGame && characterChangesEvent != null)
+                    characterChangesEvent((CharacterEvents)eve, FindConnexionIndex(address), seqNum);
+                break;
             case networkMessages.characterDie:
 
                 break;
             case networkMessages.characterSpawn:
-
-                break;
-            case networkMessages.characterTransformEvents:
 
                 break;
             case networkMessages.playerEvents:
@@ -816,6 +844,9 @@ public class myNet
             case networkMessages.startGame:
                 serializable = new GameStartEvent();
                 break;
+            case networkMessages.characterEvents:
+                serializable = new CharacterEvents();
+                break;
             case networkMessages.clientDisconnect:
                 serializable = new DisconnectEvents();
                 break;
@@ -824,9 +855,6 @@ public class myNet
                 break;
             case networkMessages.characterSpawn:
                 serializable = new SpawnEvent();
-                break;
-            case networkMessages.characterTransformEvents:
-                serializable = new CharacterEvents();
                 break;
             case networkMessages.playerEvents:
                 serializable = new PlayerEvents();

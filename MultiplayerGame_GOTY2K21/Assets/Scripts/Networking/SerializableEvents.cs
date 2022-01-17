@@ -137,24 +137,22 @@ public class SpawnEvent : SerializableEvents
 
 public class CharacterEvents : SerializableEvents
 {
-    uint characterId;
-
-    Transform transform;
+    public Vector3 pos;
+    public Vector3 rot;
 
     public override void SerializeEvents(ref MemoryStream stream)
     {
         BinaryWriter writer = new BinaryWriter(stream);
 
         writer.Write((byte)networkMessagesType);
-        writer.Write(characterId);
 
-        writer.Write(transform.position.x);
-        writer.Write(transform.position.y);
-        writer.Write(transform.position.z);
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
 
-        writer.Write(transform.eulerAngles.x);
-        writer.Write(transform.eulerAngles.y);
-        writer.Write(transform.eulerAngles.z);
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
 
     }
 
@@ -162,14 +160,15 @@ public class CharacterEvents : SerializableEvents
     {
         BinaryReader reader = new BinaryReader(stream);
 
-        //not necessary first byte;
-        characterId = reader.ReadUInt32();
-
         //position
-        transform.position.Set(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-
-        //rotation
-        transform.eulerAngles.Set(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+        pos.x = reader.ReadSingle();
+        pos.y = reader.ReadSingle();
+        pos.z = reader.ReadSingle();
+        
+        //rot
+        rot.x = reader.ReadSingle();
+        rot.y = reader.ReadSingle();
+        rot.z = reader.ReadSingle();
     }
 }
 

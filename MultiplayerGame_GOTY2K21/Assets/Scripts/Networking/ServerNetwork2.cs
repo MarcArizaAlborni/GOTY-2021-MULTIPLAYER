@@ -1,16 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using System.IO;
-using System.Text;
 
 public class ServerNetwork2 : MonoBehaviour
 {
-    [HideInInspector]public myNet serverNetwork = new myNet();
+    [HideInInspector] public myNet serverNetwork = new myNet();
+    [HideInInspector] public OnlineMovement[] playerTransforms;
 
     private Thread listeningThread;
     private object frameProcessingLock = new object();
@@ -56,5 +53,20 @@ public class ServerNetwork2 : MonoBehaviour
                 serverNetwork.UpdatePendent();
             }
         }
+    }
+    private void OnEnable()
+    {
+        myNet.characterChangesEvent += CharactersUpdate;
+    }
+    private void OnDisable()
+    {
+        myNet.characterChangesEvent -= CharactersUpdate;
+    }
+    public void CharactersUpdate(CharacterEvents eve, int index, uint seqNum)
+    {
+        playerTransforms[index].SetTransform(eve.pos, eve.rot);
+        //playerTransforms[index].SetPositionAndRotation(eve.pos, Quaternion.Euler(eve.rot));
+        //playerTransforms[index].position = eve.pos;
+        //playerTransforms[index].rotation = Quaternion.Euler(eve.rot);
     }
 }
